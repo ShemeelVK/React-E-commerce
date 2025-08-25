@@ -5,4 +5,4 @@ const api=axios.create({
         "Content-type":"application/json"
     }
 });
-export default api;
+export default api

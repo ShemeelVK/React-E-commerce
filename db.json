@@ -1,59 +1,16 @@
 {
   "users": [
     {
-      "id": "1",
+      "id": "2493",
+      "name": "Tester",
       "email": "test1@example.com",
       "password": "12345"
     },
     {
-      "id": "2",
-      "email": "test2@example.com",
-      "password": "password"
-    },
-    {
-      "id": "3",
-      "email": "john@example.com",
-      "password": "john123"
-    },
-    {
-      "id": "b3ac",
-      "email": "test5@example.com",
-      "password": "12341234"
-    },
-    {
-      "id": "bbc4",
-      "email": "shemeel@example.com",
-      "password": "shemeel123"
-    },
-    {
-      "id": "3c0e",
-      "email": "sreenand@example.com",
-      "password": "sreenand"
-    },
-    {
-      "id": "36eb",
-      "email": "arshak@exmpl.com",
-      "password": "arshak"
-    },
-    {
-      "id": "74a6",
-      "email": "rahees@gmail.com",
-      "password": "rahees"
-    },
-    {
-      "id": "9711",
-      "email": "laptop@example.com",
-      "password": "laptop"
-    },
-    {
-      "id": "b5dc",
-      "email": "laptop2@example.com",
-      "password": "laptop2"
-    },
-    {
-      "id": "066d",
-      "email": "laptop3@gmail.com",
-      "password": "laptop3"
+      "id": "0cf3",
+      "name": "shemeel",
+      "email": "shameel@eexample.com",
+      "password": "12345"
     }
   ]
 }
