@@ -23,10 +23,12 @@ function Register(){
             await axios.post("http://localhost:3000/users",{
                 name,
                 email,
-                password
+                password,
+                cart:[],
+                wishlist:[]
             });
             alert("Registration Successfull !!")
-            navigate("./Login")
+            navigate("/Login")
            }
        }  
 

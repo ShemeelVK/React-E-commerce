@@ -4,13 +4,96 @@
       "id": "2493",
       "name": "Tester",
       "email": "test1@example.com",
-      "password": "12345"
+      "password": "12345",
+      "cart": [],
+      "wishlist": []
     },
     {
       "id": "0cf3",
       "name": "shemeel",
       "email": "shameel@eexample.com",
       "password": "12345"
+    },
+    {
+      "id": "3733",
+      "name": "Nirooz",
+      "email": "nirooz@test.com",
+      "password": "nirooz",
+      "cart": [],
+      "wishlist": []
+    }
+  ],
+
+  "products": [
+    {
+      "id": "1",
+      "name": "Nike Air Force 1 '07",
+      "category": "Lifestyle",
+      "price": 115,
+      "imageUrl": "https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/b7d9211c-26e7-431a-ac24-b0540fb3c00f/air-force-1-07-mens-shoes-jBrhbr.png"
+    },
+    {
+      "id": "2",
+      "name": "Adidas Samba OG",
+      "category": "Lifestyle",
+      "price": 100,
+      "imageUrl": "https://marketplace.mainstreet.co.in/cdn/shop/files/Artboard1_d686c72c-40f5-424b-bc12-9ef8918d9933.png?v=1749557637"
+    },
+    {
+      "id": "3",
+      "name": "New Balance 550",
+      "category": "Casual",
+      "price": 120,
+      "imageUrl": "https://nb.scene7.com/is/image/NB/bb550vga_nb_02_i?$pdpflexf2$&qlt=80&fmt=jpeg&wid=440&hei=440"
+    },
+    {
+      "id": "4",
+      "name": "Converse Chuck 70",
+      "category": "Casual",
+      "price": 85,
+      "imageUrl": "https://www.converse.com/dw/image/v2/BCMP_PRD/on/demandware.static/-/Sites-converse-master-catalog/default/dw9124222a/images/a_107/162050C_A_107X1.jpg?sw=964"
+    },
+    {
+      "id": "5",
+      "name": "Nike Dunk Low Retro",
+      "category": "Skateboarding",
+      "price": 115,
+      "imageUrl": "https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/4f37fca8-6bce-43e7-87ce-4a5ae156036f/dunk-low-retro-mens-shoes-76KnBL.png"
+    },
+    {
+      "id": "6",
+      "name": "ASICS GEL-Kayano 14",
+      "category": "Running",
+      "price": 150,
+      "imageUrl": "https://images.asics.com/is/image/asics/1201A019_108_SR_RT_GLB?$sfcc-product$"
+    },
+    {
+      "id": "7",
+      "name": "Puma Suede Classic XXI",
+      "category": "Classic",
+      "price": 75,
+      "imageUrl": "https://images.puma.com/image/upload/f_auto,q_auto,b_rgb:fafafa,w_1200,h_1200/global/374915/01/sv01/fnd/PNA/fmt/png/Suede-Classic-XXI-Men's-Sneakers"
+    },
+    {
+      "id": "8",
+      "name": "Reebok Club C 85",
+      "category": "Tennis",
+      "price": 80,
+      "imageUrl": "https://images.reebok.com/image/upload/f_auto,q_auto,fl_lossy,c_limit,w_1920/stryder/prod/adbbe52614914441a733af1901131151_9366/AR0456_01.jpg"
+    },
+    {
+      "id": "9",
+      "name": "Vans Old Skool",
+      "category": "Skateboarding",
+      "price": 70,
+      "imageUrl": "https://images.vans.com/is/image/Vans/VN000D3HY28-HERO?$583x583$"
+    },
+    {
+      "id": "10",
+      "name": "Salomon XT-6",
+      "category": "Trail Running",
+      "price": 190,
+      "imageUrl": "https://images.salomon.com/is/image/salomon/L41252900_01?fmt=jpg&wid=1280&fit=constrain,0&hei=1280"
     }
   ]
 }

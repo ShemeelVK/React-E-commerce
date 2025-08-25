@@ -20,7 +20,7 @@ function Login() {
                 alert("Login Successfull")
                 
                 localStorage.setItem("user",JSON.stringify({"id":user.id,"email":email,"username":user.name}));
-                navigate("/Home")
+                navigate("/")
               }
               else{
                 alert("Invalid Credentials")
