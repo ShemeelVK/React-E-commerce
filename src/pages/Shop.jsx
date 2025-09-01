@@ -3,15 +3,14 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import ProductCard from "../Components/ProductCard";
 
-// Define your categories in an array for easy mapping
+
 const categories = ["All", "Sneakers", "Running", "Boots"];
 
 function Shop() {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("All"); // State to track the active category
-
-  // 1. Fetch all products just once when the component mounts
+  const [selectedCategory, setSelectedCategory] = useState("All"); 
+  
   useEffect(() => {
     const fetchAllProducts = async () => {
       try {
@@ -23,12 +22,12 @@ function Shop() {
       }
     };
     fetchAllProducts();
-  }, []); // Empty dependency array means this runs only once
+  }, []);
 
-  // 2. This effect runs whenever the selectedCategory or the main products list changes
+  
   useEffect(() => {
     if (selectedCategory === "All") {
-      setFilteredProducts(products); // If 'All' is selected, show all products
+      setFilteredProducts(products); 
     } else {
       // Otherwise, filter the main products list and update the filtered list
       const filtered = products.filter(

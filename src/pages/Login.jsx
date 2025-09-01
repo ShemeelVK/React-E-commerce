@@ -1,26 +1,26 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
+import { useAuth } from "../Context/AuthContext";
 
 function Login() {
     const [email,setEmail]=useState("")
     const [password,setPassword]=useState("")
     const navigate=useNavigate();
+    const {loginUser}=useAuth();
     
     const handlelogin=async (e)=>{
         e.preventDefault();
 
         try{
-            const res=await axios.get(`http://localhost:3000/users?email=${email}`);
+            const res= await axios.get(`http://localhost:3000/users?email=${email}`);
             
             if(res.data.length>0){
                 const user=res.data[0];
             
               if(user.email===email && user.password===password){
                 alert("Login Successfull")
-                
-                localStorage.setItem("user",JSON.stringify({"id":user.id,"email":email,"username":user.name}));
-                navigate("/")
+                loginUser(user)
               }
               else{
                 alert("Invalid Credentials")
@@ -29,10 +29,9 @@ function Login() {
         }
         catch(err){
             console.log("Error",err);
+            alert("An error occured during Login")
         }
-
     }
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-gray-100 via-gray-50 to-gray-100">
       <div className="bg-white shadow-2xl rounded-3xl overflow-hidden flex max-w-4xl w-full">
