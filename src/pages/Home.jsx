@@ -3,9 +3,11 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../Components/Navbar";
 import ProductCard from "../Components/ProductCard";
+import ProductModal from "../Components/ProductModal";
 function Home(){
     const navigate=useNavigate();
     const [products,setProducts]=useState([]);
+    const [selectedProduct, setSelectedProduct] = useState(null);
 
     useEffect(()=>{
       const fetchproducts=async ()=>{
@@ -21,6 +23,14 @@ function Home(){
       }
       fetchproducts();
     },[])
+
+      const handleViewProduct = (product) => {
+        setSelectedProduct(product);
+      };
+
+      const handleCloseModal = () => {
+        setSelectedProduct(null);
+      };
 
       const handleCategoryClick = (category) => {
         navigate(`/shop?category=${category}`);
@@ -62,7 +72,11 @@ function Home(){
             {/* --- The Product Grid --- */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
               {products.map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  onViewProduct={handleViewProduct}
+                />
               ))}
             </div>
           </div>
@@ -148,6 +162,9 @@ function Home(){
             </div>
           </div>
         </div>
+        {selectedProduct && (
+          <ProductModal product={selectedProduct} onClose={handleCloseModal} />
+        )}
       </>
     );
 }

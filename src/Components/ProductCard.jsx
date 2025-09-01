@@ -1,7 +1,7 @@
 import { Heart,ShoppingCart } from "lucide-react";
 import { useCart } from "../Context/CartContext";
 import { useWishlist } from "../Context/WishlistContext";
-function ProductCard({product}){
+function ProductCard({product,onViewProduct}){
     const {name,category,price,imageUrl}=product;
     const {addToCart}=useCart();
     const {addToWishlist}=useWishlist();
@@ -14,22 +14,26 @@ function ProductCard({product}){
 
     return (
       <div className="group relative bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden hover:shadow-xl transition-shadow duration-300">
-        <div className="w-full h-64 overflow-hidden">
-          <img
-            src={imageUrl}
-            alt={name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-          />
+        {/* Make the main body of the card clickable */}
+        {/* It now calls the onViewProduct function passed from the Shop page */}
+        <div onClick={() => onViewProduct(product)} className="cursor-pointer">
+          <div className="w-full h-64 overflow-hidden">
+            <img
+              src={imageUrl}
+              alt={name}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+          <div className="p-4">
+            <h3 className="text-lg font-semibold text-gray-800 truncate">
+              {name}
+            </h3>
+            <p className="text-sm text-gray-500 mb-2">{category}</p>
+            <p className="text-xl font-bold text-indigo-600">${price}</p>
+          </div>
         </div>
 
-        <div className="p-4">
-          <h3 className="text-lg font-semibold text-gray-800 truncate">
-            {name}
-          </h3>
-          <p className="text-sm text-gray-500 mb-2">{category}</p>
-          <p className="text-xl font-bold text-indigo-600">${price}</p>
-        </div>
-        {/* Add to Cart / Wishlist Buttons (initially hidden) */}
+        {/* The action buttons remain outside the clickable area and function independently */}
         <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <button
             onClick={() => addToWishlist(product)}

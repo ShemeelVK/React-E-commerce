@@ -2,6 +2,7 @@ import Navbar from "../Components/Navbar";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import ProductCard from "../Components/ProductCard";
+import ProductModal from "../Components/ProductModal";
 
 
 const categories = ["All", "Sneakers", "Running", "Boots"];
@@ -10,6 +11,8 @@ function Shop() {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All"); 
+
+  const [selectedProduct, setSelectedProduct] = useState(null);
   
   useEffect(() => {
     const fetchAllProducts = async () => {
@@ -37,6 +40,14 @@ function Shop() {
     }
   }, [selectedCategory, products]); // Re-run this logic when these values change
 
+  const handleViewproduct=(product)=>{
+    setSelectedProduct(product)
+  }
+
+  const handleCloseModal=()=>{
+    setSelectedProduct(null)
+  }
+
   return (
     <>
       <Navbar />
@@ -62,10 +73,18 @@ function Shop() {
         {/* This now maps over the 'filteredProducts' state */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {filteredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard
+              key={product.id}
+              product={product}
+              onViewProduct={handleViewproduct}
+            />
           ))}
         </div>
       </div>
+
+      {selectedProduct && (
+        <ProductModal product={selectedProduct} onClose={handleCloseModal} />
+      )}
     </>
   );
 }
