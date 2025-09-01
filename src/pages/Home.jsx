@@ -69,7 +69,7 @@ function Home(){
             <h2 className="text-3xl font-extrabold text-center text-gray-900 mb-12">
               Featured Collection
             </h2>
-            {/* --- The Product Grid --- */}
+            {/* ---Product Grid --- */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
               {products.map((product) => (
                 <ProductCard
@@ -82,7 +82,7 @@ function Home(){
           </div>
         </div>
 
-        {/* --- Shop by Category Section --- */}
+        {/* --- Category Section --- */}
         <div className="bg-gray-50 py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl font-extrabold text-center text-gray-900 mb-12">
@@ -99,7 +99,7 @@ function Home(){
                   alt="Sneakers"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
                   <h3 className="text-white text-3xl font-bold">Sneakers</h3>
                 </div>
               </div>
@@ -113,7 +113,7 @@ function Home(){
                   alt="Running Shoes"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
                   <h3 className="text-white text-3xl font-bold">Running</h3>
                 </div>
               </div>
@@ -123,11 +123,11 @@ function Home(){
                 className="relative rounded-lg overflow-hidden h-80 group cursor-pointer"
               >
                 <img
-                  src="https://images.unsplash.com/photo-1638247025965-b4b32863f687?q=80&w=1887&auto=format&fit=crop"
+                  src="https://i1.adis.ws/i/drmartens/11822006.80.jpg?$medium$"
                   alt="Boots"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
                   <h3 className="text-white text-3xl font-bold">Boots</h3>
                 </div>
               </div>
@@ -155,7 +155,7 @@ function Home(){
             </div>
             <div className="md:w-1/2 flex justify-center md:justify-end">
               <img
-                src="https://static.nike.com/a/images/f_auto,cs_srgb/w_1536,c_limit/g1unblqfusan3l2k94a2/nike-joyride.jpg"
+                src="https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/21f56016-2e59-4392-b80f-c9440573f798/ZOOMX+VAPORFLY+NEXT%25+4.png"
                 alt="Promotional"
                 className="rounded-lg shadow-2xl w-full max-w-md"
               />

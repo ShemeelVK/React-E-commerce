@@ -13,8 +13,7 @@ function ProductModal({ product, onClose }) {
   };
 
   const isInCart = product && cartItems.some((item) => item.id === product.id);
-  const isInWishlist =
-    product && wishlistItems.some((item) => item.id === product.id);
+  const isInWishlist = product && wishlistItems.some((item) => item.id === product.id);
 
   return (
     // The Modal Backdrop (the greyed-out background)
