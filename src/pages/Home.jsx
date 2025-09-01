@@ -22,10 +22,9 @@ function Home(){
       fetchproducts();
     },[])
 
-    function handleLogout(){
-        localStorage.removeItem("user")
-        navigate("./Login")
-    }
+      const handleCategoryClick = (category) => {
+        navigate(`/shop?category=${category}`);
+      };
 
     return (
       <>
@@ -65,6 +64,87 @@ function Home(){
               {products.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
+            </div>
+          </div>
+        </div>
+
+        {/* --- Shop by Category Section --- */}
+        <div className="bg-gray-50 py-20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-extrabold text-center text-gray-900 mb-12">
+              Shop by Category
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* Category Card: Sneakers */}
+              <div
+                onClick={() => handleCategoryClick("Sneakers")}
+                className="relative rounded-lg overflow-hidden h-80 group cursor-pointer"
+              >
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Air_Jordan_1_Banned.jpg/960px-Air_Jordan_1_Banned.jpg"
+                  alt="Sneakers"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                  <h3 className="text-white text-3xl font-bold">Sneakers</h3>
+                </div>
+              </div>
+              {/* Category Card: Running */}
+              <div
+                onClick={() => handleCategoryClick("Running")}
+                className="relative rounded-lg overflow-hidden h-80 group cursor-pointer"
+              >
+                <img
+                  src="https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcS7SQI-qbDz-zNujuV9KE6W2y9SmNM6Gfh7_03Vg1o3v0u2OTeadv_LoewKVKOeZuZyCtg-RMu5RppKgFHlGKT_NXBYT1aS-PrgF2IjkN1cQ3sN1pkDSN_DJA"
+                  alt="Running Shoes"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                  <h3 className="text-white text-3xl font-bold">Running</h3>
+                </div>
+              </div>
+              {/* Category Card: Boots */}
+              <div
+                onClick={() => handleCategoryClick("Boots")}
+                className="relative rounded-lg overflow-hidden h-80 group cursor-pointer"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1638247025965-b4b32863f687?q=80&w=1887&auto=format&fit=crop"
+                  alt="Boots"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                  <h3 className="text-white text-3xl font-bold">Boots</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* --- Promotional Banner Section --- */}
+        <div className="bg-indigo-700">
+          <div className="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between">
+            <div className="text-center md:text-left md:w-1/2 mb-8 md:mb-0">
+              <h2 className="text-4xl font-extrabold text-white tracking-tight">
+                Summer Styles are Here
+              </h2>
+              <p className="mt-4 text-lg text-indigo-200">
+                Check out our latest collection of premium sneakers and boots.
+                Get 20% off your first order.
+              </p>
+              <button
+                onClick={() => navigate("/shop")}
+                className="mt-8 px-8 py-3 bg-white text-indigo-600 hover:bg-gray-100 rounded-full font-semibold shadow-lg transition duration-300"
+              >
+                Shop New Arrivals
+              </button>
+            </div>
+            <div className="md:w-1/2 flex justify-center md:justify-end">
+              <img
+                src="https://static.nike.com/a/images/f_auto,cs_srgb/w_1536,c_limit/g1unblqfusan3l2k94a2/nike-joyride.jpg"
+                alt="Promotional"
+                className="rounded-lg shadow-2xl w-full max-w-md"
+              />
             </div>
           </div>
         </div>

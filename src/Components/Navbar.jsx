@@ -9,7 +9,7 @@ function Navbar() {
   const navigate = useNavigate();
 
   function handlelogout() {
-    // Note: alert() can be disruptive. Consider using a more integrated notification system.
+
     alert("Logged out Successfully");
     localStorage.removeItem("user");
     navigate("/Login");
@@ -106,11 +106,11 @@ function Navbar() {
                     My Account
                   </button>
                   <button
-                    className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                    className="w-full flex gap-2 text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
                     onClick={handlelogout}
                   >
                     <LogOut className="w-5 h-5  text-red-500" />
-                    Logout
+                     Logout
                   </button>
                 </div>
               )}
