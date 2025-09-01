@@ -1,6 +1,7 @@
 import { createContext,useState,useEffect,useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Cart from "../pages/Cart";
 
 const AuthContext=createContext(null)
 
@@ -20,6 +21,8 @@ export function AuthProvider({children}){
           id: userData.id,
           name: userData.name,
           email: userData.email,
+          cart:userData.cart || [],
+          wishlist:userData.wishlist || [],
         };
         localStorage.setItem("user",JSON.stringify(userToStore))
         SetCurrentUser(userToStore)
@@ -32,7 +35,12 @@ export function AuthProvider({children}){
         navigate("/Login");
     };
 
-    const value={currentUser,SetCurrentUser,loginUser,logoutUser}
+      const updateUserInAuthContext = (updatedUserData) => {
+        SetCurrentUser(updatedUserData);
+        localStorage.setItem("user", JSON.stringify(updatedUserData));
+      };
+
+    const value={currentUser,SetCurrentUser,loginUser,logoutUser,updateUserInAuthContext}
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 

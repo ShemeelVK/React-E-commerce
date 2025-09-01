@@ -10,29 +10,35 @@ import Cart from "./pages/Cart";
 import Wishlist from "./pages/Wishlist";
 import './index.css'
 import { AuthProvider } from "./Context/AuthContext";
+import { CartProvider } from "./Context/CartContext";
+import { WishlistProvider } from "./Context/WishlistContext";
 function App() {
 
 
   return (
     <>
       <AuthProvider>
-        <Routes>
-          <Route path="/Register" element={<Register />} />
-          <Route path="/Login" element={<Login />} />
-          <Route path="/About" element={<About />} />
-          <Route path="/Shop" element={<Shop />} />
-          <Route path="/Contact" element={<Contact />} />
-          <Route path="/Cart" element={<Cart />} />
-          <Route path="/Wishlist" element={<Wishlist />} />
-          <Route
-            path="/"
-            element={
-              <ProtectedRouter>
-                <Home />
-              </ProtectedRouter>
-            }
-          />
-        </Routes>
+          <CartProvider>
+        <WishlistProvider>
+            <Routes>
+              <Route path="/Register" element={<Register />} />
+              <Route path="/Login" element={<Login />} />
+              <Route path="/About" element={<About />} />
+              <Route path="/Shop" element={<Shop />} />
+              <Route path="/Contact" element={<Contact />} />
+              <Route path="/Cart" element={<Cart />} />
+              <Route path="/Wishlist" element={<Wishlist />} />
+              <Route
+                path="/"
+                element={
+                  <ProtectedRouter>
+                    <Home />
+                  </ProtectedRouter>
+                }
+              />
+            </Routes>
+        </WishlistProvider>
+          </CartProvider>
       </AuthProvider>
     </>
   );

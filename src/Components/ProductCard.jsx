@@ -1,6 +1,10 @@
 import { Heart,ShoppingCart } from "lucide-react";
+import { useCart } from "../Context/CartContext";
+import { useWishlist } from "../Context/WishlistContext";
 function ProductCard({product}){
     const {name,category,price,imageUrl}=product;
+    const {addToCart}=useCart();
+    const {addToWishlist}=useWishlist();
 
     return (
       <div className="group relative bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden hover:shadow-xl transition-shadow duration-300">
@@ -17,10 +21,10 @@ function ProductCard({product}){
         </div>
         {/* Add to Cart / Wishlist Buttons (initially hidden) */}
         <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <button className="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition">
+          <button onClick={()=> addToWishlist(product)} className="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition">
             <Heart className="w-5 h-5 text-red-500" />
           </button>
-          <button className="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition">
+          <button onClick={()=> addToCart(product)} className="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition">
             <ShoppingCart className="w-5 h-5 text-indigo-600" />
           </button>
         </div>

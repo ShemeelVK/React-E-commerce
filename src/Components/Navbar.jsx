@@ -1,19 +1,25 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { ShoppingCart, Heart, User,LogOut } from "lucide-react";
+import { useCart } from "../Context/CartContext";
+import { useWishlist } from "../Context/WishlistContext";
+import { useAuth } from "../Context/AuthContext";
 
 function Navbar() {
-  const [cartCount, setCartCount] = useState(0);
-  const [wishlistCount, setWishlistCount] = useState(0);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
 
-  function handlelogout() {
+  const {currentUser,logoutUser}=useAuth();
+  const {cartItems}=useCart();
+  const { wishlistItems } = useWishlist();
 
-    alert("Logged out Successfully");
-    localStorage.removeItem("user");
-    navigate("/Login");
+  const cartCount=cartItems?.length || 0;
+  const wishlistCount =wishlistItems?.length || 0;
+
+  function handlelogout() {
+    logoutUser()
   }
+
 
   return (
     <nav className="fixed top-4 left-1/2 -translate-x-1/2 w-4/5 z-50 bg-gray-50 rounded-full shadow-lg border border-gray-200">
@@ -91,26 +97,36 @@ function Navbar() {
 
             {/* Profile Dropdown */}
             <div className="relative">
-              <button
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center space-x-4 bg-indigo-600 text-white px-4 py-2 rounded-full shadow-md hover:bg-indigo-700 transition"
-              >
-                <User className="w-5 h-5" />
-                <span>Profile</span>
-              </button>
+              {currentUser ? (
+                <button
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  className="flex items-center space-x-2 bg-indigo-600 text-white px-4 py-2 rounded-full shadow-md hover:bg-indigo-700 transition"
+                >
+                  <User className="w-5 h-5" />
+                  <span>Hi, {currentUser.name}</span>
+                </button>
+              ) : (
+                <button
+                  onClick={() => navigate("/login")}
+                  className="flex items-center space-x-2 bg-gray-200 text-gray-800 px-4 py-2 rounded-full shadow-md hover:bg-gray-300 transition"
+                >
+                  <User className="w-5 h-5" />
+                  <span>Login</span>
+                </button>
+              )}
 
               {/* Dropdown Menu */}
-              {isDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
+              {isDropdownOpen && currentUser && (
+                <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
                   <button className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
                     My Account
                   </button>
                   <button
-                    className="w-full flex gap-2 text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                    className="w-full flex items-center gap-2 text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
                     onClick={handlelogout}
                   >
-                    <LogOut className="w-5 h-5  text-red-500" />
-                     Logout
+                    <LogOut className="w-5 h-5 text-red-500" />
+                    <span>Logout</span>
                   </button>
                 </div>
               )}
