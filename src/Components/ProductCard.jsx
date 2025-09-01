@@ -6,12 +6,22 @@ function ProductCard({product}){
     const {addToCart}=useCart();
     const {addToWishlist}=useWishlist();
 
+      const { cartItems } = useCart();
+      const { wishlistItems } = useWishlist();
+
+      const isInCart = cartItems.some((item) => item.id === product.id);
+      const isInWishlist = wishlistItems.some((item) => item.id === product.id);
+
     return (
       <div className="group relative bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden hover:shadow-xl transition-shadow duration-300">
         <div className="w-full h-64 overflow-hidden">
-          <img src={imageUrl} alt={name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+          <img
+            src={imageUrl}
+            alt={name}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          />
         </div>
-        
+
         <div className="p-4">
           <h3 className="text-lg font-semibold text-gray-800 truncate">
             {name}
@@ -21,11 +31,27 @@ function ProductCard({product}){
         </div>
         {/* Add to Cart / Wishlist Buttons (initially hidden) */}
         <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <button onClick={()=> addToWishlist(product)} className="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition">
-            <Heart className="w-5 h-5 text-red-500" />
+          <button
+            onClick={() => addToWishlist(product)}
+            className="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition"
+          >
+            <Heart
+              className={`w-5 h-5 ${
+                isInWishlist ? "text-red-500" : "text-gray-600"
+              }`}
+              fill={isInWishlist ? "currentColor" : "none"}
+            />
           </button>
-          <button onClick={()=> addToCart(product)} className="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition">
-            <ShoppingCart className="w-5 h-5 text-indigo-600" />
+          <button
+            onClick={() => addToCart(product)}
+            className="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition"
+          >
+            <ShoppingCart
+              className={`w-5 h-5 ${
+                isInCart ? "text-indigo-600" : "text-gray-600"
+              }`}
+              fill={isInCart ? "currentColor" : "none"}
+            />
           </button>
         </div>
       </div>
