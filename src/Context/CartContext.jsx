@@ -16,7 +16,7 @@ export function CartProvider({ children }) {
    }, [currentUser]);
 
 
-
+//updating databse
   const syncCartWithBackend = async (updatedCart) => {
     try {
       await axios.patch(`http://localhost:3000/users/${currentUser.id}`, {
@@ -30,7 +30,7 @@ export function CartProvider({ children }) {
       alert("An error occurred while updating the cart.");
     }
   };
-
+// Add to cart
   const addToCart = async (product) => {
     if (!currentUser) {
       alert("Please log in to add items to your cart.");
@@ -51,7 +51,8 @@ export function CartProvider({ children }) {
 
     alert(`${product.name} has been added to your cart!`);
   };
-
+  
+// increase quantity
   const increaseQuantity = async (productId) => {
     const updatedCart = currentUser.cart.map((item) =>
       item.id === productId ? { ...item, quantity: item.quantity + 1 } : item
@@ -59,6 +60,7 @@ export function CartProvider({ children }) {
     await syncCartWithBackend(updatedCart);
   };
 
+  // decrease quantity
   const decreaseQuantity = async (productId) => {
     const updatedCart = currentUser.cart.map((item) =>
       item.id === productId
@@ -67,7 +69,7 @@ export function CartProvider({ children }) {
     );
     await syncCartWithBackend(updatedCart);
   };
-
+// remove product
   const removeFromCart = async (productId) => {
     const updatedCart = currentUser.cart.filter(
       (item) => item.id !== productId

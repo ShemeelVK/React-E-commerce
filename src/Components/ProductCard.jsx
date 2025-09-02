@@ -14,8 +14,6 @@ function ProductCard({product,onViewProduct}){
 
     return (
       <div className="group relative bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden hover:shadow-xl transition-shadow duration-300">
-        {/* Make the main body of the card clickable */}
-        {/* It now calls the onViewProduct function passed from the Shop page */}
         <div onClick={() => onViewProduct(product)} className="cursor-pointer">
           <div className="w-full h-64 overflow-hidden">
             <img
@@ -33,7 +31,7 @@ function ProductCard({product,onViewProduct}){
           </div>
         </div>
 
-        {/* The action buttons remain outside the clickable area and function independently */}
+        {/* action buttons */}
         <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <button
             onClick={() => addToWishlist(product)}

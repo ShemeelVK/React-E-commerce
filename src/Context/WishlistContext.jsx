@@ -9,6 +9,22 @@ export function WishlistProvider({ children }) {
   const { currentUser, updateUserInAuthContext } = useAuth();
   const navigate = useNavigate();
 
+ //syncing backend
+  const syncWithBackend= async(updatedWishlist)=>{
+    try{
+        await axios.patch(`http://localhost:3000/users/${currentUser.id}`,{
+            wishlist:updatedWishlist
+        });
+
+        const updatedUser={...currentUser, wishlist : updatedWishlist}
+        updateUserInAuthContext(updatedUser)
+    }
+    catch(error){
+        console.log("An error occured while syncing",error)
+        alert("Error while syncing")
+    }
+  };
+
 // Add function
   const addToWishlist = async (product) => {
     if (!currentUser) {
@@ -25,15 +41,8 @@ export function WishlistProvider({ children }) {
       alert(`${product.name} is already in your wishlist.`);
       return;
     }
-
       const updatedWishlist = [...currentWishlist, product];
-        await axios.patch(`http://localhost:3000/users/${currentUser.id}`, {
-        wishlist: updatedWishlist,
-      });
-
-      const updatedUser = { ...currentUser, wishlist: updatedWishlist };
-      updateUserInAuthContext(updatedUser);
-
+      syncWithBackend(updatedWishlist)
       alert(`${product.name} has been added to your wishlist!`);
      
 }
@@ -42,6 +51,7 @@ export function WishlistProvider({ children }) {
       alert("An error occurred while adding the item.");
     }
   };
+
   // Remove function
    const removeFromWishlist = async (productId) => {
      if (!currentUser) return;
@@ -51,11 +61,8 @@ export function WishlistProvider({ children }) {
          (item) => item.id !== productId
        );
 
-       await axios.patch(`http://localhost:3000/users/${currentUser.id}`, {
-         wishlist: updatedWishlist,
-       });
-
-       updateUserInAuthContext({ ...currentUser, wishlist: updatedWishlist });
+       syncWithBackend(updatedWishlist)
+       alert(`This product is removed`)
      } catch (err) {
        console.error("Failed to remove item from wishlist", err);
        alert("An error occurred while removing the item.");
