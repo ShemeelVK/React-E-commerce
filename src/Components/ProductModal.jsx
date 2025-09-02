@@ -53,8 +53,7 @@ function ProductModal({ product, onClose }) {
               {product.name}
             </h1>
             <p className="text-gray-600 mb-6 text-sm md:text-base">
-              A placeholder description for the product, detailing its features,
-              materials, and unique qualities.
+              {product.description}
             </p>
             <p className="text-4xl md:text-5xl font-bold text-gray-900 mb-8">
               ${product.price}
@@ -65,7 +64,7 @@ function ProductModal({ product, onClose }) {
                 className="flex-1 bg-indigo-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-indigo-700 transition flex items-center justify-center gap-2"
               >
                 <ShoppingCart className="w-5 h-5" />
-                <span>{isInCart ? "Added to Cart" : "Add to Cart"}</span>
+                <span>{isInCart ? "Proceed to Cart" : "Add to Cart"}</span>
               </button>
               <button
                 onClick={() => addToWishlist(product)}

@@ -11,12 +11,19 @@ function Register(){
 
     const handleregister=async (e)=>{
         e.preventDefault();
+        const trimmedname=name.trim();
+
+        if(!trimmedname){
+          alert("Enter name fully")
+          return;
+        }
 
         try{
            const res = await axios.get(`http://localhost:3000/users?email=${email}`);
            if (res.data.length>0){
              alert("User already exists")
              navigate("/Login")
+             return;
            }
 
            else {
@@ -27,10 +34,12 @@ function Register(){
                 cart:[],
                 wishlist:[]
             });
+
+            }
+
             alert("Registration Successfull !!")
             navigate("/Login")
-           }
-       }  
+            }
 
        catch(err){
         console.log("Error",err);
