@@ -9,7 +9,7 @@ export function WishlistProvider({ children }) {
   const { currentUser, updateUserInAuthContext } = useAuth();
   const navigate = useNavigate();
 
-
+// Add function
   const addToWishlist = async (product) => {
     if (!currentUser) {
       alert("Please log in to add items to your wishlist.");
@@ -17,8 +17,7 @@ export function WishlistProvider({ children }) {
       return;
     }
 
-
-try {
+  try {
     const currentWishlist = currentUser.wishlist || []; 
     const itemExists = currentWishlist.find((item) => item.id === product.id);
 
@@ -34,7 +33,7 @@ try {
 
       const updatedUser = { ...currentUser, wishlist: updatedWishlist };
       updateUserInAuthContext(updatedUser);
-      
+
       alert(`${product.name} has been added to your wishlist!`);
      
 }
@@ -43,10 +42,31 @@ try {
       alert("An error occurred while adding the item.");
     }
   };
+  // Remove function
+   const removeFromWishlist = async (productId) => {
+     if (!currentUser) return;
+
+     try {
+       const updatedWishlist = currentUser.wishlist.filter(
+         (item) => item.id !== productId
+       );
+
+       await axios.patch(`http://localhost:3000/users/${currentUser.id}`, {
+         wishlist: updatedWishlist,
+       });
+
+       updateUserInAuthContext({ ...currentUser, wishlist: updatedWishlist });
+     } catch (err) {
+       console.error("Failed to remove item from wishlist", err);
+       alert("An error occurred while removing the item.");
+     }
+   };
+
 
   const value = {
     wishlistItems: currentUser?.wishlist || [],
     addToWishlist,
+    removeFromWishlist
   };
 
   return (
