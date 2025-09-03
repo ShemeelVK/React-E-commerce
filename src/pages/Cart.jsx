@@ -1,15 +1,22 @@
 import React from "react";
 import { useCart } from "../Context/CartContext";
-import { Heart, ShoppingCart, Trash2, Minus, Plus } from "lucide-react";
+import { Heart, ShoppingCart, Trash2, Minus, Plus ,ArrowLeft} from "lucide-react";
 import Navbar from "../Components/Navbar";
+import { useNavigate } from "react-router-dom";
 
 function Cart() {
-  const { cartItems, increaseQuantity, decreaseQuantity, removeFromCart } = useCart();
+  const { cartItems, increaseQuantity, decreaseQuantity, removeFromCart , clearCart} = useCart();
 
+  const navigate=useNavigate();
+// Subtotal function
   const subtotal = cartItems.reduce(
-    (acc, item) => acc + item.price * item.quantity,
-    0
+    (acc, item) => acc + item.price * item.quantity,0
   );
+
+  const handleclearcart=()=>{
+    alert("Are you sure you want remove all the cart items")
+    clearCart()
+  }
 
   return (
     <>
@@ -20,13 +27,34 @@ function Cart() {
         </h1>
 
         {cartItems.length === 0 ? (
-          <p className="text-center text-gray-500 text-xl mt-20">
-            Your cart is empty. Start adding some products!
-          </p>
+          <div className="text-center py-20 px-6">
+            <ShoppingCart size={80} className="mx-auto text-gray-300 mb-6" />
+            <h2 className="text-2xl font-semibold text-gray-800 mb-2">
+              Your cart is currently empty.
+            </h2>
+            <p className="text-gray-500 mb-8">
+              Looks like you haven't added anything to your cart yet.
+            </p>
+            <button
+              onClick={() => navigate("/shop")}
+              className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition duration-300"
+            >
+              <ArrowLeft size={20} />
+              <span>Continue Shopping</span>
+            </button>
+          </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             {/* --- Cart Items List --- */}
             <div className="lg:col-span-3 space-y-6">
+              <div className="flex justify-end">
+                <button
+                  onClick={handleclearcart}
+                  className="text-sm text-red-500 hover:text-red-700 font-semibold"
+                >
+                  Clear All
+                </button>
+              </div>
               {cartItems.map((item) => (
                 <div
                   key={item.id}
@@ -100,7 +128,12 @@ function Cart() {
                 <span>Total:</span>
                 <span>${subtotal.toFixed(2)}</span>
               </div>
-              <button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-lg font-semibold shadow-lg transition">
+              <button
+                onClick={() => {
+                  navigate("/Payment");
+                }}
+                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-lg font-semibold shadow-lg transition"
+              >
                 Proceed to Checkout
               </button>
             </div>

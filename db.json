@@ -7,12 +7,12 @@
       "password": "12345",
       "cart": [
         {
-          "id": "2",
-          "name": "Adidas Samba OG",
+          "id": "3",
+          "name": "New Balance 550",
           "category": "Sneakers",
-          "price": 100,
-          "imageUrl": "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/21f56016-2e59-4392-b80f-c9440573f798/ZOOMX+VAPORFLY+NEXT%25+4.png",
-          "description": "A retro-inspired sneaker featuring a sleek leather upper, low-profile design, and versatile wear from pitch to street.",
+          "price": 120,
+          "imageUrl": "https://nb.scene7.com/is/image/NB/bb550vga_nb_02_i?$pdpflexf2$&qlt=80&fmt=jpeg&wid=440&hei=440",
+          "description": "Reviving a 1989 classic, this sneaker blends basketball heritage with cushioned comfort and everyday streetwear style.",
           "quantity": 1
         },
         {
@@ -25,14 +25,58 @@
           "quantity": 1
         }
       ],
-      "wishlist": [
+      "wishlist": [],
+      "orders": [
         {
-          "id": "2",
-          "name": "Adidas Samba OG",
-          "category": "Sneakers",
-          "price": 100,
-          "imageUrl": "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/21f56016-2e59-4392-b80f-c9440573f798/ZOOMX+VAPORFLY+NEXT%25+4.png",
-          "description": "A retro-inspired sneaker featuring a sleek leather upper, low-profile design, and versatile wear from pitch to street."
+          "orderId": "ELEVE-1756884845418",
+          "orderDate": "2025-09-03T07:34:05.418Z",
+          "items": [
+            {
+              "id": "3",
+              "name": "New Balance 550",
+              "category": "Sneakers",
+              "price": 120,
+              "imageUrl": "https://nb.scene7.com/is/image/NB/bb550vga_nb_02_i?$pdpflexf2$&qlt=80&fmt=jpeg&wid=440&hei=440",
+              "description": "Reviving a 1989 classic, this sneaker blends basketball heritage with cushioned comfort and everyday streetwear style.",
+              "quantity": 1
+            },
+            {
+              "id": "4",
+              "name": "Converse Chuck 70",
+              "category": "Sneakers",
+              "price": 85,
+              "imageUrl": "https://www.converse.com/dw/image/v2/BCMP_PRD/on/demandware.static/-/Sites-converse-master-catalog/default/dw9124222a/images/a_107/162050C_A_107X1.jpg?sw=964",
+              "description": "Iconic high-top sneakers crafted with premium canvas, vintage detailing, and enhanced cushioning for daily comfort.",
+              "quantity": 1
+            }
+          ],
+          "totalAmount": 255,
+          "shippingAddress": {
+            "name": "Tester",
+            "address": "eleve house",
+            "city": "newyork",
+            "state": "california",
+            "phone": "9605621681",
+            "zip": "789456"
+          },
+          "paymentMethod": "upi",
+          "status": "In Progress"
+        },
+        {
+          "orderId": "ELEVE-1756884939477",
+          "orderDate": "2025-09-03T07:35:39.477Z",
+          "items": [],
+          "totalAmount": 50,
+          "shippingAddress": {
+            "name": "Tester",
+            "address": "eleve house",
+            "city": "newyork",
+            "state": "california",
+            "phone": "9605621681",
+            "zip": "789456"
+          },
+          "paymentMethod": "upi",
+          "status": "In Progress"
         }
       ]
     },
@@ -42,7 +86,8 @@
       "email": "shameel@eexample.com",
       "password": "12345",
       "wishlist": [],
-      "cart": []
+      "cart": [],
+      "orders": []
     }
   ],
   "products": [

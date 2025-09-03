@@ -8,6 +8,9 @@ import Contact from "./pages/Contact";
 import Shop from "./pages/Shop";
 import Cart from "./pages/Cart";
 import Wishlist from "./pages/Wishlist";
+import Orders from "./pages/Orders";
+import MyAccount from "./pages/MyAccount";
+import Payment from "./pages/Payment";
 import './index.css'
 import { AuthProvider } from "./Context/AuthContext";
 import { CartProvider } from "./Context/CartContext";
@@ -18,8 +21,8 @@ function App() {
   return (
     <>
       <AuthProvider>
-          <CartProvider>
-        <WishlistProvider>
+        <CartProvider>
+          <WishlistProvider>
             <Routes>
               <Route path="/Register" element={<Register />} />
               <Route path="/Login" element={<Login />} />
@@ -28,6 +31,10 @@ function App() {
               <Route path="/Contact" element={<Contact />} />
               <Route path="/Cart" element={<Cart />} />
               <Route path="/Wishlist" element={<Wishlist />} />
+              <Route path="/Orders" element={<Orders />} />
+              <Route path="/MyAccount" element={<MyAccount />} />
+              <Route path="/Payment" element={<Payment />} />
+
               <Route
                 path="/"
                 element={
@@ -37,8 +44,8 @@ function App() {
                 }
               />
             </Routes>
-        </WishlistProvider>
-          </CartProvider>
+          </WishlistProvider>
+        </CartProvider>
       </AuthProvider>
     </>
   );

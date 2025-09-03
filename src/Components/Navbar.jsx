@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import { ShoppingCart, Heart, User,LogOut } from "lucide-react";
 import { useCart } from "../Context/CartContext";
 import { useWishlist } from "../Context/WishlistContext";
@@ -15,6 +16,9 @@ function Navbar() {
 
   const cartCount=cartItems?.length || 0;
   const wishlistCount =wishlistItems?.length || 0;
+
+  const isCartpage=location.pathname==="/Cart"
+  const isWishlistpage=location.pathname==="/Wishlist"
 
   function handlelogout() {
     logoutUser()
@@ -77,7 +81,11 @@ function Navbar() {
           <div className="flex items-center space-x-10">
             {/* Wishlist */}
             <button onClick={() => navigate("/Wishlist")} className="relative">
-              <Heart className="w-6 h-6 text-gray-700 hover:text-indigo-700 transition" />
+              <Heart
+                className={`w-6 h-6 ${
+                  isWishlistpage ? "text-red-500" : " text-gray-700 hover:text-indigo-700 transition"
+                }`} fill={isWishlistpage ? "currentColor" : "none"}
+              />
               {wishlistCount > 0 && (
                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
                   {wishlistCount}
@@ -87,7 +95,8 @@ function Navbar() {
 
             {/* Cart */}
             <button onClick={() => navigate("/Cart")} className="relative">
-              <ShoppingCart className="w-6 h-6 text-gray-700 hover:text-indigo-700 transition" />
+              <ShoppingCart className={`w-6 h-6 ${isCartpage ? "text-indigo-700" : "text-gray-700 hover:text-indigo-700 transition" }`}
+              fill={isCartpage ? "currentColor" : "none"} />
               {cartCount > 0 && (
                 <span className="absolute -top-2 -right-2 bg-indigo-600 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
                   {cartCount}
@@ -118,8 +127,11 @@ function Navbar() {
               {/* Dropdown Menu */}
               {isDropdownOpen && currentUser && (
                 <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
-                  <button className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
+                  <button onClick={()=>navigate("/MyAccount")} className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
                     My Account
+                  </button>
+                  <button onClick={()=>navigate("/Orders")} className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
+                    Orders
                   </button>
                   <button
                     className="w-full flex items-center gap-2 text-left px-4 py-2 text-gray-700 hover:bg-gray-100"

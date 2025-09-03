@@ -41,8 +41,8 @@ export function AuthProvider({children}){
           id: userData.id,
           name: userData.name,
           email: userData.email,
-          cart:userData.cart || [],
-          wishlist:userData.wishlist || [],
+          cart: userData.cart || [],
+          wishlist: userData.wishlist || [],
         };
         localStorage.setItem("user",JSON.stringify(userToStore))
         SetCurrentUser(userToStore)
@@ -55,10 +55,10 @@ export function AuthProvider({children}){
         navigate("/Login");
     };
 
-      const updateUserInAuthContext = (updatedUserData) => {
-        SetCurrentUser(updatedUserData);
-        localStorage.setItem("user", JSON.stringify(updatedUserData));
-      };
+    const updateUserInAuthContext = (updatedUserData) => {
+      SetCurrentUser(updatedUserData);
+      localStorage.setItem("user", JSON.stringify(updatedUserData));
+    };
 
     const value={currentUser,SetCurrentUser,loginUser,logoutUser,updateUserInAuthContext}
 

@@ -32,7 +32,8 @@ function Register(){
                 email,
                 password,
                 cart:[],
-                wishlist:[]
+                wishlist:[],
+                orders:[]
             });
 
             }

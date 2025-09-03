@@ -78,12 +78,32 @@ export function CartProvider({ children }) {
     await syncCartWithBackend(updatedCart);
   };
 
+// Clear cart
+  const clearCart = async () => {
+
+    if (!currentUser) return;
+
+    try {
+      await axios.patch(`http://localhost:3000/users/${currentUser.id}`, {
+        cart: [],
+      });
+
+      const updatedUser = { ...currentUser, cart: [] };
+
+      updateUserInAuthContext(updatedUser);
+    } catch (error) {
+      console.error("Failed to clear cart:", error);
+      alert("There was an error clearing the cart.");
+    }
+  };
+
   const value = {
     cartItems: currentUser?.cart || [],
     addToCart,
     increaseQuantity,
     decreaseQuantity,
     removeFromCart,
+    clearCart
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
