@@ -30,6 +30,7 @@ function Payment() {
     zip: "",
   });
   const [paymentMethod, setPaymentMethod] = useState("upi");
+  const [isProcessing, setIsProcessing] = useState(false);
 
   // Load the Razorpay script when the component mounts
   useEffect(() => {
@@ -51,10 +52,14 @@ function Payment() {
   const handlePayment = async (e) => {
     e.preventDefault();
 
+    if(!currentUser || isProcessing) return;
+
     if (!window.Razorpay) {
       alert("Razorpay SDK failed to load. Are you online?");
       return;
     }
+
+    setIsProcessing(true)
 
     const newOrder = {
       orderId: `ELEVE-${Date.now()}`,
@@ -123,6 +128,7 @@ function Payment() {
           } catch (error) {
             console.error("Failed to place order:", error);
             alert("There was an error placing your order.");
+            setIsProcessing(false)
           }
         },
       },
@@ -286,7 +292,8 @@ function Payment() {
               <span>${total.toFixed(2)}</span>
             </div>
             <button
-              type="submit"
+              type="submit" 
+              disabled={isProcessing}
               className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-lg font-semibold shadow-lg transition flex items-center justify-center gap-2"
             >
               <Package className="w-5 h-5" />

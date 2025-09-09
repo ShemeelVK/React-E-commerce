@@ -1,11 +1,13 @@
 import { Heart, ShoppingCart, X } from "lucide-react";
 import { useCart } from "../Context/CartContext.jsx";
 import { useWishlist } from "../Context/WishlistContext.jsx";
+import { useNavigate } from "react-router-dom";
 
 
 function ProductModal({ product, onClose }) {
   const { addToCart, cartItems } = useCart();
   const { addToWishlist, wishlistItems } = useWishlist();
+  const navigate=useNavigate();
 
 
   const handleModalContentClick = (e) => {
@@ -60,9 +62,15 @@ function ProductModal({ product, onClose }) {
             </p>
             <div className="flex items-center gap-4">
               <button
-                onClick={() => addToCart(product)}
-                className="flex-1 bg-indigo-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-indigo-700 transition flex items-center justify-center gap-2"
-              >
+                onClick={() => {
+                  isInCart ? navigate("/Cart") : addToCart(product);
+                }}
+                className={`flex-1 text-white font-semibold py-3 px-6 rounded-lg shadow-md  transition flex items-center justify-center gap-2 
+                  ${isInCart
+                    ? "bg-green-600 hover:bg-green-700"
+                    : "bg-indigo-600 hover:bg-indigo-700"
+                }`}
+                >
                 <ShoppingCart className="w-5 h-5" />
                 <span>{isInCart ? "Proceed to Cart" : "Add to Cart"}</span>
               </button>

@@ -7,6 +7,24 @@
       "password": "12345",
       "cart": [
         {
+          "id": "6",
+          "name": "ASICS GEL-Kayano 14",
+          "category": "Running",
+          "price": 150,
+          "imageUrl": "https://images.asics.com/is/image/asics/1201A019_108_SR_RT_GLB?$sfcc-product$",
+          "description": "Performance running shoes with GEL technology cushioning, delivering stability and comfort for long-distance runs.",
+          "quantity": 1
+        },
+        {
+          "id": "7",
+          "name": "Puma Suede Classic XXI",
+          "category": "Sneakers",
+          "price": 75,
+          "imageUrl": "https://images.puma.com/image/upload/f_auto,q_auto,b_rgb:fafafa,w_1200,h_1200/global/374915/01/sv01/fnd/PNA/fmt/png/Suede-Classic-XXI-Men's-Sneakers",
+          "description": "An enduring classic with soft suede uppers, retro design, and versatile everyday appeal.",
+          "quantity": 1
+        },
+        {
           "id": "3",
           "name": "New Balance 550",
           "category": "Sneakers",
@@ -16,16 +34,25 @@
           "quantity": 1
         },
         {
-          "id": "4",
-          "name": "Converse Chuck 70",
+          "id": "1",
+          "name": "Nike Air Force 1 '07",
           "category": "Sneakers",
-          "price": 85,
-          "imageUrl": "https://www.converse.com/dw/image/v2/BCMP_PRD/on/demandware.static/-/Sites-converse-master-catalog/default/dw9124222a/images/a_107/162050C_A_107X1.jpg?sw=964",
-          "description": "Iconic high-top sneakers crafted with premium canvas, vintage detailing, and enhanced cushioning for daily comfort.",
+          "price": 115,
+          "imageUrl": "https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/b7d9211c-26e7-431a-ac24-b0540fb3c00f/air-force-1-07-mens-shoes-jBrhbr.png",
+          "description": "A timeless basketball classic turned streetwear icon, crafted with premium leather for durability and everyday style.",
           "quantity": 1
         }
       ],
-      "wishlist": [],
+      "wishlist": [
+        {
+          "id": "7",
+          "name": "Puma Suede Classic XXI",
+          "category": "Sneakers",
+          "price": 75,
+          "imageUrl": "https://images.puma.com/image/upload/f_auto,q_auto,b_rgb:fafafa,w_1200,h_1200/global/374915/01/sv01/fnd/PNA/fmt/png/Suede-Classic-XXI-Men's-Sneakers",
+          "description": "An enduring classic with soft suede uppers, retro design, and versatile everyday appeal."
+        }
+      ],
       "orders": [
         {
           "orderId": "ELEVE-1756884845418",
@@ -51,22 +78,6 @@
             }
           ],
           "totalAmount": 255,
-          "shippingAddress": {
-            "name": "Tester",
-            "address": "eleve house",
-            "city": "newyork",
-            "state": "california",
-            "phone": "9605621681",
-            "zip": "789456"
-          },
-          "paymentMethod": "upi",
-          "status": "In Progress"
-        },
-        {
-          "orderId": "ELEVE-1756884939477",
-          "orderDate": "2025-09-03T07:35:39.477Z",
-          "items": [],
-          "totalAmount": 50,
           "shippingAddress": {
             "name": "Tester",
             "address": "eleve house",
