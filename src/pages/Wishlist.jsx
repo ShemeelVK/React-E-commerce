@@ -18,7 +18,7 @@ function Wishlist() {
       <Navbar />
 
       <div className="max-w-7xl mx-auto py-12 px-4 pt-28">
-        <h1 className="text-4xl font-bold text-gray-900 mb-8 text-center">
+        <h1 className="text-4xl font-extrabold text-gray-900 mb-8 text-center mt-8">
           My Wishlist
         </h1>
 

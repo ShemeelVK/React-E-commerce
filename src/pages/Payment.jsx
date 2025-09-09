@@ -29,7 +29,7 @@ function Payment() {
     phone:"",
     zip: "",
   });
-  const [paymentMethod, setPaymentMethod] = useState("upi");
+  const [paymentMethod, setPaymentMethod] = useState("UPI");
   const [isProcessing, setIsProcessing] = useState(false);
 
   // Load the Razorpay script when the component mounts
@@ -214,9 +214,9 @@ function Payment() {
               <h2 className="text-2xl font-bold mb-6">Payment Method</h2>
               <div className="space-y-4">
                 <div
-                  onClick={() => setPaymentMethod("upi")}
+                  onClick={() => setPaymentMethod("UPI")}
                   className={`flex items-center p-4 border rounded-lg cursor-pointer transition ${
-                    paymentMethod === "upi"
+                    paymentMethod === "UPI"
                       ? "border-indigo-500 bg-indigo-50"
                       : ""
                   }`}
@@ -236,9 +236,9 @@ function Payment() {
                   <span>Net Banking</span>
                 </div>
                 <div
-                  onClick={() => setPaymentMethod("cod")}
+                  onClick={() => setPaymentMethod("COD")}
                   className={`flex items-center p-4 border rounded-lg cursor-pointer transition ${
-                    paymentMethod === "cod"
+                    paymentMethod === "COD"
                       ? "border-indigo-500 bg-indigo-50"
                       : ""
                   }`}

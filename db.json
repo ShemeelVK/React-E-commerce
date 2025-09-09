@@ -2,27 +2,18 @@
   "users": [
     {
       "id": "2493",
-      "name": "Tester",
+      "name": "Testerr",
       "email": "test1@example.com",
-      "password": "12345",
-      "cart": [
+      "password": "123456",
+      "cart": [],
+      "wishlist": [
         {
-          "id": "6",
-          "name": "ASICS GEL-Kayano 14",
-          "category": "Running",
-          "price": 150,
-          "imageUrl": "https://images.asics.com/is/image/asics/1201A019_108_SR_RT_GLB?$sfcc-product$",
-          "description": "Performance running shoes with GEL technology cushioning, delivering stability and comfort for long-distance runs.",
-          "quantity": 1
-        },
-        {
-          "id": "7",
-          "name": "Puma Suede Classic XXI",
+          "id": "2",
+          "name": "Adidas Samba OG",
           "category": "Sneakers",
-          "price": 75,
-          "imageUrl": "https://images.puma.com/image/upload/f_auto,q_auto,b_rgb:fafafa,w_1200,h_1200/global/374915/01/sv01/fnd/PNA/fmt/png/Suede-Classic-XXI-Men's-Sneakers",
-          "description": "An enduring classic with soft suede uppers, retro design, and versatile everyday appeal.",
-          "quantity": 1
+          "price": 100,
+          "imageUrl": "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/21f56016-2e59-4392-b80f-c9440573f798/ZOOMX+VAPORFLY+NEXT%25+4.png",
+          "description": "A retro-inspired sneaker featuring a sleek leather upper, low-profile design, and versatile wear from pitch to street."
         },
         {
           "id": "3",
@@ -30,27 +21,7 @@
           "category": "Sneakers",
           "price": 120,
           "imageUrl": "https://nb.scene7.com/is/image/NB/bb550vga_nb_02_i?$pdpflexf2$&qlt=80&fmt=jpeg&wid=440&hei=440",
-          "description": "Reviving a 1989 classic, this sneaker blends basketball heritage with cushioned comfort and everyday streetwear style.",
-          "quantity": 1
-        },
-        {
-          "id": "1",
-          "name": "Nike Air Force 1 '07",
-          "category": "Sneakers",
-          "price": 115,
-          "imageUrl": "https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/b7d9211c-26e7-431a-ac24-b0540fb3c00f/air-force-1-07-mens-shoes-jBrhbr.png",
-          "description": "A timeless basketball classic turned streetwear icon, crafted with premium leather for durability and everyday style.",
-          "quantity": 1
-        }
-      ],
-      "wishlist": [
-        {
-          "id": "7",
-          "name": "Puma Suede Classic XXI",
-          "category": "Sneakers",
-          "price": 75,
-          "imageUrl": "https://images.puma.com/image/upload/f_auto,q_auto,b_rgb:fafafa,w_1200,h_1200/global/374915/01/sv01/fnd/PNA/fmt/png/Suede-Classic-XXI-Men's-Sneakers",
-          "description": "An enduring classic with soft suede uppers, retro design, and versatile everyday appeal."
+          "description": "Reviving a 1989 classic, this sneaker blends basketball heritage with cushioned comfort and everyday streetwear style."
         }
       ],
       "orders": [
@@ -87,6 +58,103 @@
             "zip": "789456"
           },
           "paymentMethod": "upi",
+          "status": "Cancelled"
+        },
+        {
+          "orderId": "ELEVE-1757403292281",
+          "orderDate": "2025-09-09T07:34:52.281Z",
+          "items": [
+            {
+              "id": "6",
+              "name": "ASICS GEL-Kayano 14",
+              "category": "Running",
+              "price": 150,
+              "imageUrl": "https://images.asics.com/is/image/asics/1201A019_108_SR_RT_GLB?$sfcc-product$",
+              "description": "Performance running shoes with GEL technology cushioning, delivering stability and comfort for long-distance runs.",
+              "quantity": 1
+            },
+            {
+              "id": "7",
+              "name": "Puma Suede Classic XXI",
+              "category": "Sneakers",
+              "price": 75,
+              "imageUrl": "https://images.puma.com/image/upload/f_auto,q_auto,b_rgb:fafafa,w_1200,h_1200/global/374915/01/sv01/fnd/PNA/fmt/png/Suede-Classic-XXI-Men's-Sneakers",
+              "description": "An enduring classic with soft suede uppers, retro design, and versatile everyday appeal.",
+              "quantity": 1
+            },
+            {
+              "id": "3",
+              "name": "New Balance 550",
+              "category": "Sneakers",
+              "price": 120,
+              "imageUrl": "https://nb.scene7.com/is/image/NB/bb550vga_nb_02_i?$pdpflexf2$&qlt=80&fmt=jpeg&wid=440&hei=440",
+              "description": "Reviving a 1989 classic, this sneaker blends basketball heritage with cushioned comfort and everyday streetwear style.",
+              "quantity": 1
+            },
+            {
+              "id": "1",
+              "name": "Nike Air Force 1 '07",
+              "category": "Sneakers",
+              "price": 115,
+              "imageUrl": "https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/b7d9211c-26e7-431a-ac24-b0540fb3c00f/air-force-1-07-mens-shoes-jBrhbr.png",
+              "description": "A timeless basketball classic turned streetwear icon, crafted with premium leather for durability and everyday style.",
+              "quantity": 1
+            },
+            {
+              "id": "2",
+              "name": "Adidas Samba OG",
+              "category": "Sneakers",
+              "price": 100,
+              "imageUrl": "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/21f56016-2e59-4392-b80f-c9440573f798/ZOOMX+VAPORFLY+NEXT%25+4.png",
+              "description": "A retro-inspired sneaker featuring a sleek leather upper, low-profile design, and versatile wear from pitch to street.",
+              "quantity": 1
+            }
+          ],
+          "totalAmount": 560,
+          "shippingAddress": {
+            "name": "Tester",
+            "address": "Kakkanchery",
+            "city": "Ramanattukara",
+            "state": "Malappuram",
+            "phone": "9605621681",
+            "zip": "679334"
+          },
+          "paymentMethod": "cod",
+          "status": "In Progress"
+        },
+        {
+          "orderId": "ELEVE-1757404801220",
+          "orderDate": "2025-09-09T08:00:01.220Z",
+          "items": [
+            {
+              "id": "2",
+              "name": "Adidas Samba OG",
+              "category": "Sneakers",
+              "price": 100,
+              "imageUrl": "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/21f56016-2e59-4392-b80f-c9440573f798/ZOOMX+VAPORFLY+NEXT%25+4.png",
+              "description": "A retro-inspired sneaker featuring a sleek leather upper, low-profile design, and versatile wear from pitch to street.",
+              "quantity": 1
+            },
+            {
+              "id": "3",
+              "name": "New Balance 550",
+              "category": "Sneakers",
+              "price": 120,
+              "imageUrl": "https://nb.scene7.com/is/image/NB/bb550vga_nb_02_i?$pdpflexf2$&qlt=80&fmt=jpeg&wid=440&hei=440",
+              "description": "Reviving a 1989 classic, this sneaker blends basketball heritage with cushioned comfort and everyday streetwear style.",
+              "quantity": 1
+            }
+          ],
+          "totalAmount": 270,
+          "shippingAddress": {
+            "name": "Tester",
+            "address": "idimuzhikkal",
+            "city": "kakkanchery",
+            "state": "kerala",
+            "phone": "9605621681",
+            "zip": "679586"
+          },
+          "paymentMethod": "UPI",
           "status": "In Progress"
         }
       ]

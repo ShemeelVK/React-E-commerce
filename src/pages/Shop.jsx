@@ -52,7 +52,7 @@ function Shop() {
       <Navbar />
       <div className="max-w-7xl mx-auto py-12 px-4 pt-28">
         {/* --- Category Filter Buttons --- */}
-        <div className="flex justify-center space-x-4 mb-12">
+        <div className="flex justify-center space-x-4 mb-12 mt-8">
           {categories.map((category) => (
             <button
               key={category}
