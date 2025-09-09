@@ -1,7 +1,6 @@
 import { createContext,useState,useEffect,useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Cart from "../pages/Cart";
 
 const AuthContext=createContext(null)
 
@@ -11,12 +10,8 @@ export function AuthProvider({children}){
     const navigate=useNavigate();
 
     useEffect(()=>{
+      const fetchUserAPI = async () => {
         const storedUser=localStorage.getItem("user")
-        if(storedUser){
-            SetCurrentUser(JSON.parse(storedUser))
-        }
-
-         const fetchUserAPI = async () => {
            if (storedUser) {
              try {
                const userId = JSON.parse(storedUser).id;
@@ -24,28 +19,22 @@ export function AuthProvider({children}){
                  `http://localhost:3000/users/${userId}`
                );
                SetCurrentUser(res.data);
-               localStorage.setItem("user", JSON.stringify(res.data));
              } catch (err) {
                console.error("Failed to sync user from API:", err);
+               localStorage.removeItem("user")
+               SetCurrentUser(null)
              }
            }
            setLoading(false)
-           
          };
 
          fetchUserAPI();
     },[]);
 
     const loginUser=(userData)=>{
-        const userToStore = {
-          id: userData.id,
-          name: userData.name,
-          email: userData.email,
-          cart: userData.cart || [],
-          wishlist: userData.wishlist || [],
-        };
-        localStorage.setItem("user",JSON.stringify(userToStore))
+      const { password, ...userToStore } = userData;
         SetCurrentUser(userToStore)
+        localStorage.setItem("user",JSON.stringify(userToStore))
         navigate("/")
     };
 
@@ -56,8 +45,9 @@ export function AuthProvider({children}){
     };
 
     const updateUserInAuthContext = (updatedUserData) => {
-      SetCurrentUser(updatedUserData);
-      localStorage.setItem("user", JSON.stringify(updatedUserData));
+      const { password, ...userToStore } = updatedUserData;
+      SetCurrentUser(userToStore);
+      localStorage.setItem("user", JSON.stringify(userToStore));
     };
 
     const value={currentUser,SetCurrentUser,loginUser,logoutUser,updateUserInAuthContext}
