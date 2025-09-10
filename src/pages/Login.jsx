@@ -19,11 +19,23 @@ function Login() {
                 const user=res.data[0];
             
               if(user.email===email && user.password===password){
+                if(user.status==="blocked"){
+                  alert("Unfortunately you are blocked")
+                  return;
+                }
                 alert("Login Successfull")
                 loginUser(user)
+
+                if(user.role==="admin"){
+                  navigate("/admin");
+                  return
+                }
+                else{
+                  navigate("/")
+                }
               }
               else{
-                alert("Invalid Credentials")
+                alert("Invalid credentials")
               }
         }
         }

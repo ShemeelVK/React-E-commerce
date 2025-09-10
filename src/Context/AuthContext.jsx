@@ -35,7 +35,6 @@ export function AuthProvider({children}){
       const { password, ...userToStore } = userData;
         SetCurrentUser(userToStore)
         localStorage.setItem("user",JSON.stringify(userToStore))
-        navigate("/")
     };
 
     const logoutUser=()=>{

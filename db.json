@@ -5,6 +5,8 @@
       "name": "Testerr",
       "email": "test1@example.com",
       "password": "123456",
+      "role":"user",
+      "status":"active",
       "cart": [],
       "wishlist": [
         {
@@ -164,6 +166,8 @@
       "name": "shemeel",
       "email": "shameel@eexample.com",
       "password": "12345",
+      "role": "admin",
+      "status": "active",
       "wishlist": [],
       "cart": [],
       "orders": []
