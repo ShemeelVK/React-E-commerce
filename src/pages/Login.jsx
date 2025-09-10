@@ -27,11 +27,11 @@ function Login() {
                 loginUser(user)
 
                 if(user.role==="admin"){
-                  navigate("/admin");
+                  navigate("/admin",{replace: true});
                   return
                 }
                 else{
-                  navigate("/")
+                  navigate("/",{replace: true})
                 }
               }
               else{

@@ -5,8 +5,8 @@
       "name": "Testerr",
       "email": "test1@example.com",
       "password": "123456",
-      "role":"user",
-      "status":"active",
+      "role": "user",
+      "status": "active",
       "cart": [],
       "wishlist": [
         {
@@ -171,6 +171,17 @@
       "wishlist": [],
       "cart": [],
       "orders": []
+    },
+    {
+      "id": "4074",
+      "name": "Sreenand",
+      "email": "sreenand@example.com",
+      "password": "sreenand123",
+      "role": "user",
+      "status": "active",
+      "cart": [],
+      "wishlist": [],
+      "orders": []
     }
   ],
   "products": [
@@ -180,7 +191,8 @@
       "category": "Sneakers",
       "price": 115,
       "imageUrl": "https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/b7d9211c-26e7-431a-ac24-b0540fb3c00f/air-force-1-07-mens-shoes-jBrhbr.png",
-      "description": "A timeless basketball classic turned streetwear icon, crafted with premium leather for durability and everyday style."
+      "description": "A timeless basketball classic turned streetwear icon, crafted with premium leather for durability and everyday style.",
+      "isFeatured": false
     },
     {
       "id": "2",
@@ -188,7 +200,8 @@
       "category": "Sneakers",
       "price": 100,
       "imageUrl": "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/21f56016-2e59-4392-b80f-c9440573f798/ZOOMX+VAPORFLY+NEXT%25+4.png",
-      "description": "A retro-inspired sneaker featuring a sleek leather upper, low-profile design, and versatile wear from pitch to street."
+      "description": "A retro-inspired sneaker featuring a sleek leather upper, low-profile design, and versatile wear from pitch to street.",
+      "isFeatured": false
     },
     {
       "id": "3",
@@ -196,7 +209,8 @@
       "category": "Sneakers",
       "price": 120,
       "imageUrl": "https://nb.scene7.com/is/image/NB/bb550vga_nb_02_i?$pdpflexf2$&qlt=80&fmt=jpeg&wid=440&hei=440",
-      "description": "Reviving a 1989 classic, this sneaker blends basketball heritage with cushioned comfort and everyday streetwear style."
+      "description": "Reviving a 1989 classic, this sneaker blends basketball heritage with cushioned comfort and everyday streetwear style.",
+      "isFeatured": false
     },
     {
       "id": "4",
@@ -204,7 +218,8 @@
       "category": "Sneakers",
       "price": 85,
       "imageUrl": "https://www.converse.com/dw/image/v2/BCMP_PRD/on/demandware.static/-/Sites-converse-master-catalog/default/dw9124222a/images/a_107/162050C_A_107X1.jpg?sw=964",
-      "description": "Iconic high-top sneakers crafted with premium canvas, vintage detailing, and enhanced cushioning for daily comfort."
+      "description": "Iconic high-top sneakers crafted with premium canvas, vintage detailing, and enhanced cushioning for daily comfort.",
+      "isFeatured": false
     },
     {
       "id": "5",
@@ -212,7 +227,8 @@
       "category": "Sneakers",
       "price": 115,
       "imageUrl": "https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/4f37fca8-6bce-43e7-87ce-4a5ae156036f/dunk-low-retro-mens-shoes-76KnBL.png",
-      "description": "A revival of the classic '80s basketball icon, designed with premium leather and bold colorways for a standout look."
+      "description": "A revival of the classic '80s basketball icon, designed with premium leather and bold colorways for a standout look.",
+      "isFeatured": false
     },
     {
       "id": "6",
@@ -220,7 +236,8 @@
       "category": "Running",
       "price": 150,
       "imageUrl": "https://images.asics.com/is/image/asics/1201A019_108_SR_RT_GLB?$sfcc-product$",
-      "description": "Performance running shoes with GEL technology cushioning, delivering stability and comfort for long-distance runs."
+      "description": "Performance running shoes with GEL technology cushioning, delivering stability and comfort for long-distance runs.",
+      "isFeatured": false
     },
     {
       "id": "7",
@@ -228,7 +245,8 @@
       "category": "Sneakers",
       "price": 75,
       "imageUrl": "https://images.puma.com/image/upload/f_auto,q_auto,b_rgb:fafafa,w_1200,h_1200/global/374915/01/sv01/fnd/PNA/fmt/png/Suede-Classic-XXI-Men's-Sneakers",
-      "description": "An enduring classic with soft suede uppers, retro design, and versatile everyday appeal."
+      "description": "An enduring classic with soft suede uppers, retro design, and versatile everyday appeal.",
+      "isFeatured": false
     },
     {
       "id": "8",
@@ -236,7 +254,8 @@
       "category": "Sneakers",
       "price": 80,
       "imageUrl": "https://images.reebok.com/image/upload/f_auto,q_auto,fl_lossy,c_limit,w_1920/stryder/prod/adbbe52614914441a733af1901131151_9366/AR0456_01.jpg",
-      "description": "Clean and minimal tennis-inspired sneakers featuring soft leather uppers and timeless court style."
+      "description": "Clean and minimal tennis-inspired sneakers featuring soft leather uppers and timeless court style.",
+      "isFeatured": false
     },
     {
       "id": "9",
@@ -244,7 +263,8 @@
       "category": "Sneakers",
       "price": 70,
       "imageUrl": "https://images.vans.com/is/image/Vans/VN000D3HY28-HERO?$583x583$",
-      "description": "A skateboarding classic with suede and canvas uppers, signature side stripe, and durable waffle outsole."
+      "description": "A skateboarding classic with suede and canvas uppers, signature side stripe, and durable waffle outsole.",
+      "isFeatured": false
     },
     {
       "id": "10",
@@ -252,7 +272,8 @@
       "category": "Running",
       "price": 190,
       "imageUrl": "https://images.salomon.com/is/image/salomon/L41252900_01?fmt=jpg&wid=1280&fit=constrain,0&hei=1280",
-      "description": "Trail-ready shoes engineered with advanced cushioning and grip, built for endurance and rugged terrains."
+      "description": "Trail-ready shoes engineered with advanced cushioning and grip, built for endurance and rugged terrains.",
+      "isFeatured": false
     },
     {
       "id": "11",
@@ -260,7 +281,8 @@
       "category": "Boots",
       "price": 198,
       "imageUrl": "https://images.timberland.com/is/image/Timberland/10061024-HERO?wid=720&hei=720&fit=constrain,1&qlt=85,1&op_usm=1,1,6,0",
-      "description": "Durable waterproof boots crafted with premium leather and rugged traction, perfect for all-weather wear."
+      "description": "Durable waterproof boots crafted with premium leather and rugged traction, perfect for all-weather wear.",
+      "isFeatured": false
     },
     {
       "id": "12",
@@ -268,7 +290,8 @@
       "category": "Boots",
       "price": 170,
       "imageUrl": "https://i1.adis.ws/i/drmartens/11822006.80.jpg?$medium$",
-      "description": "The iconic 8-eye boot made with smooth leather, signature yellow stitching, and air-cushioned soles."
+      "description": "The iconic 8-eye boot made with smooth leather, signature yellow stitching, and air-cushioned soles.",
+      "isFeatured": false
     },
     {
       "id": "13",
@@ -276,7 +299,8 @@
       "category": "Running",
       "price": 145,
       "imageUrl": "https://www.hoka.com/dw/image/v2/BDFS_PRD/on/demandware.static/-/Sites-hoka-master-catalog/default/dw05324548/images/white/1127895-BBLC_1.jpg?sw=1360&sh=1690&sm=fit&q=70",
-      "description": "Lightweight and responsive running shoes designed with plush cushioning for smooth daily miles."
+      "description": "Lightweight and responsive running shoes designed with plush cushioning for smooth daily miles.",
+      "isFeatured": false
     },
     {
       "id": "14",
@@ -284,7 +308,8 @@
       "category": "Running",
       "price": 140,
       "imageUrl": "https://www.brooksrunning.com/dw/image/v2/BGPF_PRD/on/demandware.static/-/Sites-brooks-master-catalog/default/dw8f53f563/original/110393/110393-020-l-ghost-15-mens-cushion-running-shoe.png?sw=1200",
-      "description": "A cushioned neutral running shoe built for smooth transitions, soft landings, and reliable comfort."
+      "description": "A cushioned neutral running shoe built for smooth transitions, soft landings, and reliable comfort.",
+      "isFeatured": false
     },
     {
       "id": "15",
@@ -292,7 +317,8 @@
       "category": "Boots",
       "price": 350,
       "imageUrl": "https://www.redwingshoes.com/dw/image/v2/BDFS_PRD/on/demandware.static/-/Sites-red-wing-master-catalog/default/dw2da1b933/images/08085-1-1200.jpg?sw=800&sh=800&sm=fit",
-      "description": "Heritage-inspired rugged boots handcrafted with premium leather, durable soles, and timeless style."
+      "description": "Heritage-inspired rugged boots handcrafted with premium leather, durable soles, and timeless style.",
+      "isFeatured": false
     },
     {
       "id": "16",
@@ -300,7 +326,8 @@
       "category": "Sneakers",
       "price": 125,
       "imageUrl": "https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/a339855e-6916-4c10-816a-11355c825a40/air-jordan-1-mid-shoes-X5pM09.png",
-      "description": "Classic basketball-inspired sneakers with premium leather, iconic design, and versatile streetwear appeal."
+      "description": "Classic basketball-inspired sneakers with premium leather, iconic design, and versatile streetwear appeal.",
+      "isFeatured": false
     },
     {
       "id": "17",
@@ -308,7 +335,8 @@
       "category": "Running",
       "price": 140,
       "imageUrl": "https://images.on-running.com/v1638271798/shop/cloud_5-fw22-all-black-m-g1.jpg",
-      "description": "Lightweight and cushioned running shoes designed for effortless comfort, speed, and daily training."
+      "description": "Lightweight and cushioned running shoes designed for effortless comfort, speed, and daily training.",
+      "isFeatured": false
     },
     {
       "id": "18",
@@ -316,7 +344,8 @@
       "category": "Sneakers",
       "price": 100,
       "imageUrl": "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/03a7049889604a37911ead2400834a36_9366/Gazelle_Shoes_Blue_BB5478_01_standard.jpg",
-      "description": "A sleek retro silhouette crafted with suede and leather, offering casual style with classic Adidas heritage."
+      "description": "A sleek retro silhouette crafted with suede and leather, offering casual style with classic Adidas heritage.",
+      "isFeatured": false
     },
     {
       "id": "19",
@@ -324,7 +353,8 @@
       "category": "Boots",
       "price": 210,
       "imageUrl": "https://www.blundstone.com/media/catalog/product/cache/1/image/1800x/040ec09b1e35df139433887a97daa66f/5/8/585_1_1.jpg",
-      "description": "Rugged slip-on boots with premium leather and durable soles, built for all-day comfort and outdoor durability."
+      "description": "Rugged slip-on boots with premium leather and durable soles, built for all-day comfort and outdoor durability.",
+      "isFeatured": false
     },
     {
       "id": "20",
@@ -332,7 +362,8 @@
       "category": "Running",
       "price": 120,
       "imageUrl": "https://www.saucony.com/en/kinvara-14/55263M.html?dwvar_55263M_color=S20823-16#start=1",
-      "description": "Lightweight running shoes featuring responsive cushioning and flexible design for faster, smoother strides."
+      "description": "Lightweight running shoes featuring responsive cushioning and flexible design for faster, smoother strides.",
+      "isFeatured": false
     },
     {
       "id": "21",
@@ -340,7 +371,8 @@
       "category": "Running",
       "price": 180,
       "imageUrl": "https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/d6452370-49b0-461b-a517-3532a825a213/zoomx-invincible-run-flyknit-3-mens-road-running-shoes-4hL6jF.png",
-      "description": "High-performance running shoes with ZoomX foam for maximum cushioning, energy return, and long-distance comfort."
+      "description": "High-performance running shoes with ZoomX foam for maximum cushioning, energy return, and long-distance comfort.",
+      "isFeatured": false
     },
     {
       "id": "22",
@@ -348,7 +380,8 @@
       "category": "Boots",
       "price": 150,
       "imageUrl": "https://clarks.scene7.com/is/image/clarks/26138221_A",
-      "description": "Timeless chukka boots crafted with premium suede, crepe soles, and versatile style for casual or formal wear."
+      "description": "Timeless chukka boots crafted with premium suede, crepe soles, and versatile style for casual or formal wear.",
+      "isFeatured": false
     },
     {
       "id": "23",
@@ -356,7 +389,8 @@
       "category": "Running",
       "price": 135,
       "imageUrl": "https://nb.scene7.com/is/image/NB/m880g13_nb_02_i?$pdpflexf2$&qlt=80&fmt=jpeg&wid=440&hei=440",
-      "description": "Supportive and cushioned running shoes with Fresh Foam X midsoles, engineered for comfort and endurance."
+      "description": "Supportive and cushioned running shoes with Fresh Foam X midsoles, engineered for comfort and endurance.",
+      "isFeatured": false
     },
     {
       "id": "24",
@@ -364,7 +398,8 @@
       "category": "Sneakers",
       "price": 130,
       "imageUrl": "https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/73d69945-2394-45b6-a05a-691a5e1dec63/air-max-90-mens-shoes-6n3vKB.png",
-      "description": "Iconic Air Max sneakers with visible Air cushioning, retro design, and durable leather and mesh construction."
+      "description": "Iconic Air Max sneakers with visible Air cushioning, retro design, and durable leather and mesh construction.",
+      "isFeatured": false
     },
     {
       "id": "25",
@@ -372,7 +407,8 @@
       "category": "Boots",
       "price": 150,
       "imageUrl": "https://www.ugg.com/dw/image/v2/BDFS_PRD/on/demandware.static/-/Sites-ugg-master-catalog/default/dw4f2ff913/images/white/1016222-CHE_1.jpg?sw=1360&sh=1690&sm=fit&q=70",
-      "description": "Soft and cozy ankle boots featuring genuine sheepskin lining, premium suede, and everyday warmth."
+      "description": "Soft and cozy ankle boots featuring genuine sheepskin lining, premium suede, and everyday warmth.",
+      "isFeatured": false
     },
     {
       "id": "26",
@@ -380,7 +416,8 @@
       "category": "Sneakers",
       "price": 100,
       "imageUrl": "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/b47d772917314756a1b6a88e0085a623_9366/Stan_Smith_Shoes_White_M20324_01_standard.jpg",
-      "description": "Classic tennis shoes with clean leather uppers, minimal design, and versatile streetwear style."
+      "description": "Classic tennis shoes with clean leather uppers, minimal design, and versatile streetwear style.",
+      "isFeatured": false
     },
     {
       "id": "27",
@@ -388,7 +425,8 @@
       "category": "Running",
       "price": 140,
       "imageUrl": "https://www.mizunousa.com/dw/image/v2/BDBS_PRD/on/demandware.static/-/Sites-mizuno-master-catalog/default/dw2c2a0752/images/products/41/411378.9073.01.png?sw=1200",
-      "description": "Responsive running shoes with Wave technology for smooth cushioning, stability, and long-distance comfort."
+      "description": "Responsive running shoes with Wave technology for smooth cushioning, stability, and long-distance comfort.",
+      "isFeatured": false
     },
     {
       "id": "28",
@@ -396,7 +434,8 @@
       "category": "Boots",
       "price": 415,
       "imageUrl": "https://www.wolverine.com/us/en/1000-mile-plain-toe-original-boot/17967M.html?dwvar_17967M_color=W05300#start=1",
-      "description": "Premium leather boots built to last, offering classic American heritage style and rugged durability."
+      "description": "Premium leather boots built to last, offering classic American heritage style and rugged durability.",
+      "isFeatured": false
     },
     {
       "id": "29",
@@ -404,7 +443,8 @@
       "category": "Sneakers",
       "price": 175,
       "imageUrl": "https://www.veja-store.com/media/catalog/product/cache/8d1838de92973715c66744879ae24314/C/P/CP0501537A_1.jpg",
-      "description": "Eco-friendly sneakers with sustainable materials, premium design, and modern streetwear appeal."
+      "description": "Eco-friendly sneakers with sustainable materials, premium design, and modern streetwear appeal.",
+      "isFeatured": false
     },
     {
       "id": "30",
@@ -412,7 +452,8 @@
       "category": "Running",
       "price": 140,
       "imageUrl": "https://www.altrarunning.com/shop/mens-lone-peak-8-al0a82c4?variationId=400",
-      "description": "Trail running shoes with foot-shaped design, ample cushioning, and rugged traction for off-road adventures."
+      "description": "Trail running shoes with foot-shaped design, ample cushioning, and rugged traction for off-road adventures.",
+      "isFeatured": false
     },
     {
       "id": "31",
@@ -420,7 +461,8 @@
       "category": "Boots",
       "price": 425,
       "imageUrl": "https://www.grenson.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/1/1/110011_1.jpg",
-      "description": "Premium handcrafted leather brogue boots with classic detailing and durable construction for timeless style."
+      "description": "Premium handcrafted leather brogue boots with classic detailing and durable construction for timeless style.",
+      "isFeatured": false
     },
     {
       "id": "32",
@@ -428,7 +470,8 @@
       "category": "Running",
       "price": 130,
       "imageUrl": "https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/b5655b3c-659f-4537-a262-e1e48a313a2a/pegasus-40-mens-road-running-shoes-d1sFk8.png",
-      "description": "Responsive road-running shoes with lightweight cushioning and breathable design for daily training."
+      "description": "Responsive road-running shoes with lightweight cushioning and breathable design for daily training.",
+      "isFeatured": false
     },
     {
       "id": "33",
@@ -436,7 +479,8 @@
       "category": "Sneakers",
       "price": 440,
       "imageUrl": "https://media.commonprojects.com/prod/products/1528-0506-1.jpg",
-      "description": "Minimalist luxury sneakers with premium Italian leather, sleek silhouette, and sophisticated street style."
+      "description": "Minimalist luxury sneakers with premium Italian leather, sleek silhouette, and sophisticated street style.",
+      "isFeatured": false
     },
     {
       "id": "34",
@@ -444,7 +488,8 @@
       "category": "Boots",
       "price": 199,
       "imageUrl": "https://cdn.shopify.com/s/files/1/0419/1525/products/1024x1024-Captain-Brandy-3.4.jpg?v=1667858034",
-      "description": "Rugged and stylish boots crafted with full-grain leather, versatile for casual and semi-formal wear."
+      "description": "Rugged and stylish boots crafted with full-grain leather, versatile for casual and semi-formal wear.",
+      "isFeatured": false
     },
     {
       "id": "35",
@@ -452,7 +497,8 @@
       "category": "Running",
       "price": 145,
       "imageUrl": "https://www.topoathletic.com/media/catalog/product/cache/1/image/1800x/040ec09b1e35df139433887a97daa66f/m/0/m068-mango-black-phantom3-medial.jpg",
-      "description": "Trail running shoes designed for stability and comfort with durable outsoles and responsive midsoles."
+      "description": "Trail running shoes designed for stability and comfort with durable outsoles and responsive midsoles.",
+      "isFeatured": false
     },
     {
       "id": "36",
@@ -460,7 +506,8 @@
       "category": "Sneakers",
       "price": 545,
       "imageUrl": "https://www.goldengoose.com/dw/image/v2/BCHL_PRD/on/demandware.static/-/Sites-goldengoose-master-catalog/default/dw3f38995a/images/large/GMF00101.F000316.10272_1.jpg",
-      "description": "Luxury fashion sneakers featuring signature distressed design, high-quality materials, and iconic star logo."
+      "description": "Luxury fashion sneakers featuring signature distressed design, high-quality materials, and iconic star logo.",
+      "isFeatured": false
     },
     {
       "id": "37",
@@ -468,7 +515,8 @@
       "category": "Boots",
       "price": 139,
       "imageUrl": "https://ll-prod-cdn.llbean.net/is/image/LLBean/0RM4810000?hei=1095&wid=950&resMode=sharp2&defaultImage=llbstage/A0211793_2",
-      "description": "Classic 8-inch leather boots built for durability, comfort, and all-weather wear."
+      "description": "Classic 8-inch leather boots built for durability, comfort, and all-weather wear.",
+      "isFeatured": false
     },
     {
       "id": "38",
@@ -476,7 +524,8 @@
       "category": "Sneakers",
       "price": 145,
       "imageUrl": "https://karhu.com/cdn/shop/products/F804073-1.jpg?v=1627572710",
-      "description": "Retro-inspired sneakers with cushioned midsole and breathable mesh, combining style and comfort."
+      "description": "Retro-inspired sneakers with cushioned midsole and breathable mesh, combining style and comfort.",
+      "isFeatured": false
     },
     {
       "id": "39",
@@ -484,7 +533,8 @@
       "category": "Running",
       "price": 175,
       "imageUrl": "https://www.newtonrunning.com/cdn/shop/products/M000123-1_1200x.jpg?v=1676402375",
-      "description": "High-performance running shoes designed for speed and energy return, with cushioned support."
+      "description": "High-performance running shoes designed for speed and energy return, with cushioned support.",
+      "isFeatured": false
     },
     {
       "id": "40",
@@ -492,7 +542,8 @@
       "category": "Boots",
       "price": 545,
       "imageUrl": "https://www.rmwilliams.com.au/dw/image/v2/BBTZ_PRD/on/demandware.static/-/Sites-rmw-master-catalog/default/dw1e0210e7/B543Y_41FGCH_01.jpg?sw=800&sh=800",
-      "description": "Handcrafted leather boots offering all-day comfort, rugged durability, and classic Australian style."
+      "description": "Handcrafted leather boots offering all-day comfort, rugged durability, and classic Australian style.",
+      "isFeatured": false
     },
     {
       "id": "41",
@@ -500,7 +551,8 @@
       "category": "Running",
       "price": 160,
       "imageUrl": "https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/0329188f-a329-4b44-a957-41b443216832/vomero-17-mens-road-running-shoes-8lS2gK.png",
-      "description": "Soft and responsive road-running shoes with advanced cushioning for smooth, comfortable strides."
+      "description": "Soft and responsive road-running shoes with advanced cushioning for smooth, comfortable strides.",
+      "isFeatured": false
     },
     {
       "id": "42",
@@ -508,7 +560,8 @@
       "category": "Sneakers",
       "price": 110,
       "imageUrl": "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/de23d8299a424de8abb8c33ca3108c31_9366/Campus_00s_Shoes_Grey_H03470_01_standard.jpg",
-      "description": "Retro sneakers featuring premium suede, classic three-stripe branding, and casual streetwear appeal."
+      "description": "Retro sneakers featuring premium suede, classic three-stripe branding, and casual streetwear appeal.",
+      "isFeatured": false
     },
     {
       "id": "43",
@@ -516,7 +569,8 @@
       "category": "Boots",
       "price": 440,
       "imageUrl": "https://s7d4.scene7.com/is/image/LaCrosse/31530_1?$pdp_hero_desktop$",
-      "description": "Rugged hiking boots crafted with premium leather, supportive construction, and durable traction soles."
+      "description": "Rugged hiking boots crafted with premium leather, supportive construction, and durable traction soles.",
+      "isFeatured": false
     },
     {
       "id": "44",
@@ -524,7 +578,8 @@
       "category": "Running",
       "price": 160,
       "imageUrl": "https://www.saucony.com/en/triumph-21/55270M.html?dwvar_55270M_color=S20880-10#start=1",
-      "description": "Cushioned running shoes with plush midsole for comfort, stability, and long-distance performance."
+      "description": "Cushioned running shoes with plush midsole for comfort, stability, and long-distance performance.",
+      "isFeatured": false
     },
     {
       "id": "45",
@@ -532,7 +587,8 @@
       "category": "Boots",
       "price": 625,
       "imageUrl": "https://www.trickers.com/cdn/shop/products/Stow-Acorn-Side_1200x.jpg?v=1618328113",
-      "description": "Luxury handcrafted leather brogue boots with timeless design, durability, and elegant detailing."
+      "description": "Luxury handcrafted leather brogue boots with timeless design, durability, and elegant detailing.",
+      "isFeatured": false
     },
     {
       "id": "46",
@@ -540,7 +596,8 @@
       "category": "Sneakers",
       "price": 110,
       "imageUrl": "https://www.golausa.com/images/gola-classics-harrier-mens-sneakers-p3-149_image.jpg",
-      "description": "Classic retro sneakers with suede and mesh construction, offering casual style and everyday comfort."
+      "description": "Classic retro sneakers with suede and mesh construction, offering casual style and everyday comfort.",
+      "isFeatured": false
     },
     {
       "id": "47",
@@ -548,7 +605,8 @@
       "category": "Running",
       "price": 165,
       "imageUrl": "https://www.craftsports.us/cdn/shop/products/1912181-999000_C026__2.jpg?v=1678980862",
-      "description": "High-performance running shoes designed for ultimate comfort, support, and responsive movement."
+      "description": "High-performance running shoes designed for ultimate comfort, support, and responsive movement.",
+      "isFeatured": false
     },
     {
       "id": "48",
@@ -556,7 +614,8 @@
       "category": "Sneakers",
       "price": 209,
       "imageUrl": "https://cdn.shopify.com/s/files/1/0251/9850/4663/products/Low-1-White-1_1024x1024.jpg?v=1620318536",
-      "description": "Minimalist luxury sneakers made with premium leather and designed for modern casual wear."
+      "description": "Minimalist luxury sneakers made with premium leather and designed for modern casual wear.",
+      "isFeatured": false
     },
     {
       "id": "49",
@@ -564,7 +623,8 @@
       "category": "Boots",
       "price": 325,
       "imageUrl": "https://cdn.shopify.com/s/files/1/0275/4651/products/M120_ARABIAN_1_1024x1024.jpg?v=1571438780",
-      "description": "Handcrafted Italian leather boots with classic style, durable soles, and premium comfort."
+      "description": "Handcrafted Italian leather boots with classic style, durable soles, and premium comfort.",
+      "isFeatured": false
     },
     {
       "id": "50",
@@ -572,7 +632,8 @@
       "category": "Running",
       "price": 130,
       "imageUrl": "https://cdn.shopify.com/s/files/1/0458/4534/9941/products/Y2303-0791-M-Fierce2-Black-White-Side-1_1200x.jpg?v=1677701550",
-      "description": "Responsive and lightweight running shoes built for speed, comfort, and efficient performance."
+      "description": "Responsive and lightweight running shoes built for speed, comfort, and efficient performance.",
+      "isFeatured": false
     }
   ]
 }

@@ -1,23 +1,26 @@
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 import { LayoutDashboard, Users, ShoppingBag, Box, LogOut } from "lucide-react";
 import { useAuth } from "../../Context/AuthContext.jsx";
 
 function AdminLayout() {
   const { logoutUser, currentUser } = useAuth();
-  const navigate = useNavigate();
 
   const handleLogout = () => {
-    if (window.confirm("Are you sure you want to log out?")) {
+    // A confirmation provides a better user experience
+    if (
+      window.confirm("Are you sure you want to log out from the admin panel?")
+    ) {
       logoutUser();
     }
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    // Main container with a dark background
+    <div className="flex min-h-screen bg-slate-900 text-gray-200">
       {/* --- Sidebar Navigation --- */}
-      <aside className="w-64 flex-shrink-0 bg-white shadow-lg">
-        <div className="p-6 text-2xl font-extrabold text-indigo-700 border-b">
-          Elevé Admin
+      <aside className="w-64 flex-shrink-0 bg-slate-800 border-r border-slate-700">
+        <div className="p-6 text-2xl font-extrabold text-white border-b border-slate-700 text-center">
+          Elevé <span className="text-indigo-400">Admin</span>
         </div>
         <nav className="p-4 space-y-2">
           <AdminNavLink to="/admin" icon={<LayoutDashboard size={20} />}>
@@ -38,22 +41,21 @@ function AdminLayout() {
       {/* --- Main Content --- */}
       <div className="flex-1 flex flex-col">
         {/* Top Header */}
-        <header className="bg-white shadow-sm p-4 flex justify-between items-center">
-          <h1 className="text-xl font-semibold">
+        <header className="bg-slate-800 border-b border-slate-700 p-4 flex justify-between items-center">
+          <h1 className="text-xl font-semibold text-white">
             Welcome, {currentUser?.name}
           </h1>
           <button
             onClick={handleLogout}
-            className="flex items-center gap-2 text-red-600 font-semibold hover:text-red-800 transition"
+            className="flex items-center gap-2 text-slate-400 font-semibold hover:text-red-400 transition"
           >
             <LogOut size={18} />
             <span>Logout</span>
           </button>
         </header>
 
-        {/* Page Content */}
-        <main className="flex-1 p-8">
-          {/* Outlet is the placeholder where the child pages (Dashboard, etc.) will be rendered */}
+        {/* Page Content with padding */}
+        <main className="flex-1 p-8 overflow-y-auto">
           <Outlet />
         </main>
       </div>
@@ -61,17 +63,17 @@ function AdminLayout() {
   );
 }
 
-// Helper component for sidebar links to handle active styling
+// Helper component for sidebar links with updated dark theme styles
 const AdminNavLink = ({ to, icon, children }) => {
   const baseClasses =
-    "w-full flex items-center gap-3 p-3 rounded-md font-semibold transition";
-  const activeClasses = "bg-indigo-100 text-indigo-700";
-  const inactiveClasses = "hover:bg-gray-100";
+    "w-full flex items-center gap-3 p-3 rounded-md font-semibold transition-colors duration-200";
+  const activeClasses = "bg-indigo-600 text-white";
+  const inactiveClasses = "text-slate-400 hover:bg-slate-700 hover:text-white";
 
   return (
     <NavLink
       to={to}
-      end // Use 'end' for the Dashboard link to prevent it from being active on other routes
+      end={to === "/admin"} // 'end' prop ensures only the exact path is matched for Dashboard
       className={({ isActive }) =>
         `${baseClasses} ${isActive ? activeClasses : inactiveClasses}`
       }
