@@ -3,6 +3,7 @@ import { useCart } from "../Context/CartContext";
 import { Heart, ShoppingCart, Trash2, Minus, Plus ,ArrowLeft} from "lucide-react";
 import Navbar from "../Components/Navbar";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 function Cart() {
   const { cartItems, increaseQuantity, decreaseQuantity, removeFromCart , clearCart} = useCart();
@@ -14,8 +15,35 @@ function Cart() {
   );
 
   const handleclearcart=()=>{
-    alert("Are you sure you want remove all the cart items")
-    clearCart()
+  toast(
+  (t) => (
+    <div className="flex flex-col items-center gap-4 p-2">
+      <p className="font-semibold text-center">
+        Are you sure you want to clear your cart?
+      </p>
+      <div className="flex gap-4">
+        <button
+          onClick={() => toast.dismiss(t.id)}
+          className="px-4 py-2 text-sm font-semibold bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={() => {
+            clearCart();
+            toast.dismiss(t.id);
+          }}
+          className="px-4 py-2 text-sm font-semibold bg-red-500 text-white rounded-md hover:bg-red-600"
+        >
+          Clear Cart
+        </button>
+      </div>
+    </div>
+  ),
+  {
+    id: "confirmation-toast",
+  }
+);
   }
 
   return (

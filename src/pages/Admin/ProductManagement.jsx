@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { PlusCircle, Edit, Trash2, Star } from "lucide-react";
 import ProductFormModal from "../../Components/Admin/ProductFormModal.jsx";
+import toast from "react-hot-toast";
 
 function ProductManagement() {
   const [products, setProducts] = useState([]);
@@ -39,14 +40,21 @@ function ProductManagement() {
   };
 
   const handleDeleteProduct = async (productId) => {
-    if (window.confirm("Are you sure you want to delete this product?")) {
+    if (
+      toast("Are you sure you want to delete this product?", {
+        icon: "⚠️",
+        style: { background: "#fcbe03", color: "white" },
+      })
+    ) 
+    
+    {
       try {
         await axios.delete(`http://localhost:3000/products/${productId}`);
-        alert("Product deleted successfully.");
+        toast.success("Product deleted successfully.");
         fetchProducts(); // Refresh the list
       } catch (error) {
         console.error("Failed to delete product:", error);
-        alert("An error occurred while deleting the product.");
+        toast.error("An error occurred while deleting the product.");
       }
     }
   };

@@ -1,17 +1,42 @@
 import { NavLink, Outlet } from "react-router-dom";
 import { LayoutDashboard, Users, ShoppingBag, Box, LogOut } from "lucide-react";
 import { useAuth } from "../../Context/AuthContext.jsx";
-
+import toast from "react-hot-toast";
 function AdminLayout() {
   const { logoutUser, currentUser } = useAuth();
 
   const handleLogout = () => {
     // A confirmation provides a better user experience
-    if (
-      window.confirm("Are you sure you want to log out from the admin panel?")
-    ) {
-      logoutUser();
-    }
+    toast(
+      (t) => (
+        <div className="flex flex-col items-center gap-4 p-2">
+          <p className="font-semibold text-center text-white">
+            Are you sure you want to log out?
+          </p>
+          <div className="flex gap-4">
+            <button
+              onClick={() => toast.dismiss(t.id)}
+              className="px-4 py-2 text-sm font-semibold bg-slate-600 text-white rounded-md hover:bg-slate-500"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={() => {
+                logoutUser();
+                toast.dismiss(t.id);
+              }}
+              className="px-4 py-2 text-sm font-semibold bg-red-600 text-white rounded-md hover:bg-red-700"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+      ),
+      {
+        // Use the default dark style for this confirmation toast
+        id: "logout-confirmation",
+      }
+    );
   };
 
   return (

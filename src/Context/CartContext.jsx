@@ -3,6 +3,7 @@ import axios from "axios";
 import { useAuth } from "./AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
 import { useState,useEffect } from "react";
+import toast from "react-hot-toast";
 
 const CartContext = createContext(null);
 
@@ -27,13 +28,13 @@ export function CartProvider({ children }) {
       setCartItems(updatedCart)
     } catch (error) {
       console.error("Failed to sync cart:", error);
-      alert("An error occurred while updating the cart.");
+      toast.error("An error occurred while updating the cart.");
     }
   };
 // Add to cart
   const addToCart = async (product) => {
     if (!currentUser) {
-      alert("Please log in to add items to your cart.");
+      toast.error("Please log in to add items to your cart.");
       navigate("/login");
       return;
     }
@@ -42,14 +43,14 @@ export function CartProvider({ children }) {
     const itemExists = currentCart.find((item) => item.id === product.id);
 
     if (itemExists) {
-      alert(`${product.name} is already in your cart.`);
+      toast.error(`${product.name} is already in your cart.`);
       return;
     }
 
     const updatedCart = [...currentCart, { ...product, quantity: 1 }];
     await syncCartWithBackend(updatedCart);
 
-    alert(`${product.name} has been added to your cart!`);
+    toast.success(`${product.name} has been added to your cart!`);
   };
   
 // increase quantity
@@ -74,7 +75,7 @@ export function CartProvider({ children }) {
     const updatedCart = currentUser.cart.filter(
       (item) => item.id !== productId
     );
-    alert("Removed from Cart succesfully")
+    toast.success("Removed from Cart succesfully")
     await syncCartWithBackend(updatedCart);
   };
 
@@ -93,7 +94,7 @@ export function CartProvider({ children }) {
       updateUserInAuthContext(updatedUser);
     } catch (error) {
       console.error("Failed to clear cart:", error);
-      alert("There was an error clearing the cart.");
+      toast.error("There was an error clearing the cart.");
     }
   };
 

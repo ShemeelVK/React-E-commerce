@@ -40,7 +40,7 @@ export function AuthProvider({children}){
     const logoutUser=()=>{
         localStorage.removeItem("user")
         SetCurrentUser(null)
-        navigate("/Login");
+        navigate("/");
     };
 
     const updateUserInAuthContext = (updatedUserData) => {

@@ -23,6 +23,8 @@ import OrderManagement from "./pages/Admin/OrderManagement";
 import ProductManagement from "./pages/Admin/ProductManagement";
 import UserManagement from "./pages/Admin/UserManagement";
 import Navbar from "./Components/Navbar";
+
+import { Toaster } from "react-hot-toast";
 function App() {
 
 
@@ -31,6 +33,44 @@ function App() {
       <AuthProvider>
         <CartProvider>
           <WishlistProvider>
+            <Toaster
+              position="top-center"
+              reverseOrder={false}
+              toastOptions={{
+                // Default options for all toasts
+                duration: 5000,
+                style: {
+                  borderRadius: "8px",
+                  background: "#333",
+                  color: "#fff",
+                },
+                // --- THIS IS THE CHANGED SUCCESS STYLE ---
+                success: {
+                  duration: 3000,
+                  style: {
+                    background: "#10B981", // A professional green color
+                    color: "white",
+                  },
+                  // Optional: style the default checkmark icon
+                  iconTheme: {
+                    primary: "#DAF7A6",
+                    secondary: "#10B981",
+                  },
+                },
+                error: {
+                  style: {
+                    background: "#EF4444", // Red for errors
+                    color: "white",
+                  },
+                },
+                warning: {
+                  style: {
+                    background: "#F59E0B",
+                    color: "white",
+                  },
+                },
+              }}
+            />
             <Routes>
               {/* --- Group 1: The User-Facing World (with Navbar) --- */}
               <Route

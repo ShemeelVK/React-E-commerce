@@ -7,7 +7,18 @@
       "password": "123456",
       "role": "user",
       "status": "active",
-      "cart": [],
+      "cart": [
+        {
+          "id": "1",
+          "name": "Nike Air Force 1 '07",
+          "category": "Sneakers",
+          "price": 115,
+          "imageUrl": "https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/b7d9211c-26e7-431a-ac24-b0540fb3c00f/air-force-1-07-mens-shoes-jBrhbr.png",
+          "description": "A timeless basketball classic turned streetwear icon, crafted with premium leather for durability and everyday style.",
+          "isFeatured": true,
+          "quantity": 1
+        }
+      ],
       "wishlist": [
         {
           "id": "2",
@@ -157,7 +168,7 @@
             "zip": "679586"
           },
           "paymentMethod": "UPI",
-          "status": "In Progress"
+          "status": "Delivered"
         }
       ]
     },
@@ -181,7 +192,153 @@
       "status": "active",
       "cart": [],
       "wishlist": [],
-      "orders": []
+      "orders": [
+        {
+          "orderId": "ELEVE-1757617707360",
+          "orderDate": "2025-09-11T19:08:27.360Z",
+          "items": [
+            {
+              "id": "2",
+              "name": "Adidas Samba OG",
+              "category": "Sneakers",
+              "price": 100,
+              "imageUrl": "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/21f56016-2e59-4392-b80f-c9440573f798/ZOOMX+VAPORFLY+NEXT%25+4.png",
+              "description": "A retro-inspired sneaker featuring a sleek leather upper, low-profile design, and versatile wear from pitch to street.",
+              "isFeatured": true,
+              "quantity": 1
+            },
+            {
+              "id": "3",
+              "name": "New Balance 550",
+              "category": "Sneakers",
+              "price": 120,
+              "imageUrl": "https://nb.scene7.com/is/image/NB/bb550vga_nb_02_i?$pdpflexf2$&qlt=80&fmt=jpeg&wid=440&hei=440",
+              "description": "Reviving a 1989 classic, this sneaker blends basketball heritage with cushioned comfort and everyday streetwear style.",
+              "isFeatured": false,
+              "quantity": 1
+            },
+            {
+              "id": "6",
+              "name": "ASICS GEL-Kayano 14",
+              "category": "Running",
+              "price": 150,
+              "imageUrl": "https://images.asics.com/is/image/asics/1201A019_108_SR_RT_GLB?$sfcc-product$",
+              "description": "Performance running shoes with GEL technology cushioning, delivering stability and comfort for long-distance runs.",
+              "isFeatured": false,
+              "quantity": 1
+            },
+            {
+              "id": "7",
+              "name": "Puma Suede Classic XXI",
+              "category": "Sneakers",
+              "price": 75,
+              "imageUrl": "https://images.puma.com/image/upload/f_auto,q_auto,b_rgb:fafafa,w_1200,h_1200/global/374915/01/sv01/fnd/PNA/fmt/png/Suede-Classic-XXI-Men's-Sneakers",
+              "description": "An enduring classic with soft suede uppers, retro design, and versatile everyday appeal.",
+              "isFeatured": false,
+              "quantity": 1
+            },
+            {
+              "id": "12",
+              "name": "Dr. Martens 1460 Smooth",
+              "category": "Boots",
+              "price": 170,
+              "imageUrl": "https://i1.adis.ws/i/drmartens/11822006.80.jpg?$medium$",
+              "description": "The iconic 8-eye boot made with smooth leather, signature yellow stitching, and air-cushioned soles.",
+              "isFeatured": false,
+              "quantity": 1
+            }
+          ],
+          "totalAmount": 615,
+          "shippingAddress": {
+            "name": "Sreenand",
+            "address": "Kannur house",
+            "city": "Iritty",
+            "state": "kannur",
+            "phone": "9605621681",
+            "zip": "678596"
+          },
+          "paymentMethod": "UPI",
+          "status": "Shipped"
+        }
+      ]
+    },
+    {
+      "id": "51bf",
+      "name": "Nirooz",
+      "email": "nirooz@test.com",
+      "password": "nirooz@123",
+      "role": "user",
+      "status": "active",
+      "cart": [],
+      "wishlist": [
+        {
+          "id": "23",
+          "name": "New Balance Fresh Foam X 880v13",
+          "category": "Running",
+          "price": 135,
+          "imageUrl": "https://nb.scene7.com/is/image/NB/m880g13_nb_02_i?$pdpflexf2$&qlt=80&fmt=jpeg&wid=440&hei=440",
+          "description": "Supportive and cushioned running shoes with Fresh Foam X midsoles, engineered for comfort and endurance.",
+          "isFeatured": true
+        },
+        {
+          "id": "6",
+          "name": "ASICS GEL-Kayano 14",
+          "category": "Running",
+          "price": 150,
+          "imageUrl": "https://images.asics.com/is/image/asics/1201A019_108_SR_RT_GLB?$sfcc-product$",
+          "description": "Performance running shoes with GEL technology cushioning, delivering stability and comfort for long-distance runs.",
+          "isFeatured": true
+        }
+      ],
+      "orders": [
+        {
+          "orderId": "ELEVE-1757620217665",
+          "orderDate": "2025-09-11T19:50:17.665Z",
+          "items": [
+            {
+              "id": "23",
+              "name": "New Balance Fresh Foam X 880v13",
+              "category": "Running",
+              "price": 135,
+              "imageUrl": "https://nb.scene7.com/is/image/NB/m880g13_nb_02_i?$pdpflexf2$&qlt=80&fmt=jpeg&wid=440&hei=440",
+              "description": "Supportive and cushioned running shoes with Fresh Foam X midsoles, engineered for comfort and endurance.",
+              "isFeatured": true,
+              "quantity": 1
+            },
+            {
+              "id": "12",
+              "name": "Dr. Martens 1460 Smooth",
+              "category": "Boots",
+              "price": 170,
+              "imageUrl": "https://i1.adis.ws/i/drmartens/11822006.80.jpg?$medium$",
+              "description": "The iconic 8-eye boot made with smooth leather, signature yellow stitching, and air-cushioned soles.",
+              "isFeatured": true,
+              "quantity": 1
+            },
+            {
+              "id": "6",
+              "name": "ASICS GEL-Kayano 14",
+              "category": "Running",
+              "price": 150,
+              "imageUrl": "https://images.asics.com/is/image/asics/1201A019_108_SR_RT_GLB?$sfcc-product$",
+              "description": "Performance running shoes with GEL technology cushioning, delivering stability and comfort for long-distance runs.",
+              "isFeatured": true,
+              "quantity": 1
+            }
+          ],
+          "totalAmount": 505,
+          "shippingAddress": {
+            "name": "Nirooz",
+            "address": "nirooz house",
+            "city": "nadapuram",
+            "state": "kerala`",
+            "phone": "9605621681",
+            "zip": "679334"
+          },
+          "paymentMethod": "COD",
+          "status": "In Progress"
+        }
+      ]
     }
   ],
   "products": [
@@ -210,7 +367,7 @@
       "price": 120,
       "imageUrl": "https://nb.scene7.com/is/image/NB/bb550vga_nb_02_i?$pdpflexf2$&qlt=80&fmt=jpeg&wid=440&hei=440",
       "description": "Reviving a 1989 classic, this sneaker blends basketball heritage with cushioned comfort and everyday streetwear style.",
-      "isFeatured": false
+      "isFeatured": true
     },
     {
       "id": "4",
@@ -237,7 +394,7 @@
       "price": 150,
       "imageUrl": "https://images.asics.com/is/image/asics/1201A019_108_SR_RT_GLB?$sfcc-product$",
       "description": "Performance running shoes with GEL technology cushioning, delivering stability and comfort for long-distance runs.",
-      "isFeatured": false
+      "isFeatured": true
     },
     {
       "id": "7",
@@ -291,7 +448,7 @@
       "price": 170,
       "imageUrl": "https://i1.adis.ws/i/drmartens/11822006.80.jpg?$medium$",
       "description": "The iconic 8-eye boot made with smooth leather, signature yellow stitching, and air-cushioned soles.",
-      "isFeatured": false
+      "isFeatured": true
     },
     {
       "id": "13",
@@ -390,7 +547,7 @@
       "price": 135,
       "imageUrl": "https://nb.scene7.com/is/image/NB/m880g13_nb_02_i?$pdpflexf2$&qlt=80&fmt=jpeg&wid=440&hei=440",
       "description": "Supportive and cushioned running shoes with Fresh Foam X midsoles, engineered for comfort and endurance.",
-      "isFeatured": false
+      "isFeatured": true
     },
     {
       "id": "24",

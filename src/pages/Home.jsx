@@ -14,7 +14,7 @@ function Home(){
         try{
         const res = await axios.get("http://localhost:3000/products?isFeatured=true ");
         setProducts(res.data);
-        console.log("Fetched data:", response.data);
+        console.log("Fetched data:", res.data);
         }
         catch(err){
           console.log('Failed to fetch Products: ',err);

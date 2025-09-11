@@ -3,8 +3,9 @@ import { useAuth } from "../Context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
 import { User, ShoppingBag, MapPin, LogOut } from "lucide-react";
 import axios from "axios";
+import toast from "react-hot-toast";
 
-function AccountPage() {
+function MyAccount() {
   const { currentUser, logoutUser, updateUserInAuthContext } = useAuth();
   const navigate = useNavigate();
 
@@ -30,7 +31,7 @@ function AccountPage() {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 min-h-screen mt-12">
       <div className="max-w-7xl mx-auto px-4 py-28">
         <h1 className="text-4xl font-extrabold mb-12 text-center text-gray-800">
           My Account
@@ -102,7 +103,10 @@ const ProfileSection = ({ user, onUpdate }) => {
     e.preventDefault();
     const trimmedName = name.trim();
     if (!trimmedName) {
-      alert("Name cannot be empty.");
+      toast("Name cannot be empty.", {
+        icon: "⚠️",
+        style: { background: "#fcbe03", color: "white" },
+      });
       return;
     }
 
@@ -110,11 +114,17 @@ const ProfileSection = ({ user, onUpdate }) => {
 
     if (showPasswordFields) {
       if (password.length < 5) {
-        alert("Password must be at least 5 characters long.");
+        toast("Password must be at least 5 characters long.", {
+          icon: "⚠️",
+          style: { background: "#fcbe03", color: "white" },
+        });
         return;
       }
       if (password !== confirmPassword) {
-        alert("Passwords do not match.");
+        toast("Passwords do not match.", {
+          icon: "⚠️",
+          style: { background: "#fcbe03", color: "white" },
+        });
         return;
       }
       payload.password = password;
@@ -123,13 +133,13 @@ const ProfileSection = ({ user, onUpdate }) => {
     try {
       const response = await axios.patch(`http://localhost:3000/users/${user.id}`, payload);
       onUpdate(response.data);
-      alert("Your profile has been updated successfully!");
+      toast.success("Your profile has been updated successfully!");
       setShowPasswordFields(false);
       setPassword("");
       setConfirmPassword("");
     } catch (error) {
       console.error("Failed to update profile:", error);
-      alert("An error occurred while updating your profile.");
+      toast.error("An error occurred while updating your profile.");
     }
   };
 
@@ -227,4 +237,4 @@ const AddressesSection = () => (
   </div>
 );
 
-export default AccountPage;
+export default MyAccount;

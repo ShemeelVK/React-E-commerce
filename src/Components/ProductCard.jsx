@@ -1,6 +1,7 @@
 import { Heart,ShoppingCart,Star } from "lucide-react";
 import { useCart } from "../Context/CartContext";
 import { useWishlist } from "../Context/WishlistContext";
+import toast from "react-hot-toast";
 function ProductCard({product,onViewProduct}){
     const {name,category,price,imageUrl,isFeatured}=product;
     const {addToCart}=useCart();

@@ -4,6 +4,7 @@ import { useAuth } from "../Context/AuthContext.jsx";
 import { CreditCard, Landmark, CircleDollarSign, Package } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 // Function to dynamically load the Razorpay script
 const loadRazorpayScript = (src) => {
@@ -55,7 +56,7 @@ function Payment() {
     if(!currentUser || isProcessing) return;
 
     if (!window.Razorpay) {
-      alert("Razorpay SDK failed to load. Are you online?");
+      toast.error("Razorpay SDK failed to load. Are you online?");
       return;
     }
 
@@ -78,26 +79,12 @@ function Payment() {
       name: "Elevé",
       description: "Sneaker Store Transaction",
       image: "https://example.com/your_logo.png",
-      handler: function (response) {
+      handler:async function (response) {
         // This would normally handle a successful payment.
         // We'll leave it empty for now as requested.
         console.log("Payment successful:", response);
-      },
-      prefill: {
-        name: shippingInfo.name,
-        email: currentUser.email,
-        contact: shippingInfo.phone,
-      },
-      notes: {
-        address: `${shippingInfo.address}, ${shippingInfo.city}, ${shippingInfo.phone},${shippingInfo.state} - ${shippingInfo.zip}`,
-      },
-      theme: {
-        color: "#4F46E5",
-      },
-      // This function runs when the Razorpay modal is closed.
-      modal: {
-        ondismiss: async function () {
-          const newOrder = {
+
+            const newOrder = {
             orderId: `ELEVE-${Date.now()}`,
             orderDate: new Date().toISOString(),
             items: cartItems,
@@ -123,13 +110,32 @@ function Payment() {
 
             // Update the central state and give user feedback
             updateUserInAuthContext(updatedUser);
-            alert("Order placed successfully! (Simulation)");
-            navigate("/Orders");
+            toast.success("Order placed successfully! (Simulation)");
+            navigate("/Orders",{replace:true});
           } catch (error) {
             console.error("Failed to place order:", error);
-            alert("There was an error placing your order.");
+            toast.error("There was an error placing your order.");
             setIsProcessing(false)
           }
+
+        
+      },
+      prefill: {
+        name: shippingInfo.name,
+        email: currentUser.email,
+        contact: shippingInfo.phone,
+      },
+      notes: {
+        address: `${shippingInfo.address}, ${shippingInfo.city}, ${shippingInfo.phone},${shippingInfo.state} - ${shippingInfo.zip}`,
+      },
+      theme: {
+        color: "#4F46E5",
+      },
+      // This function runs when the Razorpay modal is closed.
+      modal: {
+        ondismiss: async function () {
+          toast.error("Payment was cancelled.");
+          setIsProcessing(false);
         },
       },
     };
@@ -141,7 +147,7 @@ function Payment() {
   return (
     <div className="bg-gray-50 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 py-20">
-        <h1 className="text-4xl font-extrabold mb-12 text-center text-gray-800">
+        <h1 className="text-4xl font-extrabold mb-12 mt-9 text-center text-gray-800">
           Checkout
         </h1>
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { X } from "lucide-react";
+import toast from "react-hot-toast";
 
 // This modal handles both adding a new product and editing an existing one
 function ProductFormModal({ product, onClose, onSuccess }) {
@@ -53,22 +54,22 @@ function ProductFormModal({ product, onClose, onSuccess }) {
           `http://localhost:3000/products/${product.id}`,
           dataToSubmit
         );
-        alert("Product updated successfully!");
+        toast.success("Product updated successfully!");
       } else {
         // If adding, send a POST request
         await axios.post("http://localhost:3000/products", dataToSubmit);
-        alert("Product added successfully!");
+        toast.success("Product added successfully!");
       }
       onSuccess(); // This calls fetchProducts() in the parent
       onClose(); // Close the modal
     } catch (error) {
       console.error("Failed to save product:", error);
-      alert("An error occurred while saving the product.");
+      toast.error("An error occurred while saving the product.");
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
       <div className="bg-slate-800 rounded-lg shadow-2xl max-w-2xl w-full relative text-white">
         <div className="p-6 border-b border-slate-700 flex justify-between items-center">
           <h2 className="text-2xl font-bold">

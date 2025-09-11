@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Package,MapPin,CreditCard,ShoppingBag,Calendar,ArrowLeft,XCircle } from "lucide-react";
 import axios from "axios";
 import Navbar from "../Components/Navbar";
+import toast from "react-hot-toast";
 
 function Orders() {
   const { currentUser, updateUserInAuthContext } = useAuth();
@@ -10,36 +11,72 @@ function Orders() {
   const orders = currentUser?.orders || [];
 
   const handleCancelOrder = async (orderId) => {
-    if (!currentUser) return;
+    toast(
+      (t) => (
+        <div className="flex flex-col items-center gap-4 p-2 text-gray-800">
+          <p className="font-semibold text-center">
+            Are you sure you want to cancel this order?
+          </p>
+          <p className="text-sm text-center text-gray-600">
+            This action cannot be undone.
+          </p>
+          <div className="flex gap-4 mt-2">
+            <button
+              onClick={() => toast.dismiss(t.id)} // This button just closes the toast
+              className="px-4 py-2 text-sm font-semibold bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
+            >
+              No, Keep It
+            </button>
+            <button
+              onClick={async () => {
+                // First, dismiss this confirmation toast so it doesn't linger
+                toast.dismiss(t.id);
 
-    if (
-      window.confirm(
-        "Are you sure you want to cancel this order? This action cannot be undone."
-      )
-    ) {
-      const updatedOrders = orders.map((order) => {
-        if (order.orderId === orderId) {
-          return { ...order, status: "Cancelled" };
-        }
-        return order;
-      });
+                // Now, execute the actual cancellation logic
+                const updatedOrders = orders.map((order) => {
+                  if (order.orderId === orderId) {
+                    return { ...order, status: "Cancelled" };
+                  }
+                  return order;
+                });
 
-      try {
-        const updatedUser = { ...currentUser, orders: updatedOrders };
-        await axios.patch(`http://localhost:3000/users/${currentUser.id}`, {
-          orders: updatedOrders,
-        });
-        updateUserInAuthContext(updatedUser);
-        alert(`Order #${orderId.split("-")[1]} has been cancelled.`);
-      } catch (error) {
-        console.error("Failed to cancel order:", error);
-        alert("There was an error cancelling the order.");
+                try {
+                  const updatedUser = { ...currentUser, orders: updatedOrders };
+                  await axios.patch(
+                    `http://localhost:3000/users/${currentUser.id}`,
+                    {
+                      orders: updatedOrders,
+                    }
+                  );
+                  updateUserInAuthContext(updatedUser);
+                  toast.success(
+                    `Order #${orderId.split("-")[1]} has been cancelled.`
+                  );
+                } catch (error) {
+                  console.error("Failed to cancel order:", error);
+                  toast.error("There was an error cancelling the order.");
+                }
+              }}
+              className="px-4 py-2 text-sm font-semibold bg-red-500 text-white rounded-md hover:bg-red-600"
+            >
+              Yes, Cancel
+            </button>
+          </div>
+        </div>
+      ),
+      {
+        // Use a custom style for the confirmation box
+        style: {
+          background: "white",
+          border: "1px solid #e5e7eb",
+        },
+        id: "cancel-confirmation", // Give it a unique ID
       }
-    }
+    );
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen mt-12">
+      <div className="bg-gray-50 min-h-screen mt-12">
         <Navbar/>
       <div className="max-w-4xl mx-auto px-4 py-28">
         <h1 className="text-4xl font-extrabold mb-12 text-center text-gray-800">

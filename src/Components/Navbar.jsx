@@ -5,6 +5,7 @@ import { ShoppingCart, Heart, User, LogOut } from "lucide-react";
 import { useCart } from "../Context/CartContext.jsx";
 import { useWishlist } from "../Context/WishlistContext.jsx";
 import { useAuth } from "../Context/AuthContext.jsx";
+import toast from "react-hot-toast";
 
 function Navbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -36,6 +37,16 @@ function Navbar() {
       setSearchQuery(""); // Clears the search bar after submission
     }
   };
+
+    const handleProtectedLink = (path) => {
+      if (currentUser) {
+        navigate(path); // If user is logged in, proceed
+      } else {
+        // If not logged in, show a toast and then navigate to login
+        toast.error("You must be logged in to view this page.");
+        navigate("/login");
+      }
+    };
 
   return (
     <nav className="fixed top-4 left-1/2 -translate-x-1/2 w-4/5 z-50 bg-gray-50 rounded-full shadow-lg border border-gray-200">
@@ -92,7 +103,7 @@ function Navbar() {
           {/* --- Action Icons and Profile (Unchanged) --- */}
           <div className="flex items-center space-x-10">
             {/* Wishlist Button */}
-            <button onClick={() => navigate("/Wishlist")} className="relative">
+            <button onClick={() => handleProtectedLink("/Wishlist")} className="relative">
               <Heart
                 className={`w-6 h-6 ${
                   isWishlistpage
@@ -108,7 +119,7 @@ function Navbar() {
               )}
             </button>
             {/* Cart Button */}
-            <button onClick={() => navigate("/Cart")} className="relative">
+            <button onClick={() => handleProtectedLink("/Cart")} className="relative">
               <ShoppingCart
                 className={`w-6 h-6 ${
                   isCartpage
@@ -136,7 +147,7 @@ function Navbar() {
               ) : (
                 <button
                   onClick={() => navigate("/Login")}
-                  className="flex items-center space-x-2 bg-gray-200 text-gray-800 px-4 py-2 rounded-full shadow-md hover:bg-gray-300 transition"
+                  className="flex items-center space-x-2 bg-gray-500 text-gray-800 px-4 py-2 rounded-full shadow-md hover:bg-gray-300 transition"
                 >
                   <User className="w-5 h-5" />
                   <span>Login</span>
@@ -151,7 +162,10 @@ function Navbar() {
                     My Account
                   </button>
                   <button
-                    onClick={() => navigate("/Orders")}
+                    onClick={() => {
+                      navigate("/Orders")
+                      setIsDropdownOpen(false)
+                    }}
                     className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
                   >
                     Orders

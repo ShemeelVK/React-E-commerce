@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
 import { useAuth } from "../Context/AuthContext";
+import toast from "react-hot-toast";
 
 function Login() {
     const [email,setEmail]=useState("")
@@ -20,10 +21,10 @@ function Login() {
             
               if(user.email===email && user.password===password){
                 if(user.status==="blocked"){
-                  alert("Unfortunately you are blocked")
+                  toast.error("Your account has been blocked.");
                   return;
                 }
-                alert("Login Successfull")
+                toast.success(`You are Logged In Successfully`);
                 loginUser(user)
 
                 if(user.role==="admin"){
@@ -35,13 +36,13 @@ function Login() {
                 }
               }
               else{
-                alert("Invalid credentials")
+               toast.error("Invalid credentials. Please try again.");
               }
         }
         }
         catch(err){
             console.log("Error",err);
-            alert("An error occured during Login")
+            toast.error("An error occurred during login.");
         }
     }
   return (

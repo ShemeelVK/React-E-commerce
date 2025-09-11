@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "./AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const WishlistContext = createContext(null);
 
@@ -21,14 +22,14 @@ export function WishlistProvider({ children }) {
     }
     catch(error){
         console.log("An error occured while syncing",error)
-        alert("Error while syncing")
+        toast.error("Error while syncing")
     }
   };
 
 // Add function
   const addToWishlist = async (product) => {
     if (!currentUser) {
-      alert("Please log in to add items to your wishlist.");
+      toast.error("Please log in to add items to your wishlist.");
       navigate("/login");
       return;
     }
@@ -38,17 +39,17 @@ export function WishlistProvider({ children }) {
     const itemExists = currentWishlist.find((item) => item.id === product.id);
 
     if (itemExists) {
-      alert(`${product.name} is already in your wishlist.`);
+      toast.error(`${product.name} is already in your wishlist.`);
       return;
     }
       const updatedWishlist = [...currentWishlist, product];
       syncWithBackend(updatedWishlist)
-      alert(`${product.name} has been added to your wishlist!`);
+      toast.success(`${product.name} has been added to your wishlist!`);
      
 }
     catch (err) {
       console.error("Failed to add item to wishlist", err);
-      alert("An error occurred while adding the item.");
+      toast.error("An error occurred while adding the item.");
     }
   };
 
@@ -62,10 +63,10 @@ export function WishlistProvider({ children }) {
        );
 
        syncWithBackend(updatedWishlist)
-       alert(`This product is removed`)
+       toast.success(`This product is removed`)
      } catch (err) {
        console.error("Failed to remove item from wishlist", err);
-       alert("An error occurred while removing the item.");
+       toast.error("An error occurred while removing the item.");
      }
    };
 

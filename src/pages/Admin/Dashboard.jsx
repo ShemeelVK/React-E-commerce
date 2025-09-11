@@ -16,6 +16,14 @@ const formatDateForInput = (date) => {
   return [year, month, day].join("-");
 };
 
+const STATUS_COLORS = {
+  "In Progress": "#F59E0B", // Yellow/Orange
+  Shipped: "#3B82F6", // Blue
+  Delivered: "#10B981", // Green
+  Cancelled: "#EF4444", // Red
+  Unknown: "#6B7280", // Gray for any other status
+};
+
 function Dashboard() {
   const [allTimeStats, setAllTimeStats] = useState({
     totalUsers: 0,
@@ -171,8 +179,6 @@ function Dashboard() {
     );
   }
 
-  const PIE_COLORS = ["#F59E0B", "#10B981", "#EF4444", "#3B82F6"];
-
   return (
     <div className="text-gray-200">
       <h1 className="text-3xl font-bold text-white mb-6">Admin Dashboard</h1>
@@ -291,7 +297,7 @@ function Dashboard() {
                 {ordersByStatus.map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}
-                    fill={PIE_COLORS[index % PIE_COLORS.length]}
+                    fill={STATUS_COLORS[entry.name]}
                   />
                 ))}
               </Pie>

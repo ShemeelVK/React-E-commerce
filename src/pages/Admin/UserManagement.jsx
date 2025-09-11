@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../../Context/AuthContext.jsx";
 import { ShieldCheck, ShieldX } from "lucide-react";
+import toast from "react-hot-toast";
 
 function UserManagement() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { currentUser } = useAuth(); // Get the current admin to exclude them from the list
 
   // Fetch all users when the component mounts
   useEffect(() => {
@@ -32,7 +32,14 @@ function UserManagement() {
     const newStatus = currentStatus === "active" ? "blocked" : "active";
     const action = newStatus === "blocked" ? "block" : "unblock";
 
-    if (window.confirm(`Are you sure you want to ${action} this user?`)) {
+    if (
+      toast(`Are you sure you want to ${action} this user?`, {
+        icon: "⚠️",
+        style: { background: "#fcbe03", color: "white" },
+      })
+    )
+    
+    {
       try {
         // 1. Update the user's status in the database
         await axios.patch(`http://localhost:3000/users/${userId}`, {
@@ -46,10 +53,10 @@ function UserManagement() {
           )
         );
 
-        alert(`User has been successfully ${action}ed.`);
+        toast.success(`User has been successfully ${action}ed.`);
       } catch (error) {
         console.error("Failed to update user status:", error);
-        alert("An error occurred while updating the user's status.");
+        toast.error("An error occurred while updating the user's status.");
       }
     }
   };
