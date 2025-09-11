@@ -1,25 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {
-  Users,
-  ShoppingCart,
-  DollarSign,
-  ArrowUp,
-  ArrowDown,
-} from "lucide-react";
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  Legend,
-} from "recharts";
+import {  Users, ShoppingCart, DollarSign, ArrowUp, ArrowDown} from "lucide-react";
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell,Legend,} from "recharts";
 
 // Helper function to format date to YYYY-MM-DD for input fields
 const formatDateForInput = (date) => {
@@ -40,11 +22,13 @@ function Dashboard() {
     totalOrders: 0,
     totalRevenue: 0,
   });
+
   const [highlightStats, setHighlightStats] = useState({
     revenue: { value: 0, change: 0 },
     orders: { value: 0, change: 0 },
     avgOrderValue: { value: 0, change: 0 },
   });
+
   const [revenueByDay, setRevenueByDay] = useState([]);
   const [ordersByStatus, setOrdersByStatus] = useState([]);
   const [recentOrders, setRecentOrders] = useState([]);
@@ -372,6 +356,7 @@ function Dashboard() {
   );
 }
 
+//Cards Styling
 const DashboardCard = ({ title, value, icon }) => (
   <div className="bg-slate-800 p-6 rounded-lg shadow-lg border border-slate-700 flex items-center justify-between hover:bg-slate-700 transition-colors duration-300">
     <div>

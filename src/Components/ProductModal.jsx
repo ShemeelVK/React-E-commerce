@@ -1,4 +1,4 @@
-import { Heart, ShoppingCart, X } from "lucide-react";
+import { Heart, ShoppingCart, X, Star } from "lucide-react";
 import { useCart } from "../Context/CartContext.jsx";
 import { useWishlist } from "../Context/WishlistContext.jsx";
 import { useNavigate } from "react-router-dom";
@@ -48,9 +48,17 @@ function ProductModal({ product, onClose }) {
 
           {/* Right Side: Product Details */}
           <div className="flex flex-col justify-center">
-            <p className="text-indigo-600 font-semibold mb-2">
-              {product.category}
-            </p>
+            <div className="flex items-center gap-3 mb-2">
+              <p className="text-indigo-600 font-semibold mb-2">
+                {product.category}
+              </p>
+              {product.isFeatured && (
+                <div className="bg-yellow-100 text-yellow-800 text-xs font-semibold px-2.5 py-0.5 rounded-full flex items-center gap-1 mb-2">
+                  <Star size={12} />
+                  <span>Featured</span>
+                </div>
+              )}
+            </div>
             <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">
               {product.name}
             </h1>
@@ -66,11 +74,12 @@ function ProductModal({ product, onClose }) {
                   isInCart ? navigate("/Cart") : addToCart(product);
                 }}
                 className={`flex-1 text-white font-semibold py-3 px-6 rounded-lg shadow-md  transition flex items-center justify-center gap-2 
-                  ${isInCart
-                    ? "bg-green-600 hover:bg-green-700"
-                    : "bg-indigo-600 hover:bg-indigo-700"
-                }`}
-                >
+                  ${
+                    isInCart
+                      ? "bg-green-600 hover:bg-green-700"
+                      : "bg-indigo-600 hover:bg-indigo-700"
+                  }`}
+              >
                 <ShoppingCart className="w-5 h-5" />
                 <span>{isInCart ? "Proceed to Cart" : "Add to Cart"}</span>
               </button>

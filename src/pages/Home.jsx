@@ -12,8 +12,8 @@ function Home(){
     useEffect(()=>{
       const fetchproducts=async ()=>{
         try{
-        const res = await axios.get("http://localhost:3000/products");
-        setProducts(res.data.slice(0,10));
+        const res = await axios.get("http://localhost:3000/products?isFeatured=true ");
+        setProducts(res.data);
         console.log("Fetched data:", response.data);
         }
         catch(err){

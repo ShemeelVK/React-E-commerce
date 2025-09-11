@@ -1,8 +1,8 @@
-import { Heart,ShoppingCart } from "lucide-react";
+import { Heart,ShoppingCart,Star } from "lucide-react";
 import { useCart } from "../Context/CartContext";
 import { useWishlist } from "../Context/WishlistContext";
 function ProductCard({product,onViewProduct}){
-    const {name,category,price,imageUrl}=product;
+    const {name,category,price,imageUrl,isFeatured}=product;
     const {addToCart}=useCart();
     const {addToWishlist}=useWishlist();
 
@@ -30,6 +30,13 @@ function ProductCard({product,onViewProduct}){
             <p className="text-xl font-bold text-indigo-600">${price}</p>
           </div>
         </div>
+
+        {isFeatured && (
+          <div className="absolute top-3 left-3 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded-md flex items-center gap-1">
+            <Star size={12} fill="currentColor" />
+            <span>FEATURED</span>
+          </div>
+        )}
 
         {/* action buttons */}
         <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">

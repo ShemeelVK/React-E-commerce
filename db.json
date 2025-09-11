@@ -192,7 +192,7 @@
       "price": 115,
       "imageUrl": "https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/b7d9211c-26e7-431a-ac24-b0540fb3c00f/air-force-1-07-mens-shoes-jBrhbr.png",
       "description": "A timeless basketball classic turned streetwear icon, crafted with premium leather for durability and everyday style.",
-      "isFeatured": false
+      "isFeatured": true
     },
     {
       "id": "2",
@@ -201,7 +201,7 @@
       "price": 100,
       "imageUrl": "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/21f56016-2e59-4392-b80f-c9440573f798/ZOOMX+VAPORFLY+NEXT%25+4.png",
       "description": "A retro-inspired sneaker featuring a sleek leather upper, low-profile design, and versatile wear from pitch to street.",
-      "isFeatured": false
+      "isFeatured": true
     },
     {
       "id": "3",
