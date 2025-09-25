@@ -3,9 +3,8 @@ import axios from "axios";
 import { X } from "lucide-react";
 import toast from "react-hot-toast";
 
-// This modal handles both adding a new product and editing an existing one
 function ProductFormModal({ product, onClose, onSuccess }) {
-  // If we are editing, 'product' will be an object. If adding, it's null.
+  
   const isEditing = product !== null;
 
   const [formData, setFormData] = useState({
@@ -17,7 +16,6 @@ function ProductFormModal({ product, onClose, onSuccess }) {
     isFeatured: false,
   });
 
-  // When the component loads, if we are editing, pre-fill the form
   useEffect(() => {
     if (isEditing) {
       setFormData({
@@ -44,23 +42,23 @@ function ProductFormModal({ product, onClose, onSuccess }) {
 
     const dataToSubmit = {
       ...formData,
-      price: parseFloat(formData.price), // Ensure price is a number
+      price: parseFloat(formData.price),
     };
 
     try {
       if (isEditing) {
-        // If editing, send a PATCH request
+        // If editing,
         await axios.patch(
           `http://localhost:3000/products/${product.id}`,
           dataToSubmit
         );
         toast.success("Product updated successfully!");
       } else {
-        // If adding, send a POST request
+        // If adding
         await axios.post("http://localhost:3000/products", dataToSubmit);
         toast.success("Product added successfully!");
       }
-      onSuccess(); // This calls fetchProducts() in the parent
+      onSuccess(); // calls fetchProducts() in the parent
       onClose(); // Close the modal
     } catch (error) {
       console.error("Failed to save product:", error);

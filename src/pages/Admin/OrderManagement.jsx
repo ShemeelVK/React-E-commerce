@@ -8,7 +8,7 @@ function OrderManagement() {
   const [loading, setLoading] = useState(true);
   const [viewingOrder, setViewingOrder] = useState(null);
 
-  // This function fetches ALL users, then combines their orders into one list
+  
   const fetchOrders = async () => {
     setLoading(true);
     try {
@@ -43,7 +43,7 @@ function OrderManagement() {
     fetchOrders();
   }, []);
 
-  // This function handles updating the order status
+  // updating order status
   const handleStatusChange = async (orderId, userId, newStatus) => {
     try {
       const userResponse = await axios.get(

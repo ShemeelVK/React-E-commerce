@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { PlusCircle, Edit, Trash2, Star } from "lucide-react";
+import { PlusCircle, Edit, Trash2, Star ,Search} from "lucide-react";
 import ProductFormModal from "../../Components/Admin/ProductFormModal.jsx";
 import toast from "react-hot-toast";
 
 function ProductManagement() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  // State to manage the modal
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingProduct, setEditingProduct] = useState(null); // Will hold product data for editing
+  const [editingProduct, setEditingProduct] = useState(null); 
 
-  // Function to fetch or refresh the product list
+
   const fetchProducts = async () => {
     setLoading(true);
     try {
@@ -29,16 +29,18 @@ function ProductManagement() {
     fetchProducts();
   }, []);
 
+  // add product
   const handleAddProduct = () => {
-    setEditingProduct(null); // Ensure no product is being edited
+    setEditingProduct(null); 
     setIsModalOpen(true);
   };
-
+// edit product
   const handleEditProduct = (product) => {
     setEditingProduct(product);
     setIsModalOpen(true);
   };
 
+  // Delete product
   const handleDeleteProduct = async (productId) => {
     if (
       toast("Are you sure you want to delete this product?", {
@@ -46,7 +48,7 @@ function ProductManagement() {
         style: { background: "#fcbe03", color: "white" },
       })
     ) 
-    
+
     {
       try {
         await axios.delete(`http://localhost:3000/products/${productId}`);
@@ -64,6 +66,10 @@ function ProductManagement() {
     setEditingProduct(null);
   };
 
+const filteredproducts=products.filter((product)=>
+  product.name.toLowerCase().includes(searchQuery.toLowerCase())
+)
+
   if (loading) {
     return <div className="text-white">Loading products...</div>;
   }
@@ -72,6 +78,19 @@ function ProductManagement() {
     <div>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-white">Product Management</h1>
+        <div className="relative w-full md:w-auto">
+          <Search
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+            size={20}
+          />
+          <input
+            type="text"
+            placeholder="Search by product name..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full md:w-64 bg-slate-700 border border-slate-600 rounded-lg py-2 pl-10 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
+        </div>
         <button
           onClick={handleAddProduct}
           className="bg-indigo-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-indigo-700 transition flex items-center gap-2"
@@ -94,7 +113,7 @@ function ProductManagement() {
               </tr>
             </thead>
             <tbody>
-              {products.map((product) => (
+              {filteredproducts.map((product) => (
                 <tr
                   key={product.id}
                   className="border-b border-slate-700 hover:bg-slate-700/50"
@@ -144,7 +163,7 @@ function ProductManagement() {
         <ProductFormModal
           product={editingProduct}
           onClose={handleCloseModal}
-          onSuccess={fetchProducts} // Pass the refresh function
+          onSuccess={fetchProducts}
         />
       )}
     </div>

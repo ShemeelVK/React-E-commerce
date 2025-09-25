@@ -1,4 +1,5 @@
 import { Route,Routes,Outlet } from "react-router-dom"
+// User Side
 import Register from "./pages/Register"
 import Login from "./pages/Login";
 import Home from "./pages/Home";
@@ -11,18 +12,19 @@ import Wishlist from "./pages/Wishlist";
 import Orders from "./pages/Orders";
 import MyAccount from "./pages/MyAccount";
 import Payment from "./pages/Payment";
-import './index.css'
 import { AuthProvider } from "./Context/AuthContext";
 import { CartProvider } from "./Context/CartContext";
 import { WishlistProvider } from "./Context/WishlistContext";
-
+import './index.css'
+import Navbar from "./Components/Navbar";
+  
+// Admin Side
 import AdminProtectedRouter from "./Components/Admin/AdminProtectedRouter";
 import AdminLayout from "./Components/Admin/AdminLayout";
 import Dashboard from "./pages/Admin/Dashboard";
 import OrderManagement from "./pages/Admin/OrderManagement";
 import ProductManagement from "./pages/Admin/ProductManagement";
 import UserManagement from "./pages/Admin/UserManagement";
-import Navbar from "./Components/Navbar";
 
 import { Toaster } from "react-hot-toast";
 function App() {
@@ -37,21 +39,19 @@ function App() {
               position="top-center"
               reverseOrder={false}
               toastOptions={{
-                // Default options for all toasts
                 duration: 5000,
                 style: {
                   borderRadius: "8px",
                   background: "#333",
                   color: "#fff",
                 },
-                // --- THIS IS THE CHANGED SUCCESS STYLE ---
                 success: {
                   duration: 3000,
                   style: {
-                    background: "#10B981", // A professional green color
+                    background: "#10B981", 
                     color: "white",
                   },
-                  // Optional: style the default checkmark icon
+                  
                   iconTheme: {
                     primary: "#DAF7A6",
                     secondary: "#10B981",
@@ -72,7 +72,7 @@ function App() {
               }}
             />
             <Routes>
-              {/* --- Group 1: The User-Facing World (with Navbar) --- */}
+              
               <Route
                 element={
                   <>
@@ -127,11 +127,11 @@ function App() {
                 />
               </Route>
 
-              {/* --- Group 2: Standalone Pages (no layouts) --- */}
+              
               <Route path="/Register" element={<Register />} />
               <Route path="/Login" element={<Login />} />
 
-              {/* --- Group 3: The Admin World (with Admin Sidebar) --- */}
+              
               <Route
                 element={
                   <AdminProtectedRouter>

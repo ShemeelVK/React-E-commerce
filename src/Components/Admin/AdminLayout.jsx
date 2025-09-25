@@ -6,7 +6,7 @@ function AdminLayout() {
   const { logoutUser, currentUser } = useAuth();
 
   const handleLogout = () => {
-    // A confirmation provides a better user experience
+   
     toast(
       (t) => (
         <div className="flex flex-col items-center gap-4 p-2">
@@ -33,16 +33,15 @@ function AdminLayout() {
         </div>
       ),
       {
-        // Use the default dark style for this confirmation toast
+
         id: "logout-confirmation",
       }
     );
   };
 
   return (
-    // Main container with a dark background
     <div className="flex min-h-screen bg-slate-900 text-gray-200">
-      {/* --- Sidebar Navigation --- */}
+      {/*Sidebar Navigation*/}
       <aside className="w-64 flex-shrink-0 bg-slate-800 border-r border-slate-700">
         <div className="p-6 text-2xl font-extrabold text-white border-b border-slate-700 text-center">
           Elevé <span className="text-indigo-400">Admin</span>
@@ -63,9 +62,7 @@ function AdminLayout() {
         </nav>
       </aside>
 
-      {/* --- Main Content --- */}
       <div className="flex-1 flex flex-col">
-        {/* Top Header */}
         <header className="bg-slate-800 border-b border-slate-700 p-4 flex justify-between items-center">
           <h1 className="text-xl font-semibold text-white">
             Welcome, {currentUser?.name}
@@ -79,7 +76,7 @@ function AdminLayout() {
           </button>
         </header>
 
-        {/* Page Content with padding */}
+        {/*Page Content*/}
         <main className="flex-1 p-8 overflow-y-auto">
           <Outlet />
         </main>
@@ -88,7 +85,7 @@ function AdminLayout() {
   );
 }
 
-// Helper component for sidebar links with updated dark theme styles
+
 const AdminNavLink = ({ to, icon, children }) => {
   const baseClasses =
     "w-full flex items-center gap-3 p-3 rounded-md font-semibold transition-colors duration-200";
@@ -98,7 +95,7 @@ const AdminNavLink = ({ to, icon, children }) => {
   return (
     <NavLink
       to={to}
-      end={to === "/admin"} // 'end' prop ensures only the exact path is matched for Dashboard
+      end={to === "/admin"} 
       className={({ isActive }) =>
         `${baseClasses} ${isActive ? activeClasses : inactiveClasses}`
       }

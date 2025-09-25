@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 
-// Function to dynamically load the Razorpay script
+
 const loadRazorpayScript = (src) => {
   return new Promise((resolve) => {
     const script = document.createElement("script");
@@ -73,16 +73,13 @@ function Payment() {
     };
 
     const options = {
-      key: "rzp_test_edrzdb8Gbx5U5M", // Replace with your test key
+      key: "rzp_test_edrzdb8Gbx5U5M",
       amount: total * 100,
       currency: "INR",
       name: "Elevé",
       description: "Sneaker Store Transaction",
       image: "https://example.com/your_logo.png",
       handler:async function (response) {
-        // This would normally handle a successful payment.
-        // We'll leave it empty for now as requested.
-        console.log("Payment successful:", response);
 
             const newOrder = {
             orderId: `ELEVE-${Date.now()}`,
@@ -95,20 +92,20 @@ function Payment() {
           };
 
           try {
-            // Create the updated user object with the new order and empty cart
+            
             const updatedUser = {
               ...currentUser,
               orders: [...(currentUser.orders || []), newOrder],
               cart: [],
             };
 
-            // Save the changes to the database
+           
             await axios.patch(`http://localhost:3000/users/${currentUser.id}`, {
               orders: updatedUser.orders,
               cart: updatedUser.cart,
             });
 
-            // Update the central state and give user feedback
+           
             updateUserInAuthContext(updatedUser);
             toast.success("Order placed successfully! (Simulation)");
             navigate("/Orders",{replace:true});
@@ -131,7 +128,7 @@ function Payment() {
       theme: {
         color: "#4F46E5",
       },
-      // This function runs when the Razorpay modal is closed.
+     
       modal: {
         ondismiss: async function () {
           toast.error("Payment was cancelled.");

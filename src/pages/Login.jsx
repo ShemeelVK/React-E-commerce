@@ -24,26 +24,34 @@ function Login() {
                   toast.error("Your account has been blocked.");
                   return;
                 }
-                toast.success(`You are Logged In Successfully`);
-                loginUser(user)
+
 
                 if(user.role==="admin"){
+                  loginUser(user);
                   navigate("/admin",{replace: true});
                   return
                 }
-                else{
-                  navigate("/",{replace: true})
+
+                else if(user.role==="user"){
+                 toast.success(`You are Logged In Successfully`);
+                 console.log(user)
+                 loginUser(user)
+                 navigate("/",{replace: true})
                 }
               }
               else{
-               toast.error("Invalid credentials. Please try again.");
+                toast.error("You have entered Wrong Password")
               }
-        }
+            }
+            else{
+             toast.error("Invalid credentials. Please try again.");
+            }
         }
         catch(err){
-            console.log("Error",err);
+            // console.log("Error",err);
             toast.error("An error occurred during login.");
         }
+      
     }
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-gray-100 via-gray-50 to-gray-100">

@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 function OrderDetailModal({ order, onClose }) {
   if (!order) return null;
 
-  // Prevent clicks inside the modal from closing it
+ 
   const handleModalContentClick = (e) => {
     e.stopPropagation();
   };
@@ -21,12 +21,12 @@ function OrderDetailModal({ order, onClose }) {
       onClick={onClose}
       className="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center p-4"
     >
-      {/* Modal Content */}
+     
       <div
         onClick={handleModalContentClick}
         className="bg-slate-800 rounded-lg shadow-2xl max-w-4xl w-full relative text-white animate-fade-in-up max-h-[90vh]"
       >
-        {/* Header */}
+        
         <div className="p-6 border-b border-slate-700 flex justify-between items-center">
           <h2 className="text-2xl font-bold">
             Order Details{" "}
@@ -42,10 +42,9 @@ function OrderDetailModal({ order, onClose }) {
           </button>
         </div>
 
-        {/* Body */}
         <div className="p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Left Side: Items List */}
+            {/* items list */}
             <div className="lg:col-span-2 space-y-4">
               <h3 className="text-lg font-semibold text-slate-300 mb-2">
                 Items Ordered ({order.items.length})
@@ -73,9 +72,8 @@ function OrderDetailModal({ order, onClose }) {
               ))}
             </div>
 
-            {/* Right Side: Shipping & Payment */}
+            {/* shipping */}
             <div className="space-y-6">
-              {/* Shipping Details */}
               <div>
                 <h3 className="text-lg font-semibold text-slate-300 mb-2 flex items-center gap-2">
                   <MapPin size={18} /> Shipping Address
@@ -95,7 +93,7 @@ function OrderDetailModal({ order, onClose }) {
                 </div>
               </div>
 
-              {/* Payment Details */}
+              {/* payment */}
               <div>
                 <h3 className="text-lg font-semibold text-slate-300 mb-2 flex items-center gap-2">
                   <CreditCard size={18} /> Payment Details

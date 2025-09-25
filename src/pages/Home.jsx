@@ -39,27 +39,35 @@ function Home(){
     return (
       <>
         <div
-          className="min-h-screen bg-cover  bg-no-repeat"
+          className="relative min-h-screen bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage:
               "url('https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?q=80&w=1330&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
           }}
         >
+          {/* Gradient Overlay for a more luxurious feel and better text readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/20"></div>
+
+          {/* Place Navbar here so it sits on top of the hero image */}
           <Navbar />
 
-          {/* Hero Section */}
-          <div className="pt-60 text-center text-white drop-shadow-lg px-6">
-            <h1 className="text-[4rem] md:text-6xl font-extrabold mb-6">
+          {/* Hero Content Container */}
+          <div className="relative z-10 flex flex-col items-center justify-center min-h-screen text-center text-white px-6">
+            <h1
+              className="text-5xl md:text-7xl font-extrabold mb-4 tracking-tight animate-fade-in-down"
+              style={{ textShadow: "2px 2px 8px rgba(0,0,0,0.7)" }}
+            >
               Elevé: Luxe in Every Step
             </h1>
-            <p className="text-lg md:text-xl max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl max-w-2xl mx-auto text-gray-200 animate-fade-in-down">
               Discover limited-edition sneakers crafted for the elite.
+              Unparalleled design, unmatched quality.
             </p>
             <button
-              onClick={() => navigate("/Shop")}
-              className="mt-10 px-8 py-3 bg-indigo-600 hover:bg-indigo-700 rounded-full text-white font-semibold shadow-lg transition duration-300"
+              onClick={() => navigate("/shop")}
+              className="mt-10 px-10 py-4 bg-transparent border-2 border-white rounded-full text-white font-bold tracking-wider uppercase text-sm shadow-lg hover:bg-white hover:text-black transition-all duration-300"
             >
-              Shop Now
+              Shop The Collection
             </button>
           </div>
         </div>
@@ -95,7 +103,7 @@ function Home(){
                 className="relative rounded-lg overflow-hidden h-80 group cursor-pointer"
               >
                 <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Air_Jordan_1_Banned.jpg/960px-Air_Jordan_1_Banned.jpg"
+                  src="https://ca-times.brightspotcdn.com/dims4/default/8fe0b21/2147483647/strip/true/crop/6122x4081+0+1/resize/1440x960!/quality/75/?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2F0b%2F7b%2F5b56302840069c22cf1fa46957be%2F1351750-fi-sneaker-buyer-coolkicks-jlc-16172-009.jpg"
                   alt="Sneakers"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
@@ -109,7 +117,7 @@ function Home(){
                 className="relative rounded-lg overflow-hidden h-80 group cursor-pointer"
               >
                 <img
-                  src="https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcS7SQI-qbDz-zNujuV9KE6W2y9SmNM6Gfh7_03Vg1o3v0u2OTeadv_LoewKVKOeZuZyCtg-RMu5RppKgFHlGKT_NXBYT1aS-PrgF2IjkN1cQ3sN1pkDSN_DJA"
+                  src="https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/8d73cd25-91cc-48fe-9514-7a41daccb7ef/NIKE+VOMERO+PLUS.png"
                   alt="Running Shoes"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
@@ -123,7 +131,7 @@ function Home(){
                 className="relative rounded-lg overflow-hidden h-80 group cursor-pointer"
               >
                 <img
-                  src="https://i1.adis.ws/i/drmartens/11822006.80.jpg?$medium$"
+                  src="https://egoss.in/cdn/shop/files/DSC_2106_1917a216-f12d-468f-8dd0-3587699ec440.jpg?v=1753876974&width=1950"
                   alt="Boots"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />

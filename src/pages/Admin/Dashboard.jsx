@@ -3,7 +3,7 @@ import axios from "axios";
 import {  Users, ShoppingCart, DollarSign, ArrowUp, ArrowDown} from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell,Legend,} from "recharts";
 
-// Helper function to format date to YYYY-MM-DD for input fields
+//format date
 const formatDateForInput = (date) => {
   const d = new Date(date);
   let month = "" + (d.getMonth() + 1);
@@ -21,7 +21,7 @@ const STATUS_COLORS = {
   Shipped: "#3B82F6", // Blue
   Delivered: "#10B981", // Green
   Cancelled: "#EF4444", // Red
-  Unknown: "#6B7280", // Gray for any other status
+  Unknown: "#6B7280", // Gray 
 };
 
 function Dashboard() {
@@ -310,9 +310,11 @@ function Dashboard() {
           <h2 className="text-xl font-semibold mb-4 text-white">
             Recent Orders (All Time)
           </h2>
+
+          {/*Table*/ }
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left text-gray-300">
-              {/* --- THIS IS THE COMPLETED TABLE CONTENT --- */}
+              
               <thead className="text-xs text-slate-400 uppercase bg-slate-700/50">
                 <tr>
                   <th className="p-3">Order ID</th>
