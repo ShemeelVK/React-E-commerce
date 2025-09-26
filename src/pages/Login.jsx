@@ -14,7 +14,9 @@ function Login() {
         e.preventDefault();
 
         try{
-            const res= await axios.get(`http://localhost:3000/users?email=${email}`);
+            const res = await axios.get(
+              `${import.meta.env.VITE_API_URL}/users?email=${email}`
+            );
             
             if(res.data.length>0){
                 const user=res.data[0];

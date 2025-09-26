@@ -12,7 +12,9 @@ function UserManagement() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/users");
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/users`
+        );
         const regularUsers = response.data.filter(
           (user) => user.role !== "admin"
         );
@@ -48,9 +50,12 @@ function UserManagement() {
               onClick={async () => {
                 toast.dismiss(t.id);
                 try {
-                  await axios.patch(`http://localhost:3000/users/${userId}`, {
-                    status: newStatus,
-                  });
+                  await axios.patch(
+                    `${import.meta.env.VITE_API_URL}/users/${userId}`,
+                    {
+                      status: newStatus,
+                    }
+                  );
                   setUsers(
                     users.map((user) =>
                       user.id === userId ? { ...user, status: newStatus } : user

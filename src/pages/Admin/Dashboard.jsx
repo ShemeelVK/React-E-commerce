@@ -53,7 +53,9 @@ function Dashboard() {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const usersResponse = await axios.get("http://localhost:3000/users");
+        const usersResponse = await axios.get(
+          `${import.meta.env.VITE_API_URL}/users`
+        );
         const allUsers = usersResponse.data;
 
         let allOrders = [];

@@ -131,7 +131,10 @@ const ProfileSection = ({ user, onUpdate }) => {
     }
 
     try {
-      const response = await axios.patch(`http://localhost:3000/users/${user.id}`, payload);
+      const response = await axios.patch(
+        `${import.meta.env.VITE_API_URL}/users/${user.id}`,
+        payload
+      );
       onUpdate(response.data);
       toast.success("Your profile has been updated successfully!");
       setShowPasswordFields(false);

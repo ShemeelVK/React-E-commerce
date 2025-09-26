@@ -63,7 +63,9 @@ function Register(){
 
 
         try{
-           const res = await axios.get(`http://localhost:3000/users?email=${email}`);
+           const res = await axios.get(
+             `${import.meta.env.VITE_API_URL}/users?email=${email}`
+           );
            if (res.data.length>0){
              toast.error("User already exists")
              navigate("/Login")
@@ -71,15 +73,15 @@ function Register(){
            }
 
            else {
-            await axios.post("http://localhost:3000/users",{
-                name,
-                email,
-                password,
-                role:"user",
-                status:"active",
-                cart:[],
-                wishlist:[],
-                orders:[]
+            await axios.post(`${import.meta.env.VITE_API_URL}/users`, {
+              name,
+              email,
+              password,
+              role: "user",
+              status: "active",
+              cart: [],
+              wishlist: [],
+              orders: [],
             });
 
             }

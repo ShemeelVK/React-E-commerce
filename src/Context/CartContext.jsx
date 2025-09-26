@@ -20,9 +20,12 @@ export function CartProvider({ children }) {
 //updating databse
   const syncCartWithBackend = async (updatedCart) => {
     try {
-      await axios.patch(`http://localhost:3000/users/${currentUser.id}`, {
-        cart: updatedCart,
-      });
+      await axios.patch(
+        `${import.meta.env.VITE_API_URL}/users/${currentUser.id}`,
+        {
+          cart: updatedCart,
+        }
+      );
       const updatedUser = { ...currentUser, cart: updatedCart };
       updateUserInAuthContext(updatedUser);
       setCartItems(updatedCart)
@@ -85,9 +88,12 @@ export function CartProvider({ children }) {
     if (!currentUser) return;
 
     try {
-      await axios.patch(`http://localhost:3000/users/${currentUser.id}`, {
-        cart: [],
-      });
+      await axios.patch(
+        `${import.meta.env.VITE_API_URL}/users/${currentUser.id}`,
+        {
+          cart: [],
+        }
+      );
 
       const updatedUser = { ...currentUser, cart: [] };
 

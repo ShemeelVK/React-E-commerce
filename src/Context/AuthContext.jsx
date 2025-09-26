@@ -16,7 +16,7 @@ export function AuthProvider({children}){
              try {
                const userId = JSON.parse(storedUser).id;
                const res = await axios.get(
-                 `http://localhost:3000/users/${userId}`
+                 `${import.meta.env.VITE_API_URL}/${userId}`
                );
                SetCurrentUser(res.data);
              } catch (err) {

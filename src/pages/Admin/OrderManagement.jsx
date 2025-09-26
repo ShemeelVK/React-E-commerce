@@ -12,7 +12,7 @@ function OrderManagement() {
   const fetchOrders = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("http://localhost:3000/users");
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/users`);
       const users = response.data;
 
       let combinedOrders = [];
@@ -47,7 +47,7 @@ function OrderManagement() {
   const handleStatusChange = async (orderId, userId, newStatus) => {
     try {
       const userResponse = await axios.get(
-        `http://localhost:3000/users/${userId}`
+        `${import.meta.env.VITE_API_URL}/users/${userId}`
       );
       const user = userResponse.data;
 
@@ -55,7 +55,7 @@ function OrderManagement() {
         order.orderId === orderId ? { ...order, status: newStatus } : order
       );
 
-      await axios.patch(`http://localhost:3000/users/${userId}`, {
+      await axios.patch(`${import.meta.env.VITE_API_URL}/users/${userId}`, {
         orders: updatedUserOrders,
       });
 

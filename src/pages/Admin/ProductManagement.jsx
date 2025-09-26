@@ -16,7 +16,9 @@ function ProductManagement() {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("http://localhost:3000/products");
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/products`
+      );
       setProducts(response.data);
     } catch (error) {
       console.error("Failed to fetch products:", error);
@@ -51,7 +53,9 @@ function ProductManagement() {
 
     {
       try {
-        await axios.delete(`http://localhost:3000/products/${productId}`);
+        await axios.delete(
+          `${import.meta.env.VITE_API_URL}/products/${productId}`
+        );
         toast.success("Product deleted successfully.");
         fetchProducts(); // Refresh the list
       } catch (error) {

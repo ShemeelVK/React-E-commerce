@@ -13,9 +13,12 @@ export function WishlistProvider({ children }) {
  //syncing backend
   const syncWithBackend= async(updatedWishlist)=>{
     try{
-        await axios.patch(`http://localhost:3000/users/${currentUser.id}`,{
-            wishlist:updatedWishlist
-        });
+        await axios.patch(
+          `${import.meta.env.VITE_API_URL}/users/${currentUser.id}`,
+          {
+            wishlist: updatedWishlist,
+          }
+        );
 
         const updatedUser={...currentUser, wishlist : updatedWishlist}
         updateUserInAuthContext(updatedUser)

@@ -12,7 +12,9 @@ function Home(){
     useEffect(()=>{
       const fetchproducts=async ()=>{
         try{
-        const res = await axios.get("http://localhost:3000/products?isFeatured=true ");
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/products?isFeatured=true`
+        );
         setProducts(res.data);
         console.log("Fetched data:", res.data);
         }

@@ -43,7 +43,7 @@ function Orders() {
                 try {
                   const updatedUser = { ...currentUser, orders: updatedOrders };
                   await axios.patch(
-                    `http://localhost:3000/users/${currentUser.id}`,
+                    `${import.meta.env.VITE_API_URL}/users/${currentUser.id}`,
                     {
                       orders: updatedOrders,
                     }

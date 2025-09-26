@@ -100,10 +100,13 @@ function Payment() {
             };
 
            
-            await axios.patch(`http://localhost:3000/users/${currentUser.id}`, {
-              orders: updatedUser.orders,
-              cart: updatedUser.cart,
-            });
+            await axios.patch(
+              `${import.meta.env.VITE_API_URL}/users/${currentUser.id}`,
+              {
+                orders: updatedUser.orders,
+                cart: updatedUser.cart,
+              }
+            );
 
            
             updateUserInAuthContext(updatedUser);

@@ -49,13 +49,16 @@ function ProductFormModal({ product, onClose, onSuccess }) {
       if (isEditing) {
         // If editing,
         await axios.patch(
-          `http://localhost:3000/products/${product.id}`,
+          `${import.meta.env.VITE_API_URL}/products/${product.id}`,
           dataToSubmit
         );
         toast.success("Product updated successfully!");
       } else {
         // If adding
-        await axios.post("http://localhost:3000/products", dataToSubmit);
+        await axios.post(
+          `${import.meta.env.VITE_API_URL}/products`,
+          dataToSubmit
+        );
         toast.success("Product added successfully!");
       }
       onSuccess(); // calls fetchProducts() in the parent
