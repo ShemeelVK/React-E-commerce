@@ -96,7 +96,7 @@ function Navbar() {
               {["Home", "Shop", "About", "Contact"].map((item) => (
                 <Link
                   key={item}
-                  to={item === "Home" ? "/" : `/${item.toLowerCase()}`}
+                  to={item === "Home" ? "/" : `/${item}`}
                   className="relative text-gray-800 font-medium hover:text-indigo-700 transition-colors duration-300 group"
                 >
                   {item}
