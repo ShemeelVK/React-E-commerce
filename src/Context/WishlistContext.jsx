@@ -3,31 +3,60 @@ import axios from "axios";
 import { useAuth } from "./AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import api from "../utils/api.js";
+import Wishlist from "../pages/Wishlist.jsx";
 
 const WishlistContext = createContext(null);
 
 export function WishlistProvider({ children }) {
-  const { currentUser, updateUserInAuthContext } = useAuth();
+  const { currentUser } = useAuth();
   const navigate = useNavigate();
+  const [wishlistItems,setWishlistItems]=useState([]);
 
- //syncing backend
-  const syncWithBackend= async(updatedWishlist)=>{
-    try{
-        await axios.patch(
-          `${import.meta.env.VITE_API_URL}/users/${currentUser.id}`,
-          {
-            wishlist: updatedWishlist,
+      useEffect(()=>{
+        const fetchWishlist=async () =>{
+          if(currentUser){
+            try{
+              const res=await api.get(`${import.meta.env.VITE_API_URL}/Wishlist/All-Products`);
+              const realData=res.data.map(item=>({
+                ...item,
+                id:item.productId,
+                WishlistId:item.id,
+                name:item.productName || item.name,
+                imageUrl:item.imageUrl,
+                price:item.price,
+                category:item.category || "Sneakers",
+                description:item.description
+              }))
+              console.log("context fetched wishlist: ",res.data)
+              setWishlistItems(realData);
+            }
+            catch(error){
+              console.log("Failed to fetch Wishlist",error);
+            }
           }
-        );
+          else{
+            setWishlistItems([]);
+          }
+        };
+        fetchWishlist();
+      },[currentUser]);
 
-        const updatedUser={...currentUser, wishlist : updatedWishlist}
-        updateUserInAuthContext(updatedUser)
-    }
-    catch(error){
-        console.log("An error occured while syncing",error)
-        toast.error("Error while syncing")
-    }
+  const isProductInWishlist=(productId)=>{
+    return wishlistItems.find((item)=>(item.id===productId) || (item.productId===productId));
   };
+
+  const toggleApi=async(productId)=>{
+    try{
+       await api.post(`${import.meta.env.VITE_API_URL}/Wishlist/Toggle-Wishlist?productId=${productId}`)
+     }
+     catch(error){
+        console.log("Something went wrong",error)
+
+        toast.error("Connection failed: Could not sync wishlist");
+      }
+  };
+
 
 // Add function
   const addToWishlist = async (product) => {
@@ -37,47 +66,60 @@ export function WishlistProvider({ children }) {
       return;
     }
 
-  try {
-    const currentWishlist = currentUser.wishlist || []; 
-    const itemExists = currentWishlist.find((item) => item.id === product.id);
+    const exists=wishlistItems.find((item)=>item.id===product.id || item.productId===product.id);
 
-    if (itemExists) {
-      toast.error(`${product.name} is already in your wishlist.`);
+    if(exists){
+      removeFromWishlist(product.id);
       return;
     }
-      const updatedWishlist = [...currentWishlist, product];
-      syncWithBackend(updatedWishlist)
-      toast.success(`${product.name} has been added to your wishlist!`);
-     
-}
-    catch (err) {
-      console.error("Failed to add item to wishlist", err);
-      toast.error("An error occurred while adding the item.");
-    }
+
+    const newItem={...product,productId:product.id};
+    setWishlistItems([...wishlistItems,newItem]);
+    toast.success(`${product.name} added to wishlist!`);
+
+    await toggleApi(product.id);
+
   };
 
   // Remove function
    const removeFromWishlist = async (productId) => {
      if (!currentUser) return;
 
-     try {
-       const updatedWishlist = currentUser.wishlist.filter(
-         (item) => item.id !== productId
-       );
+     const updatedList=wishlistItems.filter((item)=>item.id!==productId && item.productId!==productId);
+     setWishlistItems(updatedList);
 
-       syncWithBackend(updatedWishlist)
-       toast.success(`This product is removed`)
-     } catch (err) {
-       console.error("Failed to remove item from wishlist", err);
-       toast.error("An error occurred while removing the item.");
-     }
+     toast.success("Product removed from Wishlist")
+
+     await toggleApi(productId);
    };
+
+   const clearWishlist=async () =>{
+    if(!currentUser){
+      return;
+    }
+    setWishlistItems([])
+
+    try{
+      await api.delete(`${import.meta.env.VITE_API_URL}/Wishlist/Clear-Wishlist`);
+      toast.success("Wishlist Cleared");
+    }
+    catch(error){
+      console.log("Error occured while clearing wishlist: ",error)
+    }
+   }
+
+   const isInWishlist=(productId)=>{
+    return wishlistItems.find(item=> item.id===productId || item.productId===productId);
+   }
+
 
 
   const value = {
-    wishlistItems: currentUser?.wishlist || [],
+    wishlistItems,
     addToWishlist,
-    removeFromWishlist
+    removeFromWishlist,
+    clearWishlist,
+    isInWishlist
   };
 
   return (

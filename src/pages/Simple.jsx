@@ -1,13 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { useCart } from "../Context/CartContext.jsx";
 import { useAuth } from "../Context/AuthContext.jsx";
-import { CreditCard, Landmark, CircleDollarSign, Package, CheckCircle,ShoppingBag,ArrowRight,Copy } from "lucide-react";
+import {
+  CreditCard,
+  Landmark,
+  CircleDollarSign,
+  Package,
+  CheckCircle,
+  ShoppingBag,
+  ArrowRight,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 import Navbar from "../Components/Navbar.jsx";
 import api from "../utils/api.js";
-import eleve from "../assets/eleve.svg"
+import eleve from "../assets/eleve.svg";
 
 const loadRazorpayScript = (src) => {
   return new Promise((resolve) => {
@@ -24,6 +32,10 @@ function Payment() {
   const { currentUser, updateUserInAuthContext } = useAuth();
   const navigate = useNavigate();
 
+  // --- NEW STATES FOR SUCCESS UI ---
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [placedOrderId, setPlacedOrderId] = useState("");
+
   const [shippingInfo, setShippingInfo] = useState({
     name: currentUser?.name || "",
     address: "",
@@ -32,11 +44,10 @@ function Payment() {
     phone: "",
     zip: "",
   });
-  const [showSuccess,setShowSuccess]=useState(false);
-  const [placedOrderId,setPlacedOrderId]=useState("")
   const [paymentMethod, setPaymentMethod] = useState("UPI");
   const [isProcessing, setIsProcessing] = useState(false);
 
+  // Load the Razorpay script when the component mounts
   useEffect(() => {
     loadRazorpayScript("https://checkout.razorpay.com/v1/checkout.js");
   }, []);
@@ -47,188 +58,172 @@ function Payment() {
   );
   const shippingCost = subtotal > 500 ? 0 : 50;
   const total = subtotal + shippingCost;
-  const EXCHANGE_RATE=87;
+  const EXCHANGE_RATE = 87;
 
   const handleInputChange = (e) => {
     setShippingInfo({ ...shippingInfo, [e.target.name]: e.target.value });
   };
 
-  //Payment Handler
   const handlePayment = async (e) => {
     e.preventDefault();
+
     if (!currentUser || isProcessing) return;
 
-    if(!shippingInfo.address || !shippingInfo.city || !shippingInfo.zip || !shippingInfo.phone){
+    if (
+      !shippingInfo.address ||
+      !shippingInfo.city ||
+      !shippingInfo.zip ||
+      !shippingInfo.phone
+    ) {
       toast.error("Please fill in all the shipping details");
       return;
     }
 
-    const orderPayload={
-      shippingAddress:{
-        name:shippingInfo.name,
-        street:shippingInfo.address,
-        city:shippingInfo.city,
-        state:shippingInfo.state,
-        zipCode:shippingInfo.zip,
-        phoneNumber:shippingInfo.phone
+    const orderPayload = {
+      shippingAddress: {
+        name: shippingInfo.name,
+        street: shippingInfo.address,
+        city: shippingInfo.city,
+        state: shippingInfo.state,
+        zipCode: shippingInfo.zip,
+        phoneNumber: shippingInfo.phone,
       },
-      //DTO "items" list
-      items:cartItems.map(item=> ({
-        productId:item.productId || item.id,
-        quantity:item.quantity
+      items: cartItems.map((item) => ({
+        productId: item.productId || item.id,
+        quantity: item.quantity,
       })),
-      //DTO "PayemtnMethod" string
-      paymentMethod:paymentMethod
+      paymentMethod: paymentMethod,
     };
 
-    const placeOrder=async (paymentId = null)=> {
+    const placeOrder = async (paymentId = null) => {
       try {
-        //for online payment, you sometimes want to send paymentId too
+        const response = await api.post(
+          `${import.meta.env.VITE_API_URL}/Order/Place-Order`,
+          orderPayload
+        );
 
-        const response=await api.post(`${import.meta.env.VITE_API_URL}/Order/Place-Order`, orderPayload);
-        
-        const serverId=response.data?.order || response.data?.orderId 
-        
+        // Extracting orderId from .NET response (Adjust property name based on your DTO)
+        const serverId =
+          response.data?.orderId || response.data?.id || `ELEVE-${Date.now()}`;
         setPlacedOrderId(serverId);
+
         toast.success("Order Placed Successfully");
-        setShowSuccess(true);
         await clearCart();
 
-        // navigate("/orders",{replace:true});
-
+        // Show Success UI instead of immediate navigation
+        setShowSuccess(true);
       } catch (error) {
-        console.log("Order failed: ",error);
-        //handling backend errors
-        if(error.response && error.response.data.message){
+        console.log("Order failed: ", error);
+        if (error.response && error.response.data.message) {
           toast.error(error.response.data.message);
-        }
-        else if(error.response && error.response.data.error){
+        } else if (error.response && error.response.data.error) {
           toast.error(error.response.data.error);
-        }
-        else{
+        } else {
           toast.error("Failed to place order, Please try again.");
         }
-      }
-      finally{
         setIsProcessing(false);
       }
     };
 
     setIsProcessing(true);
 
-    if(paymentMethod==="Cash on Delivery"){
-      //skipping razorpay
+    if (paymentMethod === "Cash on Delivery") {
       await placeOrder();
-    }
-    else{
-      if(!window.Razorpay){
+    } else {
+      if (!window.Razorpay) {
         toast.error("Payment SDK failed to load");
         setIsProcessing(false);
         return;
       }
-    }
 
-    const totalInINR=Math.round(total * EXCHANGE_RATE);
-    const amountInPaise=totalInINR * 100;
+      const totalInINR = Math.round(total * EXCHANGE_RATE);
+      const amountInPaise = totalInINR * 100;
 
-    const options = {
-      key: "rzp_test_edrzdb8Gbx5U5M", // Replace with your actual key
-      amount: amountInPaise,
-      currency: "INR",
-      name: "Elevé",
-      description: "Sneaker Store Transaction",
-      image: eleve,
+      const options = {
+        key: "test_key", // Replace with your actual key
+        amount: amountInPaise,
+        currency: "INR",
+        name: "Elevé",
+        description: "Sneaker Store Transaction",
+        image: eleve,
 
-      handler: async function (response) {
-        // --- STOCK REDUCTION & ORDER LOGIC ---
-        await placeOrder(response.razorpay_payment_id);
-
-          // // 2. Create Order
-          // const newOrder = {
-          //   orderId: `ELEVE-${Date.now()}`,
-          //   paymentId: response.razorpay_payment_id,
-          //   orderDate: new Date().toISOString(),
-          //   items: cartItems,
-          //   totalAmount: total,
-          //   shippingAddress: shippingInfo,
-          //   paymentMethod: paymentMethod,
-          //   status: "In Progress",
-          // };
-
-      },
-      prefill: {
-        name: shippingInfo.name,
-        email: currentUser.email,
-        contact: shippingInfo.phone,
-      },
-      notes: {
-        address: `${shippingInfo.address}, ${shippingInfo.city}, ${shippingInfo.state} - ${shippingInfo.zip}`,
-      },
-      theme: {
-        color: "#4F46E5",
-      },
-      modal: {
-        ondismiss: function () {
-          toast.error("Payment was cancelled.");
-          setIsProcessing(false);
+        handler: async function (response) {
+          await placeOrder(response.razorpay_payment_id);
         },
-      },
-    };
+        prefill: {
+          name: shippingInfo.name,
+          email: currentUser.email,
+          contact: shippingInfo.phone,
+        },
+        notes: {
+          address: `${shippingInfo.address}, ${shippingInfo.city}, ${shippingInfo.state} - ${shippingInfo.zip}`,
+        },
+        theme: {
+          color: "#4F46E5",
+        },
+        modal: {
+          ondismiss: function () {
+            toast.error("Payment was cancelled.");
+            setIsProcessing(false);
+          },
+        },
+      };
 
-    const rzp = new window.Razorpay(options);
-    rzp.open();
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    }
   };
 
-  // if (showSuccess) {
-  //     return (
-  //       <div className="min-h-screen bg-green-50 flex items-center justify-center p-4">
-  //         <div className="max-w-md w-full bg-white rounded-3xl shadow-2xl p-8 text-center border border-green-100 animate-in fade-in zoom-in duration-300">
-  //           <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-  //             <CheckCircle className="text-green-600 w-12 h-12" />
-  //           </div>
-  //           <h1 className="text-3xl font-bold text-gray-800 mb-2">
-  //             Order Successful!
-  //           </h1>
-  //           <p className="text-gray-600 mb-6">
-  //             Thank you for your purchase! We've received your order and are
-  //             getting it ready for shipment.
-  //           </p>
-  
-  //           <div className="bg-gray-50 rounded-xl p-4 mb-8 border border-dashed border-gray-300">
-  //             <p className="text-xs text-gray-400 uppercase font-bold mb-1 tracking-widest">
-  //               Order Reference
-  //             </p>
-  //             <p className="text-lg font-mono font-bold text-indigo-600">
-  //               {placedOrderId}
-  //             </p>
-  //           </div>
-  
-  //           <p className="text-sm text-gray-500 mb-8 italic">
-  //             "Your order will be arriving soon at your doorstep!"
-  //           </p>
-  
-  //           <div className="flex flex-col gap-3">
-  //             <button
-  //               onClick={() => navigate("/shop")}
-  //               className="w-full bg-indigo-600 text-white py-4 rounded-xl font-bold hover:bg-indigo-700 transition flex items-center justify-center gap-2 shadow-lg shadow-indigo-100"
-  //             >
-  //               <ShoppingBag size={20} />
-  //               Keep Shopping
-  //             </button>
-  //             <button
-  //               onClick={() => navigate("/orders")}
-  //               className="text-gray-500 font-medium hover:text-indigo-600 transition"
-  //             >
-  //               View Order History
-  //             </button>
-  //           </div>
-  //         </div>
-  //       </div>
-  //     );
-  //   }
+  // --- NEW: SUCCESS UI VIEW ---
+  if (showSuccess) {
+    return (
+      <div className="min-h-screen bg-green-50 flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white rounded-3xl shadow-2xl p-8 text-center border border-green-100 animate-in fade-in zoom-in duration-300">
+          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <CheckCircle className="text-green-600 w-12 h-12" />
+          </div>
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">
+            Order Successful!
+          </h1>
+          <p className="text-gray-600 mb-6">
+            Thank you for your purchase! We've received your order and are
+            getting it ready for shipment.
+          </p>
 
+          <div className="bg-gray-50 rounded-xl p-4 mb-8 border border-dashed border-gray-300">
+            <p className="text-xs text-gray-400 uppercase font-bold mb-1 tracking-widest">
+              Order Reference
+            </p>
+            <p className="text-lg font-mono font-bold text-indigo-600">
+              {placedOrderId}
+            </p>
+          </div>
 
-  if (cartItems.length === 0 && !showSuccess) {
+          <p className="text-sm text-gray-500 mb-8 italic">
+            "Your order will be arriving soon at your doorstep!"
+          </p>
+
+          <div className="flex flex-col gap-3">
+            <button
+              onClick={() => navigate("/shop")}
+              className="w-full bg-indigo-600 text-white py-4 rounded-xl font-bold hover:bg-indigo-700 transition flex items-center justify-center gap-2 shadow-lg shadow-indigo-100"
+            >
+              <ShoppingBag size={20} />
+              Keep Shopping
+            </button>
+            <button
+              onClick={() => navigate("/orders")}
+              className="text-gray-500 font-medium hover:text-indigo-600 transition"
+            >
+              View Order History
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (cartItems.length === 0) {
     return (
       <div className="text-center py-40">
         <h1 className="text-2xl font-bold">Your cart is empty.</h1>
@@ -254,6 +249,7 @@ function Payment() {
             onSubmit={handlePayment}
             className="grid grid-cols-1 lg:grid-cols-3 gap-8"
           >
+            {/* --- Left Side: Shipping & Payment --- */}
             <div className="lg:col-span-2 space-y-8">
               <div className="bg-white p-8 rounded-lg shadow-md">
                 <h2 className="text-2xl font-bold mb-6">
@@ -356,6 +352,7 @@ function Payment() {
               </div>
             </div>
 
+            {/* --- Right Side: Order Summary --- */}
             <div className="bg-white p-8 rounded-lg shadow-md h-fit">
               <h2 className="text-2xl font-bold mb-6">Order Summary</h2>
               <div className="space-y-4">
@@ -408,67 +405,6 @@ function Payment() {
           </form>
         </div>
       </div>
-
-      {showSuccess && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-300">
-          <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full text-center relative animate-in zoom-in-95 duration-300">
-            {/* Close Button (Optional) */}
-            {/* <button 
-              onClick={() => setShowSuccess(false)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition"
-            >
-              <X size={24} />
-            </button> */}
-
-            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <CheckCircle className="text-green-600 w-12 h-12" />
-            </div>
-
-            <h2 className="text-3xl font-extrabold text-gray-800 mb-2">
-              Order Confirmed!
-            </h2>
-            <p className="text-gray-500 mb-6">
-              Your order has been placed successfully.
-            </p>
-
-            <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-4 mb-8">
-              <p className="text-xs text-indigo-500 uppercase font-bold mb-1 tracking-wider">
-                Order Reference ID :
-              </p>
-              <div className="flex items-center justify-center gap-2">
-                <span className="text-xl font-mono font-bold text-indigo-700 select-all">
-                  {placedOrderId}
-                </span>
-                <button
-                  onClick={() => {
-                    navigator.clipboard.writeText(placedOrderId);
-                    toast.success("Copied to clipboard!");
-                  }}
-                  className="p-1.5 hover:bg-indigo-200 rounded-md text-indigo-500 transition"
-                  title="Copy ID"
-                >
-                  <Copy size={16} />
-                </button>
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-3">
-              <button
-                onClick={() => navigate("/orders")}
-                className="w-full bg-indigo-600 text-white py-3.5 rounded-xl font-bold hover:bg-indigo-700 transition shadow-lg shadow-indigo-200"
-              >
-                Track My Order
-              </button>
-              <button
-                onClick={() => navigate("/shop")}
-                className="w-full bg-white text-gray-700 border border-gray-200 py-3.5 rounded-xl font-bold hover:bg-gray-50 hover:text-gray-900 transition"
-              >
-                Continue Shopping
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 }

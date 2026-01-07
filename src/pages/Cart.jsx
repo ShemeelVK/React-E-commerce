@@ -6,7 +6,15 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 function Cart() {
-  const { cartItems, increaseQuantity, decreaseQuantity, removeFromCart , clearCart} = useCart();
+  const {
+    cartItems,
+    increaseQuantity,
+    decreaseQuantity,
+    removeFromCart,
+    clearCart,
+    processCheckout,
+    isProcessingCheckout,
+  } = useCart();
 
   const navigate=useNavigate();
 // Subtotal function
@@ -157,12 +165,11 @@ function Cart() {
                 <span>${subtotal.toFixed(2)}</span>
               </div>
               <button
-                onClick={() => {
-                  navigate("/Payment");
-                }}
+                onClick={processCheckout}
+                disabled={isProcessingCheckout}
                 className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-lg font-semibold shadow-lg transition"
               >
-                Proceed to Checkout
+                {isProcessingCheckout ? "Verifying Stock..." : "Proceed to Checkout"}
               </button>
             </div>
           </div>

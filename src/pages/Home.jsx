@@ -4,6 +4,7 @@ import axios from "axios";
 import Navbar from "../Components/Navbar";
 import ProductCard from "../Components/ProductCard";
 import ProductModal from "../Components/ProductModal";
+import api from "../utils/api";
 
 function Home() {
   const navigate = useNavigate();
@@ -13,8 +14,8 @@ function Home() {
   useEffect(() => {
     const fetchproducts = async () => {
       try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/products?isFeatured=true`
+        const res = await api.get(
+          `${import.meta.env.VITE_API_URL}/Products/Featured-Products`
         );
         setProducts(res.data);
         console.log("Fetched data:", res.data);

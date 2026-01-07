@@ -9,6 +9,7 @@ function ProductModal({ product, onClose }) {
   const { addToWishlist, wishlistItems } = useWishlist();
   const navigate=useNavigate();
 
+  // console.log("renderes")
 
   const handleModalContentClick = (e) => {
     e.stopPropagation();
@@ -16,6 +17,10 @@ function ProductModal({ product, onClose }) {
 
   const isInCart = product && cartItems.some((item) => item.id === product.id);
   const isInWishlist = product && wishlistItems.some((item) => item.id === product.id);
+
+  const stock = product.stock !== undefined ? product.stock : 0;
+  const isOutOfStock = stock === 0;
+  const isLowStock = stock > 0 && stock < 10;
 
   return (
     // The Modal Backdrop (the greyed-out background)
@@ -44,6 +49,14 @@ function ProductModal({ product, onClose }) {
               alt={product.name}
               className="max-h-[250px] md:max-h-[400px] object-contain"
             />
+            {/* Out of Stock Overlay */}
+            {isOutOfStock && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="bg-red-600 text-white px-4 py-2 text-lg font-bold rounded shadow-lg transform -rotate-12">
+                  OUT OF STOCK
+                </span>
+              </div>
+            )}
           </div>
 
           {/* Right Side: Product Details */}
@@ -65,23 +78,60 @@ function ProductModal({ product, onClose }) {
             <p className="text-gray-600 mb-6 text-sm md:text-base">
               {product.description}
             </p>
-            <p className="text-4xl md:text-5xl font-bold text-gray-900 mb-8">
+
+            {/* Price and Stock Status Row */}
+            <div className="flex items-center justify-between mb-8">
+              <p className="text-4xl md:text-5xl font-bold text-gray-900">
+                ${product.price}
+              </p>
+              {/* Stock Availability Indicator */}
+              {!isOutOfStock ? (
+                <span
+                  className={`text-sm font-bold px-3 py-1 rounded-full ${
+                    isLowStock
+                      ? "text-orange-600 bg-orange-100"
+                      : "text-green-600 bg-green-100"
+                  }`}
+                >
+                  {isLowStock
+                    ? `Limited Stock only: ${stock} left!`
+                    : "In Stock"}
+                </span>
+              ) : (
+                <span className="text-sm font-bold text-red-600 bg-red-100 px-3 py-1 rounded-full">
+                  Out of Stock
+                </span>
+              )}
+            </div>
+
+            {/* <p className="text-4xl md:text-5xl font-bold text-gray-900 mb-8">
               ${product.price}
-            </p>
+            </p> */}
+            
             <div className="flex items-center gap-4">
               <button
                 onClick={() => {
-                  isInCart ? navigate("/Cart") : addToCart(product);
+                  if (isOutOfStock) return;
+                  isInCart ? navigate("/cart") : addToCart(product);
                 }}
-                className={`flex-1 text-white font-semibold py-3 px-6 rounded-lg shadow-md  transition flex items-center justify-center gap-2 
+                disabled={isOutOfStock}
+                className={`flex-1 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition flex items-center justify-center gap-2 
                   ${
-                    isInCart
+                    isOutOfStock
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : isInCart
                       ? "bg-green-600 hover:bg-green-700"
                       : "bg-indigo-600 hover:bg-indigo-700"
                   }`}
               >
                 <ShoppingCart className="w-5 h-5" />
-                <span>{isInCart ? "Proceed to Cart" : "Add to Cart"}</span>
+                <span>
+                  {isOutOfStock
+                    ? "Sold Out"
+                    : isInCart
+                    ? "Proceed to Cart"
+                    : "Add to Cart"}
+                </span>
               </button>
               <button
                 onClick={() => addToWishlist(product)}

@@ -1,6 +1,8 @@
 import { createContext,useState,useEffect,useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import api from "../utils/api";
+import toast from "react-hot-toast";
 
 const AuthContext=createContext(null)
 
@@ -11,34 +13,57 @@ export function AuthProvider({children}){
 
     useEffect(()=>{
       const fetchUserAPI = async () => {
-        const storedUser=localStorage.getItem("user")
-           if (storedUser) {
-             try {
-               const userId = JSON.parse(storedUser).id;
-               const res = await axios.get(
-                 `${import.meta.env.VITE_API_URL}/${userId}`
-               );
-               SetCurrentUser(res.data);
-             } catch (err) {
-               console.error("Failed to sync user from API:", err);
-               localStorage.removeItem("user")
-               SetCurrentUser(null)
-             }
-           }
-           setLoading(false)
+        const storedUser=localStorage.getItem("user");
+        const storedToken=localStorage.getItem("token");
+
+        if(storedUser && storedToken){
+          SetCurrentUser(JSON.parse(storedUser));
+        }
+        else{
+          SetCurrentUser(null);
+          localStorage.removeItem("user");
+          localStorage.removeItem("token");
+        }
+
+        setLoading(false);
+
          };
 
          fetchUserAPI();
     },[]);
 
-    const loginUser=(userData)=>{
-      const { password, ...userToStore } = userData;
-        SetCurrentUser(userToStore)
-        localStorage.setItem("user",JSON.stringify(userToStore))
+    const loginUser=async (formData)=>{
+      try{
+          const res=await api.post(`${import.meta.env.VITE_API_URL}/Auth/login`,formData);
+          const {token,user}=res.data;
+
+          localStorage.setItem("token",token);
+          localStorage.setItem("user",JSON.stringify(user))
+
+          SetCurrentUser(user);
+
+          if(user.role==="Admin"){
+            navigate("/admin")
+          }
+          else{
+            navigate("/");
+          }
+
+          return{success:true};
+      }
+      catch(err){
+          console.log("Error: ",err)
+
+          return{
+            success:false,
+            message:err.response?.data?.err || "Something went wrong!"
+          }
+      }
     };
 
     const logoutUser=()=>{
         localStorage.removeItem("user")
+        localStorage.removeItem("token")
         SetCurrentUser(null)
         navigate("/");
     };

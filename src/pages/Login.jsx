@@ -1,8 +1,9 @@
-import { useNavigate } from "react-router-dom";
+import { replace, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
 import { useAuth } from "../Context/AuthContext";
 import toast from "react-hot-toast";
+import api from "../utils/api";
 
 function Login() {
     const [email,setEmail]=useState("")
@@ -13,47 +14,14 @@ function Login() {
     const handlelogin=async (e)=>{
         e.preventDefault();
 
-        try{
-            const res = await axios.get(
-              `${import.meta.env.VITE_API_URL}/users?email=${email}`
-            );
-            
-            if(res.data.length>0){
-                const user=res.data[0];
-            
-              if(user.email===email && user.password===password){
-                if(user.status==="blocked"){
-                  toast.error("Your account has been blocked.");
-                  return;
-                }
+        const result=await loginUser({email,password});
 
-
-                if(user.role==="admin"){
-                  loginUser(user);
-                  navigate("/admin",{replace: true});
-                  return
-                }
-
-                else if(user.role==="user"){
-                 toast.success(`You are Logged In Successfully`);
-                 console.log(user)
-                 loginUser(user)
-                 navigate("/",{replace: true})
-                }
-              }
-              else{
-                toast.error("You have entered Wrong Password")
-              }
-            }
-            else{
-             toast.error("Invalid credentials. Please try again.");
-            }
+        if(!result.success){
+          toast.error(result.message);
         }
-        catch(err){
-            // console.log("Error",err);
-            toast.error("An error occurred during login.");
+        else{
+          toast.success("Login Successfull")
         }
-      
     }
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-gray-100 via-gray-50 to-gray-100">

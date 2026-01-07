@@ -1,16 +1,40 @@
 import { useAuth } from "../Context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
 import { Package,MapPin,CreditCard,ShoppingBag,Calendar,ArrowLeft,XCircle } from "lucide-react";
-import axios from "axios";
+import api from "../utils/api.js";
 import Navbar from "../Components/Navbar";
 import toast from "react-hot-toast";
+import { useState } from "react";
+import { useEffect } from "react";
 
 function Orders() {
-  const { currentUser, updateUserInAuthContext } = useAuth();
+  // const { currentUser, updateUserInAuthContext } = useAuth();
   const navigate = useNavigate();
-  const orders = currentUser?.orders || [];
+  const [orders,setOrders]=useState([]);
+  const [loading,setLoading]=useState(true);
 
-  const handleCancelOrder = async (orderId) => {
+  useEffect(()=>{
+    const fetchOrders=async ()=>{
+      try{
+        const res=await api.get(`${import.meta.env.VITE_API_URL}/Order/my-order`)
+        setOrders(res.data);
+      }
+      catch (error){
+        console.log("Failed to fetch orders : ",error);
+        toast.error("Could not load order history");
+      }
+      finally{
+        setLoading(false);
+      }
+    };
+    fetchOrders();
+  },[])
+
+  // const getImageUrl=(item)=>{
+  //   return item.productImage || item.product?.imageUrl || null;
+  // }
+
+  const handleCancelOrder = async (orderId,orderReference) => {
     toast(
       (t) => (
         <div className="flex flex-col items-center gap-4 p-2 text-gray-800">
@@ -33,28 +57,38 @@ function Orders() {
                 toast.dismiss(t.id);
 
                 // Now, execute the actual cancellation logic
-                const updatedOrders = orders.map((order) => {
-                  if (order.orderId === orderId) {
-                    return { ...order, status: "Cancelled" };
-                  }
-                  return order;
-                });
+                // const updatedOrders = orders.map((order) => {
+                //   if (order.orderId === orderId) {
+                //     return { ...order, status: "Cancelled" };
+                //   }
+                //   return order;
+                // });
 
                 try {
-                  const updatedUser = { ...currentUser, orders: updatedOrders };
-                  await axios.patch(
-                    `${import.meta.env.VITE_API_URL}/users/${currentUser.id}`,
-                    {
-                      orders: updatedOrders,
-                    }
+                  // const updatedUser = { ...currentUser, orders: updatedOrders };
+                  await api.put(
+                    `${import.meta.env.VITE_API_URL}/Order/Cancel-Order/${orderId}`
                   );
-                  updateUserInAuthContext(updatedUser);
+
                   toast.success(
-                    `Order #${orderId.split("-")[1]} has been cancelled.`
+                    `Order #${orderReference} has been cancelled successfully.`
                   );
+
+                  setOrders((prevOrders)=>
+                    prevOrders.map((order)=>{
+                      if(order.id===orderId){
+                        return {...order,status:"Cancelled"}
+                      }
+                    return order;
+                  }));
                 } catch (error) {
                   console.error("Failed to cancel order:", error);
-                  toast.error("There was an error cancelling the order.");
+                  if(error.response && error.response.data){
+                    toast.error("There was an error cancelling the order.");
+                  }
+                  else{
+                    toast.error("Network error.Please try again");
+                  }
                 }
               }}
               className="px-4 py-2 text-sm font-semibold bg-red-500 text-white rounded-md hover:bg-red-600"
@@ -74,6 +108,14 @@ function Orders() {
       }
     );
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-gray-50">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+      </div>
+    );
+  }
 
   return (
       <div className="bg-gray-50 min-h-screen mt-12">
@@ -102,17 +144,16 @@ function Orders() {
         ) : (
           <div className="space-y-8">
             {orders
-              .slice()
-              .reverse()
+              // .slice()
               .map((order) => {
                 const totalItems = order.items.reduce(
-                  (acc, item) => acc + item.quantity,
-                  0
-                );
+                  (acc, item) => acc + item.quantity,0 );
+                
+                const displayId=order.orderReference || order.id?.toString().substring(0,8).toUpperCase();
 
                 return (
                   <div
-                    key={order.orderId}
+                    key={order.id}
                     className="bg-white rounded-lg shadow-md border border-gray-200"
                   >
                     <div className="p-6 flex flex-col md:flex-row justify-between items-start md:items-center border-b border-gray-200">
@@ -120,7 +161,7 @@ function Orders() {
                         <p className="font-bold text-lg text-gray-800">
                           Order{" "}
                           <span className="text-indigo-600">
-                            #{order.orderId.split("-")[1]}
+                            #{order.orderReference}
                           </span>
                         </p>
                         <p className="text-sm text-gray-500 mt-1 flex items-center gap-2">
@@ -159,28 +200,28 @@ function Orders() {
                     </div>
 
                     <div className="p-6">
-                      {order.items.map((item) => (
+                      {order.items.map((item, index) => (
                         <div
-                          key={item.id}
+                          key={`${item.id}-${index}`}
                           className="flex items-center gap-4 not-last:border-b not-last:pb-4 not-last:mb-4"
                         >
                           <div className="w-20 h-20 bg-gray-100 rounded-md p-2 flex-shrink-0">
                             <img
-                              src={item.imageUrl}
+                              src={item.productImage}
                               alt={item.name}
                               className="w-full h-full object-contain"
                             />
                           </div>
                           <div className="flex-1">
                             <p className="font-semibold text-gray-800">
-                              {item.name}
+                              {item.productName}
                             </p>
                             <p className="text-sm text-gray-500">
                               Qty: {item.quantity}
                             </p>
                           </div>
                           <p className="font-semibold text-gray-800">
-                            ${(item.price * item.quantity).toFixed(2)}
+                            ${(item.unitPrice * item.quantity).toFixed(2)}
                           </p>
                         </div>
                       ))}
@@ -198,7 +239,6 @@ function Orders() {
                           </p>
                           <p className="text-gray-600">
                             {order.shippingAddress.name},{" "}
-                            {order.shippingAddress.address},{" "}
                             {order.shippingAddress.city}
                           </p>
                         </div>
@@ -233,9 +273,11 @@ function Orders() {
                       </div>
 
                       <div className="md:text-right md:col-span-1">
-                        {order.status === "In Progress" && (
+                        {order.status === "Pending" && (
                           <button
-                            onClick={() => handleCancelOrder(order.orderId)}
+                            onClick={() =>
+                              handleCancelOrder(order.id, displayId)
+                            }
                             className="bg-red-100 text-red-700 font-semibold px-4 py-2 rounded-lg hover:bg-red-200 transition text-sm flex items-center gap-2 ml-auto"
                           >
                             <XCircle size={14} />

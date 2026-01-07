@@ -5,6 +5,7 @@ import ProductModal from "../Components/ProductModal.jsx";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { SearchX } from "lucide-react";
 import Navbar from "../Components/Navbar.jsx";
+import api from "../utils/api.js";
 
 const categories = ["All", "Sneakers", "Running", "Boots"];
 
@@ -22,7 +23,7 @@ function Shop() {
   useEffect(() => {
     const fetchAllProducts = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/products`);
+        const res = await api.get(`${import.meta.env.VITE_API_URL}/Products/Get-All-Product`);
         setProducts(res.data);
       } catch (error) {
         console.error("Failed to fetch products:", error);

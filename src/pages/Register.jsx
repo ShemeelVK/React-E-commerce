@@ -3,6 +3,7 @@ import axios from "axios";
 import { useState,useEffect } from "react";
 import toast from "react-hot-toast";
 import { CheckCircle2, XCircle ,Eye,EyeOff} from "lucide-react";
+import api from "../utils/api";
 
 const PasswordRequirement = ({ label, isMet }) => (
   <div className={`flex items-center text-sm transition-colors ${
@@ -63,35 +64,35 @@ function Register(){
 
 
         try{
-           const res = await axios.get(
-             `${import.meta.env.VITE_API_URL}/users?email=${email}`
+           const res = await api.post(
+             `${import.meta.env.VITE_API_URL}/Auth/register`,{
+              username:name,
+              email:email,
+              password:password
+             }
            );
-           if (res.data.length>0){
-             toast.error("User already exists")
-             navigate("/Login")
-             return;
+
+           if (res.status===200){
+             toast.success("Registration successfull, Please Login")
+             navigate("/Login");
            }
+          }
 
-           else {
-            await axios.post(`${import.meta.env.VITE_API_URL}/users`, {
-              name,
-              email,
-              password,
-              role: "user",
-              status: "active",
-              cart: [],
-              wishlist: [],
-              orders: [],
-            });
+         catch(err){
+          console.log("Error",err);
 
+          if(err.response){
+            
+            if(err.response.data.errors){
+              toast.error("Please fix valdiation errors");
             }
-
-            toast.success("Registration Successfull !!")
-            navigate("/Login")
+            else if(err.response.data.error){
+              toast.error(err.response.data.error);
             }
-
-       catch(err){
-        console.log("Error",err);
+            else{
+              toast.error("Registration failed. Try Again");
+            }
+          }
        }
     }
 

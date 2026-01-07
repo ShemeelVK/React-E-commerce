@@ -6,7 +6,8 @@ import { useState } from "react";
 import { X, ShoppingCart } from "lucide-react";
 
 function Wishlist() {
-  const { wishlistItems, removeFromWishlist } = useWishlist();
+  
+  const { wishlistItems, removeFromWishlist } = useWishlist([]);
   const { addToCart, cartItems } = useCart();
   const [selectedProduct, setSelectedProduct] = useState(null);
 
@@ -63,7 +64,10 @@ function Wishlist() {
                   {/* Action Buttons (only on card) */}
                   <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <button
-                      onClick={() => removeFromWishlist(product.id)}
+                      onClick={(e) =>{
+                        e.stopPropagation();
+                        removeFromWishlist(product.id);
+                      }}
                       className="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition"
                     >
                       <X className="w-5 h-5 text-red-500" />

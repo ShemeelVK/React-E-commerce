@@ -4,7 +4,6 @@ import { X } from "lucide-react";
 import toast from "react-hot-toast";
 
 function ProductFormModal({ product, onClose, onSuccess }) {
-  
   const isEditing = product !== null;
 
   const [formData, setFormData] = useState({
@@ -14,6 +13,7 @@ function ProductFormModal({ product, onClose, onSuccess }) {
     description: "",
     imageUrl: "",
     isFeatured: false,
+    stock: 0, // NEW: Initialize stock
   });
 
   useEffect(() => {
@@ -25,6 +25,7 @@ function ProductFormModal({ product, onClose, onSuccess }) {
         description: product.description,
         imageUrl: product.imageUrl,
         isFeatured: product.isFeatured || false,
+        stock: product.stock || 0, // NEW: Load existing stock
       });
     }
   }, [product, isEditing]);
@@ -43,26 +44,22 @@ function ProductFormModal({ product, onClose, onSuccess }) {
     const dataToSubmit = {
       ...formData,
       price: parseFloat(formData.price),
+      stock: parseInt(formData.stock), // NEW: Ensure stock is saved as a number
     };
 
     try {
       if (isEditing) {
-        // If editing,
         await axios.patch(
-          `${import.meta.env.VITE_API_URL}/products/${product.id}`,
+          `http://localhost:3000/products/${product.id}`,
           dataToSubmit
         );
         toast.success("Product updated successfully!");
       } else {
-        // If adding
-        await axios.post(
-          `${import.meta.env.VITE_API_URL}/products`,
-          dataToSubmit
-        );
+        await axios.post("http://localhost:3000/products", dataToSubmit);
         toast.success("Product added successfully!");
       }
-      onSuccess(); // calls fetchProducts() in the parent
-      onClose(); // Close the modal
+      onSuccess();
+      onClose();
     } catch (error) {
       console.error("Failed to save product:", error);
       toast.error("An error occurred while saving the product.");
@@ -70,7 +67,7 @@ function ProductFormModal({ product, onClose, onSuccess }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center p-4">
       <div className="bg-slate-800 rounded-lg shadow-2xl max-w-2xl w-full relative text-white">
         <div className="p-6 border-b border-slate-700 flex justify-between items-center">
           <h2 className="text-2xl font-bold">
@@ -117,6 +114,8 @@ function ProductFormModal({ product, onClose, onSuccess }) {
                 <option>Boots</option>
               </select>
             </div>
+
+            {/* Price Input */}
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-1">
                 Price ($)
@@ -132,6 +131,23 @@ function ProductFormModal({ product, onClose, onSuccess }) {
                 className="w-full p-2 bg-slate-700 border border-slate-600 rounded-md"
               />
             </div>
+
+            {/* NEW: Stock Input */}
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-1">
+                Stock Quantity
+              </label>
+              <input
+                type="number"
+                name="stock"
+                value={formData.stock}
+                onChange={handleInputChange}
+                required
+                min="0"
+                className="w-full p-2 bg-slate-700 border border-slate-600 rounded-md"
+              />
+            </div>
+
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-slate-300 mb-1">
                 Image URL
@@ -165,7 +181,7 @@ function ProductFormModal({ product, onClose, onSuccess }) {
                 checked={formData.isFeatured}
                 onChange={handleInputChange}
                 id="isFeatured"
-                className="h-4 w-4 rounded text-indigo-600 bg-slate-700 border-slate-600 focus:ring-indigo-500"
+                className="h-4 w-4 rounded text-indigo-500 bg-slate-600 border-slate-500 focus:ring-indigo-500"
               />
               <label
                 htmlFor="isFeatured"
