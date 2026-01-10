@@ -2,66 +2,60 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import OrderDetailModal from "../../Components/Admin/OrderDetailModal.jsx";
 import toast from "react-hot-toast";
+import api from "../../utils/api.js";
+
+const STATUS_ENUM={
+  "Pending":0,
+  "Shipped":1,
+  "Delivered":2,
+  "Cancelled":3
+}
 
 function OrderManagement() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [viewingOrder, setViewingOrder] = useState(null);
 
-  
-  const fetchOrders = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/users`);
-      const users = response.data;
+   useEffect(() => {
+     const fetchOrders = async () => {
+       setLoading(true);
+       try {
+         const response = await api.get(
+           `${import.meta.env.VITE_API_URL}/Order/admin/All-Orders`
+         );
+         setOrders(response.data);
+       } catch (error) {
+         console.error("Failed to fetch orders:", error);
+         toast.error("failed to fetch Orders");
+       } finally {
+         setLoading(false);
+       }
+     };
 
-      let combinedOrders = [];
-      users.forEach((user) => {
-        if (user.orders && user.orders.length > 0) {
-          const userOrders = user.orders.map((order) => ({
-            ...order,
-            userId: user.id,
-            userName: user.name,
-          }));
-          combinedOrders = [...combinedOrders, ...userOrders];
-        }
-      });
-
-      setOrders(
-        combinedOrders.sort(
-          (a, b) => new Date(b.orderDate) - new Date(a.orderDate)
-        )
-      );
-    } catch (error) {
-      console.error("Failed to fetch orders:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchOrders();
-  }, []);
+     fetchOrders();
+   }, []);
 
   // updating order status
-  const handleStatusChange = async (orderId, userId, newStatus) => {
+  const handleStatusChange = async (orderId, newStatusString) => {
+
+    const statusEnumInt=STATUS_ENUM[newStatusString];
+
+    if(statusEnumInt===undefined){
+      toast.error("Invalid status selected");
+      return;
+    }
+
     try {
-      const userResponse = await axios.get(
-        `${import.meta.env.VITE_API_URL}/users/${userId}`
-      );
-      const user = userResponse.data;
-
-      const updatedUserOrders = user.orders.map((order) =>
-        order.orderId === orderId ? { ...order, status: newStatus } : order
-      );
-
-      await axios.patch(`${import.meta.env.VITE_API_URL}/users/${userId}`, {
-        orders: updatedUserOrders,
+      await api.put(`${import.meta.env.VITE_API_URL}/Order/Order-Status/${orderId}`, {
+        status: statusEnumInt,
       });
 
-      // Refresh the list in the UI
-      fetchOrders();
-      toast.success(`Order status updated to "${newStatus}".`);
+      setOrders((prev) =>
+        prev.map((o) =>
+          o.id === orderId ? { ...o, status: newStatusString } : o
+        )
+      );
+      toast.success(`Order status updated to "${newStatusString}".`);
     } catch (error) {
       console.error("Failed to update order status:", error);
       toast.error("An error occurred while updating the status.");
@@ -88,7 +82,7 @@ function OrderManagement() {
           <table className="w-full text-sm text-left text-gray-300">
             <thead className="text-xs text-slate-400 uppercase bg-slate-700/50">
               <tr>
-                <th className="p-4">Order ID</th>
+                <th className="p-4">Order Ref</th>
                 <th className="p-4">Date</th>
                 <th className="p-4">Customer</th>
                 <th className="p-4">Total</th>
@@ -99,30 +93,33 @@ function OrderManagement() {
             <tbody>
               {orders.map((order) => (
                 <tr
-                  key={order.orderId}
+                  key={order.id} // Using Guid ID
                   className="border-b border-slate-700 hover:bg-slate-700/50 cursor-pointer"
                   onClick={() => handleViewOrder(order)}
                 >
                   <td className="p-4 font-medium text-sky-400">
-                    #{order.orderId.split("-")[1]}
+                    {order.orderReference} {/* Using OrderReference */}
                   </td>
                   <td className="p-4">
                     {new Date(order.orderDate).toLocaleDateString()}
                   </td>
-                  <td className="p-4">{order.userName}</td>
+                  <td className="p-4 text-white font-medium">
+                    {order.username || "Guest"}
+                  </td>
+                  {/* <td className="p-4">Unknown User</td> */}
                   <td className="p-4 font-semibold">
                     ${order.totalAmount.toFixed(2)}
                   </td>
                   <td className="p-4">
                     <span
                       className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                        order.status === "In Progress"
-                          ? "bg-yellow-500/10 text-yellow-400"
-                          : order.status === "Cancelled"
+                        order.status === "Cancelled"
                           ? "bg-red-500/10 text-red-400"
                           : order.status === "Shipped"
                           ? "bg-blue-500/10 text-blue-400"
-                          : "bg-green-500/10 text-green-400"
+                          : order.status === "Delivered"
+                          ? "bg-green-500/10 text-green-400"
+                          : "bg-slate-500/10 text-slate-400" // Default for Pending
                       }`}
                     >
                       {order.status}
@@ -135,15 +132,12 @@ function OrderManagement() {
                     <select
                       value={order.status}
                       onChange={(e) =>
-                        handleStatusChange(
-                          order.orderId,
-                          order.userId,
-                          e.target.value
-                        )
+                        handleStatusChange(order.id, e.target.value)
                       }
-                      className="bg-slate-700 border border-slate-600 rounded-md p-2 text-xs"
+                      className="bg-slate-700 border border-slate-600 rounded-md p-2 text-xs text-white focus:ring-2 focus:ring-indigo-500 outline-none"
                     >
-                      <option value="In Progress">In Progress</option>
+                      {/* Ensure these strings match the keys in STATUS_ENUM */}
+                      <option value="Pending">Pending</option>
                       <option value="Shipped">Shipped</option>
                       <option value="Delivered">Delivered</option>
                       <option value="Cancelled">Cancelled</option>

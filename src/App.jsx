@@ -17,6 +17,7 @@ import { CartProvider } from "./Context/CartContext";
 import { WishlistProvider } from "./Context/WishlistContext";
 import './index.css'
 import Navbar from "./Components/Navbar";
+import { useState,useEffect } from "react";
   
 // Admin Side
 import AdminProtectedRouter from "./Components/Admin/AdminProtectedRouter";
@@ -29,6 +30,17 @@ import UserManagement from "./pages/Admin/UserManagement";
 import { Toaster } from "react-hot-toast";
 function App() {
 
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+ useEffect(() => {
+   const storedUser = localStorage.getItem("user");
+   if (storedUser) {
+     // Parse the string back into an object and put it into your state
+     setUser(JSON.parse(storedUser));
+   }
+   setLoading(false);
+ }, []);
 
   return (
     <>

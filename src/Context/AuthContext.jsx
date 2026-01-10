@@ -27,14 +27,14 @@ export function AuthProvider({children}){
 
         setLoading(false);
 
-         };
+      };
 
          fetchUserAPI();
     },[]);
 
     const loginUser=async (formData)=>{
       try{
-          const res=await api.post(`${import.meta.env.VITE_API_URL}/Auth/login`,formData);
+          const res=await api.post("/Auth/login",formData);
           const {token,user}=res.data;
 
           localStorage.setItem("token",token);
@@ -56,16 +56,24 @@ export function AuthProvider({children}){
 
           return{
             success:false,
-            message:err.response?.data?.err || "Something went wrong!"
+            message:err.response?.data?.error || "Something went wrong!"
           }
       }
     };
 
-    const logoutUser=()=>{
+    const logoutUser=async ()=>{
+      try {
+        await api.post(`${import.meta.env.VITE_API_URL}/Auth/Logout`);
+      } catch (error) {
+        console.error("Logout error", error);
+      }
+      finally{
         localStorage.removeItem("user")
         localStorage.removeItem("token")
         SetCurrentUser(null)
         navigate("/");
+        toast.success("Logged out Successfully")
+      }
     };
 
     const updateUserInAuthContext = (updatedUserData) => {

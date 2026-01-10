@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { PlusCircle, Edit, Trash2, Star ,Search} from "lucide-react";
+import { PlusCircle, Edit, Trash2, Star, Search, Loader2 } from "lucide-react";
 import ProductFormModal from "../../Components/Admin/ProductFormModal.jsx";
 import toast from "react-hot-toast";
+import api from "../../utils/api.js";
 
 function ProductManagement() {
   const [products, setProducts] = useState([]);
@@ -12,14 +13,31 @@ function ProductManagement() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null); 
 
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      fetchProducts();
+    }, 800);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchQuery]);
 
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/products`
+      let endpoint;
+
+      if (searchQuery) {
+        endpoint = `${
+          import.meta.env.VITE_API_URL
+        }/Products/Admin-Search?query=${searchQuery}`;
+      } else {
+        endpoint = `${import.meta.env.VITE_API_URL}/Products/Admin-Products`;
+      }
+      const response = await api.get(
+        endpoint
       );
       setProducts(response.data);
+      console.log(response.data)
     } catch (error) {
       console.error("Failed to fetch products:", error);
     } finally {
@@ -43,39 +61,72 @@ function ProductManagement() {
   };
 
   // Delete product
-  const handleDeleteProduct = async (productId) => {
-    if (
-      toast("Are you sure you want to delete this product?", {
-        icon: "⚠️",
-        style: { background: "#fcbe03", color: "white" },
-      })
-    ) 
+  const handleDeleteClick = (productId) => {
+   toast(
+     (t) => (
+      
+       <div className="flex flex-col items-center gap-4 p-2">
+         
+         <p className="font-semibold text-center text-white">
+           Are you sure you want to delete this product?
+         </p>
+       
+         <div className="flex gap-4">
+           {/* LEFT BUTTON: Cancel */}
+           <button
+             onClick={() => toast.dismiss(t.id)}
+             className="px-4 py-2 text-sm font-semibold bg-slate-600 text-white rounded-md hover:bg-slate-500 transition"
+           >
+             Cancel
+           </button>
 
-    {
-      try {
-        await axios.delete(
-          `${import.meta.env.VITE_API_URL}/products/${productId}`
-        );
-        toast.success("Product deleted successfully.");
-        fetchProducts(); // Refresh the list
-      } catch (error) {
-        console.error("Failed to delete product:", error);
-        toast.error("An error occurred while deleting the product.");
-      }
-    }
+           <button
+             onClick={() => {
+               confirmDelete(productId);
+               toast.dismiss(t.id);
+             }}
+             className="px-4 py-2 text-sm font-semibold bg-red-600 text-white rounded-md hover:bg-red-700 transition"
+           >
+             Yes, Delete
+           </button>
+         </div>
+       </div>
+     ),
+     {
+       id: "product-delete-confirmation",
+       position: "top-center",
+       duration: 3000,
+      
+       style: {
+         background: "#1f2937", 
+         color: "#fff",
+         border: "1px solid #334155",
+       },
+     }
+   );
   };
+
+  const confirmDelete=async (productId) => {
+    try {
+      await api.delete(
+        `${import.meta.env.VITE_API_URL}/Products/Delete-Product/${productId}`
+      );
+      console.log(productId)
+      toast.success("Product deleted successfully.");
+      fetchProducts(searchQuery);
+    } catch (error) {
+      console.error("Failed to delete product: ",error)
+      toast.error("Could not delete product")
+    }
+  }
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setEditingProduct(null);
   };
 
-const filteredproducts=products.filter((product)=>
-  product.name.toLowerCase().includes(searchQuery.toLowerCase())
-)
-
   if (loading) {
-    return <div className="text-white">Loading products...</div>;
+     <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 animate-spin text-slate-500" />;
   }
 
   return (
@@ -117,10 +168,13 @@ const filteredproducts=products.filter((product)=>
               </tr>
             </thead>
             <tbody>
-              {filteredproducts.map((product) => (
+              {products.map((product) => (
                 <tr
                   key={product.id}
-                  className="border-b border-slate-700 hover:bg-slate-700/50"
+                  // CONDITIONAL STYLING: If deleted, reduce opacity and add a red tint
+                  className={`border-b border-slate-700 hover:bg-slate-700/50 transition
+        ${product.isDeleted ? "opacity-50 bg-red-900/10 grayscale" : ""}
+      `}
                 >
                   <td className="p-4 font-medium flex items-center gap-3">
                     <img
@@ -128,8 +182,18 @@ const filteredproducts=products.filter((product)=>
                       alt={product.name}
                       className="w-10 h-10 object-contain rounded-md bg-white p-1"
                     />
-                    <span>{product.name}</span>
+                    <div className="flex flex-col">
+                      <span>{product.name}</span>
+                      {/* Small badge if deleted */}
+                      {product.isDeleted && (
+                        <span className="text-[10px] text-red-400 font-bold uppercase tracking-wider">
+                          Deleted
+                        </span>
+                      )}
+                    </div>
                   </td>
+
+                  {/* ... Category, Price, Featured columns */}
                   <td className="p-4">{product.category}</td>
                   <td className="p-4">${product.price.toFixed(2)}</td>
                   <td className="p-4 text-center">
@@ -140,20 +204,35 @@ const filteredproducts=products.filter((product)=>
                       />
                     )}
                   </td>
+
                   <td className="p-4 text-center">
                     <div className="flex justify-center gap-4">
-                      <button
-                        onClick={() => handleEditProduct(product)}
-                        className="text-sky-400 hover:text-sky-300"
-                      >
-                        <Edit size={18} />
-                      </button>
-                      <button
-                        onClick={() => handleDeleteProduct(product.id)}
-                        className="text-red-500 hover:text-red-400"
-                      >
-                        <Trash2 size={18} />
-                      </button>
+                      {/* Disable Edit if deleted? Or allow restore? */}
+                      {!product.isDeleted && (
+                        <button
+                          onClick={() => handleEditProduct(product)}
+                          className="text-sky-400 hover:text-sky-300"
+                        >
+                          <Edit size={18} />
+                        </button>
+                      )}
+
+                      {/* Change Trash Icon logic */}
+                      {product.isDeleted ? (
+                        <button
+                          className="text-slate-500 cursor-not-allowed"
+                          disabled
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => handleDeleteClick(product.id)} // Use new Toast function
+                          className="text-red-500 hover:text-red-400"
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      )}
                     </div>
                   </td>
                 </tr>

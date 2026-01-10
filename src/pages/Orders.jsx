@@ -37,11 +37,11 @@ function Orders() {
   const handleCancelOrder = async (orderId,orderReference) => {
     toast(
       (t) => (
-        <div className="flex flex-col items-center gap-4 p-2 text-gray-800">
+        <div className="flex flex-col items-center gap-4 p-2 text-white">
           <p className="font-semibold text-center">
             Are you sure you want to cancel this order?
           </p>
-          <p className="text-sm text-center text-gray-600">
+          <p className="text-sm text-center text-gray-200">
             This action cannot be undone.
           </p>
           <div className="flex gap-4 mt-2">
@@ -67,26 +67,28 @@ function Orders() {
                 try {
                   // const updatedUser = { ...currentUser, orders: updatedOrders };
                   await api.put(
-                    `${import.meta.env.VITE_API_URL}/Order/Cancel-Order/${orderId}`
+                    `${
+                      import.meta.env.VITE_API_URL
+                    }/Order/Cancel-Order/${orderId}`
                   );
 
                   toast.success(
                     `Order #${orderReference} has been cancelled successfully.`
                   );
 
-                  setOrders((prevOrders)=>
-                    prevOrders.map((order)=>{
-                      if(order.id===orderId){
-                        return {...order,status:"Cancelled"}
+                  setOrders((prevOrders) =>
+                    prevOrders.map((order) => {
+                      if (order.id === orderId) {
+                        return { ...order, status: "Cancelled" };
                       }
-                    return order;
-                  }));
+                      return order;
+                    })
+                  );
                 } catch (error) {
                   console.error("Failed to cancel order:", error);
-                  if(error.response && error.response.data){
+                  if (error.response && error.response.data) {
                     toast.error("There was an error cancelling the order.");
-                  }
-                  else{
+                  } else {
                     toast.error("Network error.Please try again");
                   }
                 }
@@ -101,7 +103,8 @@ function Orders() {
       {
         // Use a custom style for the confirmation box
         style: {
-          background: "white",
+          background: "#1f2937",
+          color:"#fff",
           border: "1px solid #e5e7eb",
         },
         id: "cancel-confirmation", // Give it a unique ID
@@ -175,20 +178,26 @@ function Orders() {
                       <div className="mt-4 md:mt-0 flex items-center gap-4">
                         <div
                           className={`px-3 py-1 text-sm font-semibold rounded-full flex items-center gap-2 ${
-                            order.status === "In Progress"
+                            // 1. Badge Background & Text Color
+                            order.status === "Pending"
                               ? "bg-yellow-100 text-yellow-800"
                               : order.status === "Cancelled"
                               ? "bg-red-100 text-red-800"
-                              : "bg-green-100 text-green-800"
+                              : order.status === "Shipped"
+                              ? "bg-indigo-100 text-indigo-800" // Blue for Shipped
+                              : "bg-green-100 text-green-800" // Green for Delivered
                           }`}
                         >
                           <div
                             className={`w-2 h-2 rounded-full ${
-                              order.status === "In Progress"
+                              // 2. Dot Color
+                              order.status === "Pending"
                                 ? "bg-yellow-500"
                                 : order.status === "Cancelled"
                                 ? "bg-red-500"
-                                : "bg-green-500"
+                                : order.status === "Shipped"
+                                ? "bg-blue-500" // Blue Dot
+                                : "bg-green-500" // Green Dot
                             }`}
                           ></div>
                           {order.status}

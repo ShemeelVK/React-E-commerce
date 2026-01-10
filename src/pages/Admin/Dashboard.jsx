@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {  Users, ShoppingCart, DollarSign, ArrowUp, ArrowDown} from "lucide-react";
+import {  Users, ShoppingCart, DollarSign, ArrowUp, ArrowDown, Import} from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell,Legend,} from "recharts";
+import api from "../../utils/api";
+
 
 //format date
 const formatDateForInput = (date) => {
+  if(!date) return "";
   const d = new Date(date);
   let month = "" + (d.getMonth() + 1);
   let day = "" + d.getDate();
@@ -18,10 +21,11 @@ const formatDateForInput = (date) => {
 
 const STATUS_COLORS = {
   "In Progress": "#F59E0B", // Yellow/Orange
+  "Pending":"#F59E0B",
   Shipped: "#3B82F6", // Blue
   Delivered: "#10B981", // Green
   Cancelled: "#EF4444", // Red
-  Unknown: "#6B7280", // Gray 
+  Unknown: "#6B7280", // Gray
 };
 
 function Dashboard() {
@@ -53,125 +57,92 @@ function Dashboard() {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const usersResponse = await axios.get(
-          `${import.meta.env.VITE_API_URL}/users`
-        );
-        const allUsers = usersResponse.data;
-
-        let allOrders = [];
-        allUsers.forEach((user) => {
-          if (user.orders && user.orders.length > 0) {
-            allOrders = [...allOrders, ...user.orders];
-          }
-        });
-
-        // Calculate all-time stats
-        const totalUsers = allUsers.filter((u) => u.role === "user").length;
-        const allTimeTotalOrders = allOrders.length;
-        const allTimeTotalRevenue = allOrders.reduce(
-          (acc, order) => acc + order.totalAmount,
-          0
-        );
-        setAllTimeStats({
-          totalUsers,
-          totalOrders: allTimeTotalOrders,
-          totalRevenue: allTimeTotalRevenue,
-        });
-
-        // Logic for period-over-period comparison
+        // 1. Prepare Dates
+        // Ensure End Date covers the FULL day (23:59:59)
         const adjustedEndDate = new Date(endDate);
         adjustedEndDate.setHours(23, 59, 59, 999);
-        const duration = adjustedEndDate.getTime() - startDate.getTime();
-        const previousStartDate = new Date(startDate.getTime() - duration);
-        const previousEndDate = new Date(startDate.getTime() - 1);
 
-        const currentPeriodOrders = allOrders.filter((o) => {
-          const d = new Date(o.orderDate);
-          return d >= startDate && d <= adjustedEndDate;
-        });
-        const previousPeriodOrders = allOrders.filter((o) => {
-          const d = new Date(o.orderDate);
-          return d >= previousStartDate && d <= previousEndDate;
+        // 2. Call the Dashboard Service Endpoint
+        const response = await api.get(
+          `${import.meta.env.VITE_API_URL}/Dashboard/Stats`,
+          {
+            params: {
+              startDate: startDate.toISOString(),
+              endDate: adjustedEndDate.toISOString(),
+            },
+          }
+        );
+
+        console.log(response.data);
+
+        // Destructure Backend DTO
+        const { totalUsers, totalOrders, totalRevenue, orders } = response.data;
+
+        // Set All-Time Stats (From DB)
+        setAllTimeStats({
+          totalUsers,
+          totalOrders,
+          totalRevenue,
         });
 
-        const currentRevenue = currentPeriodOrders.reduce(
+        // Calculate "Highlights" for the selected period
+        const currentRevenue = orders.reduce(
           (acc, o) => acc + o.totalAmount,
           0
         );
-        const previousRevenue = previousPeriodOrders.reduce(
-          (acc, o) => acc + o.totalAmount,
-          0
-        );
-        const calculateChange = (current, previous) =>
-          previous === 0
-            ? current > 0
-              ? 100
-              : 0
-            : ((current - previous) / previous) * 100;
+        const orderCount = orders.length;
 
         setHighlightStats({
-          revenue: {
-            value: currentRevenue,
-            change: calculateChange(currentRevenue, previousRevenue),
-          },
-          orders: {
-            value: currentPeriodOrders.length,
-            change: calculateChange(
-              currentPeriodOrders.length,
-              previousPeriodOrders.length
-            ),
-          },
+          revenue: { value: currentRevenue, change: 0 }, // Implement compare logic if needed
+          orders: { value: orderCount, change: 0 },
           avgOrderValue: {
-            value:
-              currentPeriodOrders.length > 0
-                ? currentRevenue / currentPeriodOrders.length
-                : 0,
-            change: calculateChange(
-              currentPeriodOrders.length > 0
-                ? currentRevenue / currentPeriodOrders.length
-                : 0,
-              previousPeriodOrders.length > 0
-                ? previousRevenue / previousPeriodOrders.length
-                : 0
-            ),
+            value: orderCount > 0 ? currentRevenue / orderCount : 0,
+            change: 0,
           },
         });
 
-        // Process chart data
+        // Process Area Chart (Daily Revenue)
         const dailyRevenue = {};
-        currentPeriodOrders.forEach((order) => {
-          const date = new Date(order.orderDate).toLocaleDateString("en-CA");
-          dailyRevenue[date] = (dailyRevenue[date] || 0) + order.totalAmount;
+        orders.forEach((order) => {
+          // Extract YYYY-MM-DD part only
+          const dateKey = new Date(order.orderDate).toISOString().split("T")[0];
+          dailyRevenue[dateKey] =
+            (dailyRevenue[dateKey] || 0) + order.totalAmount;
         });
+
         const revenueData = Object.keys(dailyRevenue)
           .map((date) => ({
             date,
             revenue: parseFloat(dailyRevenue[date].toFixed(2)),
           }))
           .sort((a, b) => new Date(a.date) - new Date(b.date));
+
         setRevenueByDay(revenueData);
 
+        // Process Pie Chart (Status Distribution)
         const statusCount = {};
-        currentPeriodOrders.forEach((order) => {
-          statusCount[order.status] = (statusCount[order.status] || 0) + 1;
+        orders.forEach((order) => {
+          // Fallback to "Unknown" if status is null/empty
+          const statusKey = order.status || "Unknown";
+          statusCount[statusKey] = (statusCount[statusKey] || 0) + 1;
         });
+
         const pieData = Object.keys(statusCount).map((name) => ({
           name,
           value: statusCount[name],
         }));
         setOrdersByStatus(pieData);
 
-        setRecentOrders(
-          allOrders
-            .sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate))
-            .slice(0, 5)
-        );
+        // Orders
+        // The backend already sorts by date desc, so just slice
+        setRecentOrders(orders.slice(0, 5));
       } catch (error) {
         console.error("Failed to fetch dashboard data:", error);
       } finally {
         setLoading(false);
       }
     };
+
     fetchData();
   }, [startDate, endDate]);
 
@@ -182,9 +153,10 @@ function Dashboard() {
   }
 
   return (
-    <div className="text-gray-200">
+    <div className="text-gray-200 p-6">
       <h1 className="text-3xl font-bold text-white mb-6">Admin Dashboard</h1>
 
+      {/* Top Cards (All Time) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <DashboardCard
           title="Total Users"
@@ -203,34 +175,38 @@ function Dashboard() {
         />
       </div>
 
+      {/* Date Picker & Charts Section */}
       <div className="bg-slate-800 border border-slate-700 p-6 rounded-lg shadow-lg mb-8">
         <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
           <h2 className="text-xl font-semibold text-white">Sales Overview</h2>
+
+          {/* Date Picker Controls */}
           <div className="flex items-center gap-2">
             <input
               type="date"
               value={formatDateForInput(startDate)}
               onChange={(e) => setStartDate(new Date(e.target.value))}
-              className="p-2 bg-slate-700 border border-slate-600 rounded-md text-sm text-gray-200"
+              className="p-2 bg-slate-700 border border-slate-600 rounded-md text-sm text-gray-200 outline-none focus:border-blue-500"
             />
             <span className="text-slate-400">to</span>
             <input
               type="date"
               value={formatDateForInput(endDate)}
               onChange={(e) => setEndDate(new Date(e.target.value))}
-              className="p-2 bg-slate-700 border border-slate-600 rounded-md text-sm text-gray-200"
+              className="p-2 bg-slate-700 border border-slate-600 rounded-md text-sm text-gray-200 outline-none focus:border-blue-500"
             />
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        {/* Highlight Stats for Selected Period */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
           <StatsHighlightCard
-            title="Total Revenue"
+            title="Revenue (Selected Period)"
             value={`$${highlightStats.revenue.value.toFixed(2)}`}
             change={highlightStats.revenue.change}
           />
           <StatsHighlightCard
-            title="Total Orders"
+            title="Orders (Selected Period)"
             value={highlightStats.orders.value}
             change={highlightStats.orders.change}
           />
@@ -241,7 +217,8 @@ function Dashboard() {
           />
         </div>
 
-        <div className="w-full h-[400px] p-4">
+        {/* Revenue Area Chart */}
+        <div className="w-full h-[450px] p-4">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart
               data={revenueByDay}
@@ -260,8 +237,9 @@ function Dashboard() {
                 contentStyle={{
                   backgroundColor: "#1f2937",
                   border: "1px solid #374151",
+                  color: "#fff",
                 }}
-                formatter={(value) => `$${value}`}
+                formatter={(value) => [`$${value}`, "Revenue"]}
               />
               <Area
                 type="monotone"
@@ -276,7 +254,9 @@ function Dashboard() {
         </div>
       </div>
 
+      {/* Bottom Section: Pie Chart & Recent Orders */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        {/* Pie Chart */}
         <div className="lg:col-span-1 bg-slate-800 border border-slate-700 p-6 rounded-lg shadow-lg">
           <h2 className="text-xl font-semibold mb-4 text-white">
             Orders by Status
@@ -289,9 +269,8 @@ function Dashboard() {
                 nameKey="name"
                 cx="50%"
                 cy="50%"
-                outerRadius={110}
+                outerRadius={80}
                 fill="#8884d8"
-                labelLine={false}
                 label={({ name, percent }) =>
                   `${name} ${(percent * 100).toFixed(0)}%`
                 }
@@ -299,24 +278,31 @@ function Dashboard() {
                 {ordersByStatus.map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}
-                    fill={STATUS_COLORS[entry.name]}
+                    fill={STATUS_COLORS[entry.name] || STATUS_COLORS.Unknown}
                   />
                 ))}
               </Pie>
-              <Tooltip />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "#1f2937",
+                  borderColor: "#374151",
+                }}
+                // Add this line to make the text visible
+                itemStyle={{ color: "#F3F4F6" }}
+              />
               <Legend />
             </PieChart>
           </ResponsiveContainer>
         </div>
+
+        {/* Recent Orders Table */}
         <div className="lg:col-span-2 bg-slate-800 border border-slate-700 p-6 rounded-lg shadow-lg">
           <h2 className="text-xl font-semibold mb-4 text-white">
-            Recent Orders (All Time)
+            Recent Orders
           </h2>
 
-          {/*Table*/ }
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left text-gray-300">
-              
               <thead className="text-xs text-slate-400 uppercase bg-slate-700/50">
                 <tr>
                   <th className="p-3">Order ID</th>
@@ -327,36 +313,50 @@ function Dashboard() {
                 </tr>
               </thead>
               <tbody>
-                {recentOrders.map((order) => (
-                  <tr
-                    key={order.orderId}
-                    className="border-b border-slate-700 hover:bg-slate-700/50"
-                  >
-                    <td className="p-3 font-medium text-sky-400">
-                      #{order.orderId.split("-")[1]}
-                    </td>
-                    <td className="p-3">
-                      {new Date(order.orderDate).toLocaleDateString()}
-                    </td>
-                    <td className="p-3">{order.shippingAddress.name}</td>
-                    <td className="p-3 font-semibold">
-                      ${order.totalAmount.toFixed(2)}
-                    </td>
-                    <td className="p-3">
-                      <span
-                        className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                          order.status === "In Progress"
-                            ? "bg-yellow-500/10 text-yellow-400"
-                            : order.status === "Cancelled"
-                            ? "bg-red-500/10 text-red-400"
-                            : "bg-green-500/10 text-green-400"
-                        }`}
-                      >
-                        {order.status}
-                      </span>
+                {recentOrders.length === 0 ? (
+                  <tr>
+                    <td colSpan="5" className="p-4 text-center text-gray-500">
+                      No orders found for this period.
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  recentOrders.map((order) => (
+                    <tr
+                      key={order.id || order.orderReference}
+                      className="border-b border-slate-700 hover:bg-slate-700/50"
+                    >
+                      <td className="p-3 font-medium text-sky-400">
+                        {/* Handle ID display */}#
+                        {order.orderReference.includes("-")
+                          ? order.orderReference.split("-")[2]
+                          : order.orderReference.substring(0, 8)}
+                      </td>
+                      <td className="p-3">
+                        {new Date(order.orderDate).toLocaleDateString()}
+                      </td>
+                      <td className="p-3">
+                        {order.shippingAddress?.name || "N/A"}
+                      </td>
+                      <td className="p-3 font-semibold">
+                        ${order.totalAmount.toFixed(2)}
+                      </td>
+                      <td className="p-3">
+                        <span
+                          className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                            order.status === "In Progress" ||
+                            order.status === "Pending"
+                              ? "bg-yellow-500/10 text-yellow-400"
+                              : order.status === "Cancelled"
+                              ? "bg-red-500/10 text-red-400"
+                              : "bg-green-500/10 text-green-400"
+                          }`}
+                        >
+                          {order.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>

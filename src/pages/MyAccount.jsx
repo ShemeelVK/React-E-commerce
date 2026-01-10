@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useAuth } from "../Context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
-import { User, ShoppingBag, MapPin, LogOut,KeyRound,Loader2 } from "lucide-react";
+import { User, ShoppingBag, MapPin, LogOut,KeyRound,Loader2,Package } from "lucide-react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import api from "../utils/api.js";
+import { useEffect } from "react";
 
 function MyAccount() {
   const { currentUser, logoutUser, updateUserInAuthContext } = useAuth();
@@ -363,41 +364,363 @@ const ProfileSection = ({ user, onUpdate }) => {
 
   // --- 2. ORDERS SECTION ---
   const OrdersSection = ({ navigate }) => {
-    return (
-      <div className="text-center py-10 animate-in fade-in duration-500">
-        <div className="bg-indigo-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
-          <ShoppingBag className="text-indigo-600" size={32} />
+    const [orders,setOrders]=useState([]);
+    const [loading,setLoading]=useState(true);
+
+    useEffect(()=>{
+      const fetchOrders=async ()=>{
+        try {
+          const res = await api.get(
+            `${import.meta.env.VITE_API_URL}/Order/my-order`
+          );
+          setOrders(res.data);
+        } catch (error) {
+          console.error("Failed to fetch orders", error);
+          toast.error("Could not load recent orders.");
+        }
+        finally{
+          setLoading(false);
+        }
+      };
+      fetchOrders();
+    },[]);
+
+
+    if (loading) {
+      return (
+        <div className="flex justify-center py-10">
+          <Loader2 className="animate-spin text-indigo-600" size={32} />
         </div>
-        <h2 className="text-2xl font-bold mb-2 text-gray-800">My Orders</h2>
-        <p className="text-gray-500 mb-8 max-w-sm mx-auto">
-          Track your current orders and review your purchase history all in one
-          place.
-        </p>
-        <button
-          onClick={() => navigate("/orders")}
-          className="px-8 py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition shadow-lg shadow-indigo-200"
-        >
-          View All Orders
-        </button>
-      </div>
-    );
+      );
+    }
+
+    if (orders.length === 0) {
+      return (
+        <div className="text-center py-10 animate-in fade-in duration-500">
+          <div className="bg-indigo-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+            <ShoppingBag className="text-indigo-600" size={32} />
+          </div>
+          <h2 className="text-2xl font-bold mb-2 text-gray-800">
+            No Orders Yet
+          </h2>
+          <p className="text-gray-500 mb-8 max-w-sm mx-auto">
+            It looks like you haven't placed any orders yet. Start shopping now!
+          </p>
+          <button
+            onClick={() => navigate("/shop")}
+            className="px-8 py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition shadow-lg shadow-indigo-200"
+          >
+            Start Shopping
+          </button>
+        </div>
+      );
+    }
+
+    const recentOrders=orders.slice(0,3);
+
+   return (
+     <div className="animate-in fade-in duration-500">
+       <div className="flex items-center justify-between mb-6">
+         <h2 className="text-2xl font-bold text-gray-800">Recent Orders</h2>
+         <button
+           onClick={() => navigate("/orders")}
+           className="text-indigo-600 font-semibold hover:text-indigo-800 text-sm"
+         >
+           View All ({orders.length})
+         </button>
+       </div>
+
+       <div className="space-y-4">
+         {recentOrders.map((order) => (
+           <div
+             key={order.id} // or order.orderReference
+             className="border border-gray-200 rounded-xl p-5 hover:shadow-md transition bg-white"
+           >
+             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+               {/* Left: Icon & Info */}
+               <div className="flex items-center gap-4">
+                 <div className="bg-gray-100 p-3 rounded-lg text-gray-600">
+                   <Package size={24} />
+                 </div>
+                 <div>
+                   <p className="font-bold text-gray-800">
+                     Order #
+                     {order.orderReference?.split("-")[2] ||
+                       order.id.toString().slice(0, 8)}
+                     ...
+                   </p>
+                   <p className="text-sm text-gray-500">
+                     Placed on {new Date(order.orderDate).toLocaleDateString()}
+                   </p>
+                   <p
+                     className={`text-xs font-bold mt-1 inline-block px-2 py-0.5 rounded-full 
+                    ${
+                      order.status === "Delivered"
+                        ? "bg-green-100 text-green-700"
+                        : "bg-yellow-100 text-yellow-700"
+                    }`}
+                   >
+                     {order.status}
+                   </p>
+                 </div>
+               </div>
+
+               {/* Right: Price & Action */}
+               <div className="text-right w-full sm:w-auto">
+                 <p className="text-lg font-bold text-indigo-600 mb-1">
+                   ${order.totalAmount?.toFixed(2)}
+                 </p>
+                 <button
+                   onClick={() => navigate(`/orders`)} // Or navigate to specific order detail if you have that page
+                   className="text-sm font-medium text-gray-500 hover:text-gray-900 underline"
+                 >
+                   View Details
+                 </button>
+               </div>
+             </div>
+           </div>
+         ))}
+       </div>
+
+       {orders.length > 3 && (
+         <div className="mt-6 text-center border-t pt-4">
+           <button
+             onClick={() => navigate("/orders")}
+             className="text-indigo-600 font-semibold hover:underline"
+           >
+             See all {orders.length} orders
+           </button>
+         </div>
+       )}
+     </div>
+   );
   };
 
   // --- 3. ADDRESS SECTION ---
-  const AddressesSection = () => (
+  const AddressesSection = () => {
+    
+  const [addresses, setAddresses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  const [formData,setFormData]=useState({
+    name:"",
+    phoneNumber:"",
+    street:"",
+    city:"",
+    state:"",
+    zipCode:""
+  });
+
+  useEffect(()=>{
+    fetchAddresses();
+  },[]);
+
+  const fetchAddresses=async () =>{
+    try {
+      const res = await api.get(`${import.meta.env.VITE_API_URL}/User/Get-Address`);
+      setAddresses(res.data);
+    } catch (error) {
+      console.error("Failed to load addresses: ",error);
+      toast.error("Could not load addresses");
+    }
+    finally{
+      setLoading(false);
+    }
+  };
+
+  const handleInputChange=(e) => {
+    setFormData({...formData,[e.target.name]: e.target.value});
+  }
+
+  const handleSubmit=async (e) =>{
+    e.preventDefault();
+    setSubmitting(true);
+    try {
+      await api.post(`${import.meta.env.VITE_API_URL}/User/Add-Address`,formData);
+      toast.success("Address added successfully");
+      await fetchAddresses();
+      setShowForm(false);
+      setFormData({
+        name: "",
+        phoneNumber: "",
+        street: "",
+        city: "",
+        state: "",
+        zipCode: "",
+      });
+    } catch (error) {
+      if (error.response?.data?.errors) {
+        const serverErrors = error.response.data.errors;
+        // Get the first error message from the first field that failed
+        const firstKey = Object.keys(serverErrors)[0];
+        const msg = serverErrors[firstKey][0];
+        toast.error(msg);
+      }
+      // 2. Check for Custom Exceptions (throw new Exception)
+      else if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      }
+      // 3. Generic Fallback
+      else {
+        toast.error("An error occurred while saving the address.");
+      }
+    }
+    finally{
+      setSubmitting(false);
+    }
+  }
+
+if (loading) return <div className="p-8 text-center">Loading addresses...</div>;
+
+  return (
     <div className="animate-in fade-in duration-500">
-      <h2 className="text-2xl font-bold mb-6 text-gray-800 flex items-center gap-2">
-        <MapPin className="text-indigo-600" /> Manage Addresses
-      </h2>
-      <div className="bg-gray-50 border-2 border-dashed border-gray-300 rounded-xl p-12 text-center">
-        <MapPin className="mx-auto text-gray-400 mb-3" size={48} />
-        <p className="text-gray-500 mb-6 text-lg">
-          You haven't saved any addresses yet.
-        </p>
-        <button className="px-6 py-2.5 bg-white border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 shadow-sm transition">
-          Add New Address
-        </button>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+          <MapPin className="text-indigo-600" /> Manage Addresses
+        </h2>
+        {!showForm && (
+          <button
+            onClick={() => setShowForm(true)}
+            className="px-4 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-lg hover:bg-indigo-700 transition"
+          >
+            + Add New
+          </button>
+        )}
       </div>
+
+      {/* --- ADD ADDRESS FORM --- */}
+      {showForm && (
+        <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 mb-8 animate-in slide-in-from-top-4">
+          <h3 className="font-bold text-gray-800 mb-4">Add New Address</h3>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* NAME INPUT */}
+              <input
+                name="name"
+                placeholder="Full Name"
+                // ✅ SAFETY CHECK: || "" ensures it is never undefined
+                value={formData.name || ""}
+                onChange={handleInputChange}
+                className="p-3 rounded-lg border w-full outline-none focus:ring-2 focus:ring-indigo-500"
+                required
+              />
+
+              {/* PHONE INPUT - CRITICAL FIX */}
+              <input
+                name="phoneNumber" // Must match state key
+                placeholder="Phone Number"
+                // ✅ SAFETY CHECK: || "" ensures it is never undefined
+                value={formData.phoneNumber || ""}
+                onChange={handleInputChange}
+                className="p-3 rounded-lg border w-full outline-none focus:ring-2 focus:ring-indigo-500"
+                required
+              />
+            </div>
+
+            {/* STREET INPUT */}
+            <input
+              name="street"
+              placeholder="Street Address"
+              value={formData.street || ""}
+              onChange={handleInputChange}
+              className="p-3 rounded-lg border w-full outline-none focus:ring-2 focus:ring-indigo-500"
+              required
+            />
+
+            <div className="grid grid-cols-3 gap-4">
+              {/* CITY INPUT */}
+              <input
+                name="city"
+                placeholder="City"
+                value={formData.city || ""}
+                onChange={handleInputChange}
+                className="p-3 rounded-lg border w-full outline-none focus:ring-2 focus:ring-indigo-500"
+                required
+              />
+
+              {/* STATE INPUT */}
+              <input
+                name="state"
+                placeholder="State"
+                value={formData.state || ""}
+                onChange={handleInputChange}
+                className="p-3 rounded-lg border w-full outline-none focus:ring-2 focus:ring-indigo-500"
+                required
+              />
+
+              {/* ZIPCODE INPUT */}
+              <input
+                name="zipCode" // Must match state key
+                placeholder="Zip Code"
+                value={formData.zipCode || ""}
+                onChange={handleInputChange}
+                className="p-3 rounded-lg border w-full outline-none focus:ring-2 focus:ring-indigo-500"
+                required
+              />
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                type="submit"
+                disabled={submitting}
+                className="px-6 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 disabled:bg-indigo-400 flex items-center gap-2"
+              >
+                {submitting && <Loader2 className="animate-spin" size={16} />}
+                {submitting ? "Saving..." : "Save Address"}
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowForm(false)}
+                className="px-6 py-2 bg-white border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-100"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+
+      {/* --- ADDRESS LIST --- */}
+      {addresses.length === 0 && !showForm ? (
+        <div className="bg-gray-50 border-2 border-dashed border-gray-300 rounded-xl p-12 text-center">
+          <MapPin className="mx-auto text-gray-400 mb-3" size={48} />
+          <p className="text-gray-500 mb-6 text-lg">
+            You haven't saved any addresses yet.
+          </p>
+          <button
+            onClick={() => setShowForm(true)}
+            className="px-6 py-2.5 bg-white border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 shadow-sm transition"
+          >
+            Add New Address
+          </button>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {addresses.map((addr, index) => (
+            <div
+              key={index}
+              className="border border-gray-200 p-5 rounded-xl hover:shadow-md transition bg-white relative group"
+            >
+              <div className="flex items-start gap-3">
+                <MapPin className="text-gray-400 mt-1 shrink-0" size={20} />
+                <div>
+                  <p className="font-bold text-gray-800">{addr.name}</p>
+                  <p className="text-gray-600 text-sm mt-1">{addr.street}</p>
+                  <p className="text-gray-600 text-sm">
+                    {addr.city}, {addr.state} {addr.zipCode}
+                  </p>
+                  <p className="text-gray-500 text-xs mt-2 font-mono">
+                    {addr.phoneNumber}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
+};
 export default MyAccount;

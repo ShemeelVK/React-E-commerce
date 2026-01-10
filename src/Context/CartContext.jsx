@@ -121,17 +121,19 @@ export function CartProvider({ children }) {
   };
 
 // Clear cart
-  const clearCart = async () => {
+  const clearCart = async (showToast=true) => {
 
     if (!currentUser) return;
     setCartItems([]);
-
+    
     try {
       await api.delete(
         `${import.meta.env.VITE_API_URL}/Cart/Clear-Cart`
       );
 
+    if(showToast){
       toast.success("Cart Cleared Succesfully")
+    }
 
     } catch (error) {
       console.error("Failed to clear cart:", error);

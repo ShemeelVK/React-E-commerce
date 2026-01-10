@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import api from "../../utils/api";
 import { X } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -43,19 +44,23 @@ function ProductFormModal({ product, onClose, onSuccess }) {
 
     const dataToSubmit = {
       ...formData,
+      id: product ? product.id : undefined,
       price: parseFloat(formData.price),
       stock: parseInt(formData.stock), // NEW: Ensure stock is saved as a number
     };
 
     try {
       if (isEditing) {
-        await axios.patch(
-          `http://localhost:3000/products/${product.id}`,
+        await api.put(
+          `${import.meta.env.VITE_API_URL}/Products/Update-Product/${product.id}`,
           dataToSubmit
         );
         toast.success("Product updated successfully!");
       } else {
-        await axios.post("http://localhost:3000/products", dataToSubmit);
+        await api.post(
+          `${import.meta.env.VITE_API_URL}/Products/Add-Product`,
+          dataToSubmit
+        );
         toast.success("Product added successfully!");
       }
       onSuccess();

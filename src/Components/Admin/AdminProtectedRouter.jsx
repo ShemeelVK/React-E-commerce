@@ -13,7 +13,7 @@ function AdminProtectedRouter({ children }) {
   }
 
  
-  if (currentUser.role !== "admin") {
+  if (currentUser.role !== "Admin") {
     
     return <Navigate to="/" replace />;
   }
