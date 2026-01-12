@@ -1,146 +1,180 @@
-import { Heart, ShoppingCart, X, Star } from "lucide-react";
-import { useCart } from "../Context/CartContext.jsx";
-import { useWishlist } from "../Context/WishlistContext.jsx";
+import { Heart, ShoppingCart, X, Star, Check } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
+// ============================================================================
+// ⚠️ IMPORTANT: UNCOMMENT YOUR REAL IMPORTS IN YOUR PROJECT
+// ============================================================================
+import { useCart } from "../Context/CartContext.jsx";
+import { useWishlist } from "../Context/WishlistContext.jsx";
+
+// --- TEMPORARY MOCKS FOR PREVIEW (DELETE IN YOUR APP) ---
+// const useCart = () => ({
+//   addToCart: () => console.log("Add to cart"),
+//   cartItems: [],
+// });
+// const useWishlist = () => ({
+//   addToWishlist: () => console.log("Add to wishlist"),
+//   wishlistItems: [],
+// });
+// ============================================================================
 
 function ProductModal({ product, onClose }) {
   const { addToCart, cartItems } = useCart();
   const { addToWishlist, wishlistItems } = useWishlist();
-  const navigate=useNavigate();
-
-  // console.log("renderes")
+  const navigate = useNavigate();
 
   const handleModalContentClick = (e) => {
     e.stopPropagation();
   };
 
   const isInCart = product && cartItems.some((item) => item.id === product.id);
-  const isInWishlist = product && wishlistItems.some((item) => item.id === product.id);
+  const isInWishlist =
+    product && wishlistItems.some((item) => item.id === product.id);
 
   const stock = product.stock !== undefined ? product.stock : 0;
   const isOutOfStock = stock === 0;
   const isLowStock = stock > 0 && stock < 10;
 
+  if (!product) return null;
+
   return (
-    // The Modal Backdrop (the greyed-out background)
+    // The Modal Backdrop
     <div
       onClick={onClose}
-      className="fixed inset-0 bg-black/50  z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-neutral-900/40 backdrop-blur-md transition-all duration-300"
     >
       {/* The Modal Content */}
       <div
         onClick={handleModalContentClick}
-        className="bg-white rounded-lg shadow-2xl max-w-4xl w-full relative animate-fade-in-up max-h-[90vh] overflow-y-auto"
+        className="bg-white w-full max-w-5xl rounded-[2.5rem] shadow-2xl overflow-hidden relative flex flex-col md:flex-row max-h-[90vh] md:max-h-[650px] animate-in fade-in zoom-in-95 duration-300 border border-white/50"
       >
+        {/* Close Button - Floating Glass */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-800 transition z-10"
+          className="absolute top-5 right-5 z-20 p-2 bg-white/80 backdrop-blur-md rounded-full text-neutral-400 hover:text-black hover:bg-white hover:shadow-lg transition-all duration-300"
           aria-label="Close"
         >
-          <X size={28} />
+          <X size={24} />
         </button>
 
-        <div className="grid md:grid-cols-2 gap-6 md:gap-8 p-6 md:p-8">
-          {/* Left Side: Product Image */}
-          <div className="bg-gray-100 rounded-lg flex items-center justify-center p-4 md:p-8">
-            <img
-              src={product.imageUrl}
-              alt={product.name}
-              className="max-h-[250px] md:max-h-[400px] object-contain"
-            />
-            {/* Out of Stock Overlay */}
-            {isOutOfStock && (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="bg-red-600 text-white px-4 py-2 text-lg font-bold rounded shadow-lg transform -rotate-12">
-                  OUT OF STOCK
-                </span>
-              </div>
-            )}
-          </div>
+        {/* Left Side: Product Image */}
+        <div className="w-full md:w-1/2 bg-neutral-50 relative flex items-center justify-center p-8 md:p-12 overflow-hidden group">
+          {/* Background Decor */}
+          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
-          {/* Right Side: Product Details */}
-          <div className="flex flex-col justify-center">
-            <div className="flex items-center gap-3 mb-2">
-              <p className="text-indigo-600 font-semibold mb-2">
+          <img
+            src={product.imageUrl}
+            alt={product.name}
+            className="relative z-10 w-full max-h-[300px] md:max-h-[450px] object-contain drop-shadow-xl transition-transform duration-700 group-hover:scale-110 group-hover:-rotate-3"
+          />
+
+          {/* Out of Stock Overlay */}
+          {isOutOfStock && (
+            <div className="absolute inset-0 z-20 bg-white/60 backdrop-blur-[2px] flex items-center justify-center">
+              <div className="bg-black text-white px-6 py-3 text-xs font-bold tracking-[0.2em] uppercase border border-neutral-200 transform -rotate-12 shadow-2xl">
+                Sold Out
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Right Side: Product Details */}
+        <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center bg-white relative overflow-y-auto">
+          <div className="space-y-6">
+            {/* Header: Category & Rating */}
+            <div className="flex items-center justify-between">
+              <p className="text-[12px] font-bold tracking-[0.2em] text-indigo-600 uppercase">
                 {product.category}
               </p>
               {product.isFeatured && (
-                <div className="bg-yellow-100 text-yellow-800 text-xs font-semibold px-2.5 py-0.5 rounded-full flex items-center gap-1 mb-2">
-                  <Star size={12} />
-                  <span>Featured</span>
+                <div className="flex items-center gap-1.5 px-3 py-1 bg-neutral-900 text-white rounded-full">
+                  <Star
+                    size={10}
+                    fill="currentColor"
+                    className="text-yellow-400"
+                  />
+                  <span className="text-[10px] font-bold tracking-widest uppercase">
+                    Featured
+                  </span>
                 </div>
               )}
             </div>
-            <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">
-              {product.name}
-            </h1>
-            <p className="text-gray-600 mb-6 text-sm md:text-base">
-              {product.description}
-            </p>
 
-            {/* Price and Stock Status Row */}
-            <div className="flex items-center justify-between mb-8">
-              <p className="text-4xl md:text-5xl font-bold text-gray-900">
+            {/* Title & Desc */}
+            <div>
+              <h1 className="text-3xl md:text-4xl font-black text-neutral-900 leading-tight tracking-tight mb-3 uppercase">
+                {product.name}
+              </h1>
+              <p className="text-neutral-500 text-sm leading-relaxed font-medium">
+                {product.description}
+              </p>
+            </div>
+
+            {/* Price Row */}
+            <div className="flex items-center gap-4 border-y border-neutral-100 py-6">
+              <p className="text-4xl font-bold text-neutral-900 tracking-tight">
                 ${product.price}
               </p>
-              {/* Stock Availability Indicator */}
+
+              {/* Stock Status Pill */}
               {!isOutOfStock ? (
-                <span
-                  className={`text-sm font-bold px-3 py-1 rounded-full ${
+                <div
+                  className={`px-3 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase border ${
                     isLowStock
-                      ? "text-orange-600 bg-orange-100"
-                      : "text-green-600 bg-green-100"
+                      ? "bg-orange-50 text-orange-600 border-orange-100"
+                      : "bg-emerald-50 text-emerald-600 border-emerald-100"
                   }`}
                 >
-                  {isLowStock
-                    ? `Limited Stock only: ${stock} left!`
-                    : "In Stock"}
-                </span>
+                  {isLowStock ? `Low Stock: ${stock} Left` : "In Stock"}
+                </div>
               ) : (
-                <span className="text-sm font-bold text-red-600 bg-red-100 px-3 py-1 rounded-full">
-                  Out of Stock
-                </span>
+                <div className="px-3 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase bg-red-50 text-red-600 border border-red-100">
+                  Unavailable
+                </div>
               )}
             </div>
 
-            {/* <p className="text-4xl md:text-5xl font-bold text-gray-900 mb-8">
-              ${product.price}
-            </p> */}
-            
-            <div className="flex items-center gap-4">
+            {/* Action Buttons */}
+            <div className="flex gap-4 pt-2">
               <button
                 onClick={() => {
                   if (isOutOfStock) return;
                   isInCart ? navigate("/cart") : addToCart(product);
                 }}
                 disabled={isOutOfStock}
-                className={`flex-1 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition flex items-center justify-center gap-2 
+                className={`flex-1 py-4 px-6 rounded-full font-bold text-xs tracking-[0.15em] uppercase transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm
                   ${
                     isOutOfStock
-                      ? "bg-gray-400 cursor-not-allowed"
+                      ? "bg-neutral-100 text-neutral-400 cursor-not-allowed shadow-none"
                       : isInCart
-                      ? "bg-green-600 hover:bg-green-700"
-                      : "bg-indigo-600 hover:bg-indigo-700"
+                      ? "bg-emerald-600 text-white hover:bg-emerald-700"
+                      : "bg-black text-white hover:bg-indigo-600"
                   }`}
               >
-                <ShoppingCart className="w-5 h-5" />
+                {isInCart ? <Check size={18} /> : <ShoppingCart size={18} />}
                 <span>
                   {isOutOfStock
-                    ? "Sold Out"
+                    ? "Out of Stock"
                     : isInCart
-                    ? "Proceed to Cart"
+                    ? "Checkout Now"
                     : "Add to Cart"}
                 </span>
               </button>
+
               <button
                 onClick={() => addToWishlist(product)}
-                className="p-3 bg-gray-200 rounded-lg shadow-sm hover:bg-gray-300 transition"
+                className={`group p-4 rounded-full border transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5
+                  ${
+                    isInWishlist
+                      ? "bg-red-50 border-red-100 text-red-500"
+                      : "bg-white border-neutral-200 text-neutral-400 hover:border-red-200 hover:text-red-500"
+                  }`}
                 aria-label="Add to wishlist"
               >
                 <Heart
-                  className={`w-6 h-6 ${
-                    isInWishlist ? "text-red-500" : "text-gray-500"
+                  size={20}
+                  className={`transition-transform duration-300 ${
+                    isInWishlist ? "fill-current" : "group-hover:scale-110"
                   }`}
                   fill={isInWishlist ? "currentColor" : "none"}
                 />

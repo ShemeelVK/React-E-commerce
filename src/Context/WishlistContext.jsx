@@ -9,12 +9,13 @@ import Wishlist from "../pages/Wishlist.jsx";
 const WishlistContext = createContext(null);
 
 export function WishlistProvider({ children }) {
-  const { currentUser } = useAuth();
+  const { currentUser,loading } = useAuth();
   const navigate = useNavigate();
   const [wishlistItems,setWishlistItems]=useState([]);
 
       useEffect(()=>{
         const fetchWishlist=async () =>{
+          if (loading) return;
           if(currentUser){
             try{
               const res=await api.get(`${import.meta.env.VITE_API_URL}/Wishlist/All-Products`);
@@ -28,11 +29,11 @@ export function WishlistProvider({ children }) {
                 category:item.category || "Sneakers",
                 description:item.description
               }))
-              console.log("context fetched wishlist: ",res.data)
               setWishlistItems(realData);
+              console.log(realData);
             }
             catch(error){
-              console.log("Failed to fetch Wishlist",error);
+              console.error("Failed to fetch Wishlist",error);
             }
           }
           else{
@@ -40,7 +41,7 @@ export function WishlistProvider({ children }) {
           }
         };
         fetchWishlist();
-      },[currentUser]);
+      },[currentUser,loading]);
 
   const isProductInWishlist=(productId)=>{
     return wishlistItems.find((item)=>(item.id===productId) || (item.productId===productId));

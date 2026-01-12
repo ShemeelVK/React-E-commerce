@@ -1,18 +1,18 @@
 import { replace, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useState,useRef } from "react";
+import { useState, useRef } from "react";
 import { useAuth } from "../Context/AuthContext";
 import toast from "react-hot-toast";
 import api from "../utils/api";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, ArrowRight, X, ChevronLeft } from "lucide-react";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const[showPassword,setShowPassword]=useState(false);
-  const[showNewPassword,setShowNewPassword]=useState(false);
-  
+  const [showPassword, setShowPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+
   const navigate = useNavigate();
   const { loginUser } = useAuth();
 
@@ -45,8 +45,8 @@ function Login() {
       toast.success("OTP sent to your email!");
       setStep(2);
     } catch (err) {
-      const errormsg=err.response?.data || "Something went wrong";
-      toast.error(typeof errormsg==='string' ? errormsg : "USer not found");
+      const errormsg = err.response?.data || "Something went wrong";
+      toast.error(typeof errormsg === "string" ? errormsg : "User not found");
     } finally {
       setLoading(false);
     }
@@ -85,120 +85,168 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-gray-100 via-gray-50 to-gray-100 p-4">
-      <div className="bg-white shadow-2xl rounded-3xl overflow-hidden flex max-w-4xl w-full">
-        {/* Left Image Section */}
-        <div className="hidden md:block w-1/2">
+    <div className="min-h-screen flex items-center justify-center bg-neutral-100 p-4 font-sans selection:bg-black selection:text-white">
+      {/* --- CENTERED CARD CONTAINER --- */}
+      <div className="bg-white w-full max-w-5xl h-[650px] md:h-[700px] rounded-[2.5rem] shadow-2xl overflow-hidden flex border border-white/50 relative">
+        {/* Left Section - Immersive Visual */}
+        <div className="hidden md:flex w-1/2 bg-black relative overflow-hidden items-center justify-center">
           <img
-            src="https://images.unsplash.com/photo-1542291026-7eec264c27ff"
-            alt="Sneaker luxury"
-            className="h-full w-full object-cover"
+            src="https://images.unsplash.com/photo-1556906781-9a412961c28c?q=80&w=1000&auto=format&fit=crop"
+            alt="Luxury Editorial"
+            className="absolute inset-0 w-full h-full object-cover opacity-80 mix-blend-screen grayscale contrast-125 hover:scale-110 transition-transform duration-[3s] ease-in-out"
           />
+          {/* Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/20" />
+
+          <div className="absolute bottom-12 left-10 z-10">
+            <div className="w-12 h-1 bg-white mb-6" />
+            <h1 className="text-6xl font-black italic tracking-tighter text-white mb-2">
+              ELEVÉ.
+            </h1>
+            <p className="text-white/80 text-[10px] font-bold tracking-[0.3em] uppercase">
+              Future • Fashion • Footwear
+            </p>
+          </div>
         </div>
 
-        {/* Right Login Section */}
-        <div className="w-full md:w-1/2 p-10 flex flex-col justify-center">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 tracking-wide">
-              Elevé
-            </h1>
-            <p className="text-gray-500 mt-2">Luxury Sneaker Store</p>
-          </div>
-
-          <h2 className="text-2xl font-semibold text-center text-indigo-700 mb-6">
-            Sign in to your account
-          </h2>
-
-          <form onSubmit={handlelogin} className="space-y-6">
-            <div>
-              <label className="block text-gray-700 font-medium mb-2">
-                Email
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-                placeholder="Enter your Email"
-              />
+        {/* Right Section - Form */}
+        <div className="w-full md:w-1/2 flex flex-col justify-center items-center p-8 md:p-12 relative bg-white">
+          <div className="w-full max-w-sm space-y-10">
+            {/* Header */}
+            <div className="text-center md:text-left space-y-2">
+              <h2 className="text-3xl font-bold tracking-tight text-black">
+                WELCOME BACK
+              </h2>
+              <span className="text-[10px] font-bold tracking-widest text-neutral-400 uppercase">
+                Login
+              </span>
             </div>
 
-            <div>
-              <label className="block text-gray-700 font-medium mb-2">
-                Password
-              </label>
-              <div className="relative">
+            {/* Form */}
+            <form onSubmit={handlelogin} className="space-y-6">
+              {/* Email Input */}
+              <div className="group relative">
                 <input
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  autoComplete="current-password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  type="email"
+                  name="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none pr-12"
-                  placeholder="Enter your Password"
+                  className="peer w-full border-b border-neutral-200 bg-transparent py-3 text-sm font-medium text-black placeholder-transparent focus:border-black focus:outline-none transition-colors"
+                  placeholder="Email"
+                  id="email_input"
                 />
-                {/* ICON BUTTON */}
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-indigo-600 transition-colors"
+                <label
+                  htmlFor="email_input"
+                  className="absolute left-0 -top-3.5 text-[10px] font-bold text-neutral-400 transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-sm peer-placeholder-shown:text-neutral-400 peer-focus:-top-3.5 peer-focus:text-[10px] peer-focus:text-black uppercase tracking-widest"
                 >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                </button>
+                  Email Address
+                </label>
               </div>
 
-              <div className="text-right mt-2">
-                <span
-                  onClick={() => setIsModalOpen(true)}
-                  className="text-sm text-indigo-600 cursor-pointer hover:underline"
-                >
-                  Forgot Password?
+              {/* Password Input */}
+              <div className="group relative">
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    autoComplete="current-password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    className="peer w-full border-b border-neutral-200 bg-transparent py-3 text-sm font-medium text-black placeholder-transparent focus:border-black focus:outline-none transition-colors pr-10"
+                    placeholder="Password"
+                    id="password_input"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-0 top-3 text-neutral-400 hover:text-black transition-colors"
+                  >
+                    {showPassword ? (
+                      <EyeOff size={18} strokeWidth={1.5} />
+                    ) : (
+                      <Eye size={18} strokeWidth={1.5} />
+                    )}
+                  </button>
+                  <label
+                    htmlFor="password_input"
+                    className="absolute left-0 -top-3.5 text-[10px] font-bold text-neutral-400 transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-sm peer-placeholder-shown:text-neutral-400 peer-focus:-top-3.5 peer-focus:text-[10px] peer-focus:text-black uppercase tracking-widest"
+                  >
+                    Password
+                  </label>
+                </div>
+
+                <div className="flex justify-end mt-3">
+                  <span
+                    onClick={() => setIsModalOpen(true)}
+                    className="text-[10px] font-bold uppercase tracking-widest text-neutral-400 cursor-pointer hover:text-black transition-colors"
+                  >
+                    Forgot Password?
+                  </span>
+                </div>
+              </div>
+
+              {/* Action Button */}
+              <button
+                type="submit"
+                className="group relative w-full overflow-hidden bg-black py-4 text-white transition-all hover:bg-neutral-900 rounded-full mt-4"
+              >
+                <span className="relative z-10 flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-[0.2em]">
+                  Sign In{" "}
+                  <ArrowRight
+                    size={16}
+                    className="group-hover:translate-x-1 transition-transform"
+                  />
                 </span>
-              </div>
+              </button>
+            </form>
+
+            {/* Footer */}
+            <div className="text-center pt-4">
+              <p className="text-xs text-neutral-500 font-medium">
+                Not a member?{" "}
+                <span
+                  onClick={() => navigate("/Register")}
+                  className="font-bold text-black cursor-pointer uppercase tracking-wide border-b border-black ml-1 hover:text-neutral-700 hover:border-neutral-700 transition-colors"
+                >
+                  Register Now
+                </span>
+              </p>
             </div>
-
-            <button
-              type="submit"
-              className="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition-colors font-semibold"
-            >
-              Login
-            </button>
-          </form>
-
-          <p className="mt-6 text-center text-gray-500">
-            Don’t have an account?{" "}
-            <span
-              onClick={() => navigate("/Register")}
-              className="text-indigo-600 font-medium cursor-pointer hover:underline"
-            >
-              Register
-            </span>
-          </p>
+          </div>
         </div>
       </div>
 
       {/* --- FORGOT PASSWORD MODAL --- */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/20 backdrop-blur-md flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl relative">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-white/80 backdrop-blur-xl transition-opacity"
+            onClick={() => setIsModalOpen(false)}
+          />
+
+          {/* Modal Content */}
+          <div className="relative w-full max-w-md bg-white border border-neutral-100 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] rounded-[2rem] p-10 animate-in fade-in zoom-in-95 duration-300">
             <button
               onClick={() => setIsModalOpen(false)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+              className="absolute top-6 right-6 p-2 text-neutral-400 hover:text-black transition-colors"
             >
-              ✕
+              <X size={20} />
             </button>
 
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">
-              {step === 1 ? "Forgot Password" : "Verify OTP"}
-            </h2>
-            <p className="text-gray-500 mb-6 text-sm">
-              {step === 1
-                ? "Enter your registered email..."
-                : `Enter the code sent to ${resetEmail}`}
-            </p>
+            <div className="text-center mb-10">
+              <h3 className="text-xl font-black text-black uppercase tracking-tight mb-2">
+                {step === 1 ? "Account Recovery" : "Security Check"}
+              </h3>
+              <div className="w-8 h-1 bg-black mx-auto rounded-full mb-4" />
+              <p className="text-xs text-neutral-500 font-medium uppercase tracking-wider">
+                {step === 1
+                  ? "Authentication via Email"
+                  : `Code sent to ${resetEmail}`}
+              </p>
+            </div>
 
             {step === 1 ? (
               <form
@@ -206,23 +254,24 @@ function Login() {
                   e.preventDefault();
                   handleSendOtp();
                 }}
-                className="space-y-4"
+                className="space-y-8"
               >
-                <input
-                  type="email"
-                  name="email"
-                  autoComplete="email"
-                  placeholder="Email Address"
-                  value={resetEmail}
-                  onChange={(e) => setResetEmail(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-indigo-500"
-                />
+                <div className="relative">
+                  <input
+                    type="email"
+                    value={resetEmail}
+                    onChange={(e) => setResetEmail(e.target.value)}
+                    className="w-full border-b border-neutral-200 py-3 text-center text-lg font-medium outline-none focus:border-black placeholder:text-neutral-300 transition-colors"
+                    placeholder="user@example.com"
+                  />
+                </div>
+
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold disabled:bg-gray-400"
+                  className="w-full bg-black text-white py-4 rounded-full text-xs font-bold uppercase tracking-[0.2em] hover:bg-neutral-800 disabled:opacity-50 transition-colors shadow-lg"
                 >
-                  {loading ? "Sending..." : "Send Reset Code"}
+                  {loading ? "Processing..." : "Send Code"}
                 </button>
               </form>
             ) : (
@@ -231,59 +280,66 @@ function Login() {
                   e.preventDefault();
                   handleResetPassword();
                 }}
-                className="space-y-6"
+                className="space-y-8"
               >
-                <input
-                  type="hidden"
-                  name="username"
-                  value={resetEmail}
-                  autoComplete="username"
-                />
-                <div className="flex justify-between gap-2">
+                {/* RING FOCUSED OTP INPUTS */}
+                <div className="flex justify-center gap-3">
                   {otp.map((data, index) => (
                     <input
                       key={index}
                       type="text"
                       maxLength="1"
-                      className="w-12 h-12 border-2 rounded-lg text-center text-xl font-bold border-gray-300 focus:border-indigo-500 outline-none"
+                      className="w-12 h-12 rounded-full border-2 border-neutral-200 text-center text-xl font-bold text-black outline-none transition-all focus:border-black focus:scale-110 shadow-sm"
                       value={data}
                       onChange={(e) => handleOtpChange(e.target, index)}
                       onFocus={(e) => e.target.select()}
                     />
                   ))}
                 </div>
-                {/* NEW PASSWORD WITH ICON */}
-                <div className="relative">
-                  <input
-                    type={showNewPassword ? "text" : "password"}
-                    name="new-password"
-                    autoComplete="new-password"
-                    placeholder="New Password"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-indigo-500 pr-12"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowNewPassword(!showNewPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-indigo-600"
-                  >
-                    {showNewPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                  </button>
+
+                <div className="space-y-2">
+                  <label className="block text-center text-[10px] font-bold text-neutral-400 uppercase tracking-widest">
+                    New Credential
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showNewPassword ? "text" : "password"}
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      placeholder="******"
+                      className="w-full border-b border-neutral-200 py-3 text-center text-lg font-medium outline-none focus:border-black transition-colors"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowNewPassword(!showNewPassword)}
+                      className="absolute right-0 top-3 text-neutral-400 hover:text-black transition-colors"
+                    >
+                      {showNewPassword ? (
+                        <EyeOff size={18} />
+                      ) : (
+                        <Eye size={18} />
+                      )}
+                    </button>
+                  </div>
                 </div>
+
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold disabled:bg-gray-400"
+                  className="w-full bg-black text-white py-4 rounded-full text-xs font-bold uppercase tracking-[0.2em] hover:bg-neutral-800 disabled:opacity-50 transition-colors shadow-lg"
                 >
-                  {loading ? "Resetting..." : "Verify & Reset"}
+                  {loading ? "Verifying..." : "Confirm Reset"}
                 </button>
-                <p
-                  onClick={() => setStep(1)}
-                  className="text-center text-indigo-600 text-sm cursor-pointer hover:underline"
-                >
-                  Back to email
-                </p>
+
+                <div className="text-center">
+                  <button
+                    type="button"
+                    onClick={() => setStep(1)}
+                    className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest hover:text-black flex items-center justify-center gap-1 mx-auto transition-colors"
+                  >
+                    <ChevronLeft size={12} /> Change Email
+                  </button>
+                </div>
               </form>
             )}
           </div>
@@ -292,4 +348,5 @@ function Login() {
     </div>
   );
 }
+
 export default Login;

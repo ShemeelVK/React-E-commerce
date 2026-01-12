@@ -13,20 +13,28 @@ export function AuthProvider({children}){
 
     useEffect(()=>{
       const fetchUserAPI = async () => {
-        const storedUser=localStorage.getItem("user");
-        const storedToken=localStorage.getItem("token");
-
-        if(storedUser && storedToken){
-          SetCurrentUser(JSON.parse(storedUser));
+        try {
+          const storedUser=localStorage.getItem("user");
+          const storedToken=localStorage.getItem("token");
+          
+          if(storedUser && storedToken){
+            SetCurrentUser(JSON.parse(storedUser));
+          }
+          else{
+            SetCurrentUser(null);
+            localStorage.removeItem("user");
+            localStorage.removeItem("token");
+          }
+        } catch (error) {
+          console.error("Auth initialisation error: ",error)
+           SetCurrentUser(null);
+           localStorage.removeItem("user");
+           localStorage.removeItem("token");
         }
-        else{
-          SetCurrentUser(null);
-          localStorage.removeItem("user");
-          localStorage.removeItem("token");
+        finally{
+          
+          setLoading(false);
         }
-
-        setLoading(false);
-
       };
 
          fetchUserAPI();
@@ -82,7 +90,7 @@ export function AuthProvider({children}){
       localStorage.setItem("user", JSON.stringify(userToStore));
     };
 
-    const value={currentUser,SetCurrentUser,loginUser,logoutUser,updateUserInAuthContext}
+    const value={currentUser,SetCurrentUser,loginUser,logoutUser,updateUserInAuthContext,loading}
 
     if (loading) {
       return (
