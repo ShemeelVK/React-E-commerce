@@ -186,7 +186,7 @@ function Home() {
               Explore Categories
             </p>
             <h2 className="text-5xl md:text-8xl font-black text-gray-900 tracking-tighter italic uppercase leading-none">
-              Shop By <span className="text-indigo-600 not-italic">DNA</span>
+              Shop By <span className="text-indigo-600 not-italic">Lifestyle</span>
             </h2>
           </div>
 

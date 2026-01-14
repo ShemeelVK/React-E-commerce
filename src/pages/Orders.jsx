@@ -9,6 +9,9 @@ import {
   XCircle,
   ChevronRight,
   Truck,
+  FileText,
+  X,
+  RotateCcw, // Added for Return Icon
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
@@ -20,66 +23,71 @@ import { useAuth } from "../Context/AuthContext.jsx";
 import api from "../utils/api.js";
 import Navbar from "../Components/Navbar";
 
-// --- TEMPORARY MOCKS FOR PREVIEW (DELETE IN YOUR APP) ---
-// const Navbar = () => (
-//   <div className="w-full py-4 border-b border-gray-100 flex justify-center items-center bg-white/80 backdrop-blur-md sticky top-0 z-40">
-//     <span className="font-black italic text-xl">ELEVÉ.</span>
-//   </div>
-// );
-// const api = {
-//   get: async () => {
-//     await new Promise((r) => setTimeout(r, 1000));
-//     return {
-//       data: [
-//         {
-//           id: 101,
-//           orderReference: "ORD-88392-XJ",
-//           status: "Pending",
-//           totalAmount: 2450,
-//           orderDate: "2023-10-15",
-//           paymentMethod: "UPI",
-//           shippingAddress: { name: "John Doe", city: "New York" },
-//           items: [
-//             {
-//               id: 1,
-//               productName: "Urban Drifter X",
-//               quantity: 1,
-//               unitPrice: 2450,
-//               productImage:
-//                 "https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&q=80&w=1000",
-//             },
-//           ],
-//         },
-//         {
-//           id: 102,
-//           orderReference: "ORD-11293-AB",
-//           status: "Delivered",
-//           totalAmount: 1800,
-//           orderDate: "2023-09-20",
-//           paymentMethod: "Card",
-//           shippingAddress: { name: "John Doe", city: "Los Angeles" },
-//           items: [
-//             {
-//               id: 2,
-//               productName: "Aero Glide 4000",
-//               quantity: 1,
-//               unitPrice: 1800,
-//               productImage:
-//                 "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=1000",
-//             },
-//           ],
-//         },
-//       ],
-//     };
-//   },
-//   put: async () => {},
-// };
-// ============================================================================
+// --- PDF VIEWER MODAL COMPONENT ---
+const InvoiceModal = ({ pdfUrl, onClose }) => {
+  if (!pdfUrl) return null;
+
+  return (
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-6">
+      {/* Backdrop */}
+      <div
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+        onClick={onClose}
+      />
+
+      {/* Modal Content */}
+      <div className="relative w-full max-w-4xl h-[85vh] bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-200">
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-white">
+          <div className="flex items-center gap-2">
+            <FileText size={20} className="text-indigo-600" />
+            <h3 className="font-bold text-gray-900">Invoice Viewer</h3>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
+          >
+            <X size={20} />
+          </button>
+        </div>
+
+        {/* PDF Viewer (Using native embed) */}
+        <div className="flex-1 bg-gray-50 p-4">
+          <iframe
+            src={pdfUrl}
+            className="w-full h-full rounded-lg border border-gray-200 shadow-sm bg-white"
+            title="Invoice PDF"
+          />
+        </div>
+
+        {/* Footer Actions */}
+        <div className="px-6 py-4 border-t border-gray-100 bg-gray-50 flex justify-end gap-3">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 text-xs font-bold text-gray-600 uppercase tracking-wider hover:bg-gray-200 rounded-lg transition-colors"
+          >
+            Close
+          </button>
+          <a
+            href={pdfUrl}
+            download="Invoice.pdf"
+            className="px-6 py-2 bg-indigo-600 text-white text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-100 flex items-center gap-2"
+          >
+            Download PDF
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 function Orders() {
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // State for the PDF Viewer
+  const [viewingInvoice, setViewingInvoice] = useState(null); // stores the Blob URL
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -97,6 +105,35 @@ function Orders() {
     };
     fetchOrders();
   }, []);
+
+  const handleViewInvoice = async (orderId) => {
+    const toastId = toast.loading("Loading Invoice...");
+    try {
+      const response = await api.get(
+        `${import.meta.env?.VITE_API_URL || ""}/Order/${orderId}/invoice`,
+        { responseType: "blob" }
+      );
+
+      // Create Blob URL
+      const file = new Blob([response.data], { type: "application/pdf" });
+      const fileURL = URL.createObjectURL(file);
+
+      // Set state to open modal
+      setViewingInvoice(fileURL);
+
+      toast.success("Invoice Loaded", { id: toastId });
+    } catch (error) {
+      console.error("Invoice error:", error);
+      toast.error("Unable to load invoice", { id: toastId });
+    }
+  };
+
+  const handleCloseInvoice = () => {
+    if (viewingInvoice) {
+      URL.revokeObjectURL(viewingInvoice); // Cleanup memory
+      setViewingInvoice(null);
+    }
+  };
 
   const handleCancelOrder = async (orderId, orderReference) => {
     toast(
@@ -167,6 +204,77 @@ function Orders() {
     );
   };
 
+  const handleReturnOrder = async (orderId, orderReference) => {
+    toast(
+      (t) => (
+        <div className="flex flex-col items-center gap-3 p-2 font-sans text-neutral-800">
+          <p className="font-bold text-sm text-center">
+            Return Order #{orderReference}?
+          </p>
+          <p className="text-xs text-center text-neutral-500">
+            Items will be returned and refund initiated.
+          </p>
+          <div className="flex gap-3 mt-2">
+            <button
+              onClick={() => toast.dismiss(t.id)}
+              className="px-4 py-2 text-xs font-bold uppercase tracking-wide bg-neutral-100 text-neutral-600 rounded-lg hover:bg-neutral-200 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={async () => {
+                toast.dismiss(t.id);
+                try {
+                  await api.put(
+                    `${
+                      import.meta.env?.VITE_API_URL || ""
+                    }/Order/Return-Order/${orderId}`
+                  );
+
+                  toast.success(
+                    `Return initiated for Order #${orderReference}.`
+                  );
+
+                  setOrders((prevOrders) =>
+                    prevOrders.map((order) => {
+                      if (order.id === orderId) {
+                        return { ...order, status: "Returned" };
+                      }
+                      return order;
+                    })
+                  );
+                } catch (error) {
+                  console.error("Failed to return order:", error);
+                  if (error.response && error.response.data) {
+                    toast.error(
+                      error.response.data.message || "Error returning order."
+                    );
+                  } else {
+                    toast.error("Network error. Please try again");
+                  }
+                }
+              }}
+              className="px-4 py-2 text-xs font-bold uppercase tracking-wide bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-100"
+            >
+              Confirm Return
+            </button>
+          </div>
+        </div>
+      ),
+      {
+        style: {
+          background: "#fff",
+          color: "#333",
+          border: "1px solid #e5e5e5",
+          borderRadius: "16px",
+          padding: "16px",
+          boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
+        },
+        id: "return-confirmation",
+      }
+    );
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-neutral-50">
@@ -179,6 +287,9 @@ function Orders() {
     <div className="min-h-screen bg-neutral-50 font-sans selection:bg-black selection:text-white">
       <Navbar />
       <Toaster position="top-center" />
+
+      {/* INVOICE MODAL */}
+      <InvoiceModal pdfUrl={viewingInvoice} onClose={handleCloseInvoice} />
 
       <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8 py-24">
         {/* Header */}
@@ -265,6 +376,8 @@ function Orders() {
                             ? "bg-red-50 text-red-700 border-red-100"
                             : order.status === "Shipped"
                             ? "bg-blue-50 text-blue-700 border-blue-100"
+                            : order.status === "Returned"
+                            ? "bg-purple-50 text-purple-700 border-purple-100"
                             : "bg-emerald-50 text-emerald-700 border-emerald-100"
                         }`}
                       >
@@ -276,6 +389,8 @@ function Orders() {
                               ? "bg-red-500"
                               : order.status === "Shipped"
                               ? "bg-blue-500"
+                              : order.status === "Returned"
+                              ? "bg-purple-500"
                               : "bg-emerald-500"
                           }`}
                         />
@@ -373,29 +488,41 @@ function Orders() {
                       </p>
                     </div>
 
-                    {/* Col 4: Actions (Cancel Button) */}
-                    <div className="p-6 flex flex-col justify-center items-start border-t border-neutral-100 md:border-t-0 bg-neutral-50/50">
-                      {order.status === "Pending" ? (
-                        <div className="w-full flex flex-col gap-1.5">
-                          <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-400 mb-1 block md:hidden">
-                            Actions
-                          </span>
-                          <button
-                            onClick={() =>
-                              handleCancelOrder(order.id, displayId)
-                            }
-                            className="w-full bg-white border border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300 font-bold text-[10px] uppercase tracking-widest px-4 py-2.5 rounded-lg transition-all flex items-center justify-center gap-2 shadow-sm whitespace-nowrap"
-                          >
-                            <XCircle size={14} />
-                            Cancel Order
-                          </button>
-                        </div>
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center opacity-30">
-                          <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">
-                            No Actions
-                          </span>
-                        </div>
+                    {/* Col 4: Actions (View Invoice & Actions) */}
+                    <div className="p-6 flex flex-col justify-center items-stretch border-t border-neutral-100 md:border-t-0 bg-neutral-50/50 gap-2">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-400 mb-1 block md:hidden">
+                        Actions
+                      </span>
+
+                      {/* VIEW INVOICE BUTTON - Always visible */}
+                      <button
+                        onClick={() => handleViewInvoice(order.id)}
+                        className="w-full bg-indigo-50 border border-indigo-100 text-indigo-700 hover:bg-indigo-100 font-bold text-[10px] uppercase tracking-widest px-4 py-2.5 rounded-lg transition-all flex items-center justify-center gap-2 shadow-sm whitespace-nowrap"
+                      >
+                        <FileText size={14} />
+                        View Invoice
+                      </button>
+
+                      {/* CANCEL BUTTON (Condition: Only if Pending) */}
+                      {order.status === "Pending" && (
+                        <button
+                          onClick={() => handleCancelOrder(order.id, displayId)}
+                          className="w-full bg-white border border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300 font-bold text-[10px] uppercase tracking-widest px-4 py-2.5 rounded-lg transition-all flex items-center justify-center gap-2 shadow-sm whitespace-nowrap"
+                        >
+                          <XCircle size={14} />
+                          Cancel
+                        </button>
+                      )}
+
+                      {/* RETURN BUTTON (Condition: Only if Delivered) */}
+                      {order.status === "Delivered" && (
+                        <button
+                          onClick={() => handleReturnOrder(order.id, displayId)}
+                          className="w-full bg-white border border-neutral-200 text-neutral-700 hover:bg-neutral-50 hover:border-neutral-300 font-bold text-[10px] uppercase tracking-widest px-4 py-2.5 rounded-lg transition-all flex items-center justify-center gap-2 shadow-sm whitespace-nowrap"
+                        >
+                          <RotateCcw size={14} />
+                          Return
+                        </button>
                       )}
                     </div>
                   </div>

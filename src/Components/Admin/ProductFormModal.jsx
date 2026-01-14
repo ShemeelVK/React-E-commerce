@@ -1,82 +1,139 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import api from "../../utils/api";
-import { X } from "lucide-react";
-import toast from "react-hot-toast";
+import React, { useState, useRef ,useEffect} from "react";
+import { X, Upload, Image as ImageIcon, Loader2, Check } from "lucide-react";
+import toast, { Toaster } from "react-hot-toast";
 
-function ProductFormModal({ product, onClose, onSuccess }) {
-  const isEditing = product !== null;
+// ============================================================================
+// ⚠️ IMPORTANT: UNCOMMENT THIS IMPORT IN YOUR REAL PROJECT
+// ============================================================================
+import api from "../../utils/api";
+
+// ============================================================================
+// --- TEMPORARY MOCK FOR PREVIEW (DELETE THIS SECTION IN YOUR APP) ---
+// ============================================================================
+// const api = {
+//   post: async (url, data, config) => {
+//     console.log("Mock API Post:", url, data);
+//     await new Promise((r) => setTimeout(r, 1500));
+//     return { data: { success: true } };
+//   },
+//   put: async (url, data, config) => {
+//     console.log("Mock API Put:", url, data);
+//     await new Promise((r) => setTimeout(r, 1500));
+//     return { data: { success: true } };
+//   },
+// };
+// ============================================================================
+
+function ProductFormModal({ isOpen, onClose, onSuccess, product = null }) {
+  const [loading, setLoading] = useState(false);
+  const [preview, setPreview] = useState(null);
+  const [file, setFile] = useState(null);
+  const [dragActive, setDragActive] = useState(false);
+  const fileInputRef = useRef(null);
 
   const [formData, setFormData] = useState({
     name: "",
-    category: "Sneakers",
     price: "",
+    category: "Sneakers",
+    stock: "",
     description: "",
-    imageUrl: "",
-    isFeatured: false,
-    stock: 0, // NEW: Initialize stock
   });
 
+  // Populate data if editing
   useEffect(() => {
-    if (isEditing) {
+    if (product) {
       setFormData({
-        name: product.name,
-        category: product.category,
-        price: product.price,
-        description: product.description,
-        imageUrl: product.imageUrl,
-        isFeatured: product.isFeatured || false,
-        stock: product.stock || 0, // NEW: Load existing stock
+        name: product.name || "",
+        price: product.price || "",
+        category: product.category || "Sneakers",
+        stock: product.stock || "",
+        description: product.description || "",
       });
+      setPreview(product.imageUrl || null);
+    } else {
+      // Reset if adding new
+      setFormData({
+        name: "",
+        price: "",
+        category: "Sneakers",
+        stock: "",
+        description: "",
+      });
+      setPreview(null);
+      setFile(null);
     }
-  }, [product, isEditing]);
+  }, [product, isOpen]);
 
-  const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+  if (!isOpen) return null;
+
+  // --- Drag & Drop Logic ---
+  const handleDrag = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === "dragenter" || e.type === "dragover") setDragActive(true);
+    else if (e.type === "dragleave") setDragActive(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      handleFile(e.dataTransfer.files[0]);
+    }
+  };
+
+  const handleFile = (selectedFile) => {
+    if (!selectedFile.type.startsWith("image/")) {
+      toast.error("Please upload an image file");
+      return;
+    }
+    setFile(selectedFile);
+    setPreview(URL.createObjectURL(selectedFile));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const dataToSubmit = {
-      ...formData,
-      id: product ? product.id : undefined,
-      price: parseFloat(formData.price),
-      stock: parseInt(formData.stock), // NEW: Ensure stock is saved as a number
-    };
+    setLoading(true);
 
     try {
-      if (isEditing) {
-        await api.put(
-          `${import.meta.env.VITE_API_URL}/Products/Update-Product/${product.id}`,
-          dataToSubmit
-        );
-        toast.success("Product updated successfully!");
-      } else {
-        await api.post(
-          `${import.meta.env.VITE_API_URL}/Products/Add-Product`,
-          dataToSubmit
-        );
-        toast.success("Product added successfully!");
+      const data = new FormData();
+      data.append("name", formData.name);
+      data.append("price", formData.price);
+      data.append("category", formData.category);
+      data.append("stock", formData.stock);
+      data.append("description", formData.description);
+
+      if (file) {
+        data.append("imageFile", file);
       }
-      onSuccess();
+
+      const url = product
+        ? `/Products/Update-Product/${product.id}`
+        : "/Products/Add-Product";
+      const method = product ? "put" : "post";
+
+      await api[method](url, data, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      toast.success(`Product ${product ? "updated" : "added"} successfully!`);
+      if (onSuccess) onSuccess();
       onClose();
     } catch (error) {
-      console.error("Failed to save product:", error);
-      toast.error("An error occurred while saving the product.");
+      console.error(error);
+      toast.error("Failed to save product");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center p-4">
-      <div className="bg-slate-800 rounded-lg shadow-2xl max-w-2xl w-full relative text-white">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+      <div className="bg-slate-800 border border-slate-700 rounded-lg shadow-2xl w-full max-w-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
         <div className="p-6 border-b border-slate-700 flex justify-between items-center">
-          <h2 className="text-2xl font-bold">
-            {isEditing ? "Edit Product" : "Add New Product"}
+          <h2 className="text-xl font-bold text-white">
+            {product ? "Edit Product" : "Add New Product"}
           </h2>
           <button
             onClick={onClose}
@@ -86,129 +143,150 @@ function ProductFormModal({ product, onClose, onSuccess }) {
           </button>
         </div>
 
-        <form
-          onSubmit={handleSubmit}
-          className="p-6 max-h-[80vh] overflow-y-auto"
-        >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-slate-300 mb-1">
-                Product Name
-              </label>
+        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+          {/* Image Upload Area (Drag & Drop) */}
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-slate-300">
+              Product Image
+            </label>
+            <div
+              onDragEnter={handleDrag}
+              onDragLeave={handleDrag}
+              onDragOver={handleDrag}
+              onDrop={handleDrop}
+              onClick={() => fileInputRef.current.click()}
+              className={`relative h-48 w-full rounded-lg border-2 border-dashed flex flex-col items-center justify-center cursor-pointer transition-all ${
+                dragActive
+                  ? "border-indigo-500 bg-indigo-500/10"
+                  : "border-slate-600 bg-slate-700/50 hover:border-slate-500 hover:bg-slate-700"
+              }`}
+            >
+              {preview ? (
+                <img
+                  src={preview}
+                  alt="Preview"
+                  className="h-full w-full object-contain p-2"
+                />
+              ) : (
+                <div className="text-center text-slate-400 p-4">
+                  <Upload className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                  <p className="text-sm font-medium">
+                    Drag & drop or click to upload
+                  </p>
+                  <p className="text-xs opacity-50 mt-1">JPG, PNG up to 5MB</p>
+                </div>
+              )}
               <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                required
-                className="w-full p-2 bg-slate-700 border border-slate-600 rounded-md"
+                type="file"
+                ref={fileInputRef}
+                className="hidden"
+                accept="image/*"
+                onChange={(e) =>
+                  e.target.files[0] && handleFile(e.target.files[0])
+                }
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">
-                Category
-              </label>
-              <select
-                name="category"
-                value={formData.category}
-                onChange={handleInputChange}
-                className="w-full p-2 bg-slate-700 border border-slate-600 rounded-md"
-              >
-                <option>Sneakers</option>
-                <option>Running</option>
-                <option>Boots</option>
-              </select>
-            </div>
+          </div>
 
-            {/* Price Input */}
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-slate-300">
+                Name
+              </label>
+              <input
+                required
+                type="text"
+                className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                value={formData.name}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-slate-300">
                 Price ($)
               </label>
               <input
-                type="number"
-                name="price"
-                value={formData.price}
-                onChange={handleInputChange}
                 required
-                min="0"
+                type="number"
                 step="0.01"
-                className="w-full p-2 bg-slate-700 border border-slate-600 rounded-md"
+                className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                value={formData.price}
+                onChange={(e) =>
+                  setFormData({ ...formData, price: e.target.value })
+                }
               />
-            </div>
-
-            {/* NEW: Stock Input */}
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">
-                Stock Quantity
-              </label>
-              <input
-                type="number"
-                name="stock"
-                value={formData.stock}
-                onChange={handleInputChange}
-                required
-                min="0"
-                className="w-full p-2 bg-slate-700 border border-slate-600 rounded-md"
-              />
-            </div>
-
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-slate-300 mb-1">
-                Image URL
-              </label>
-              <input
-                type="text"
-                name="imageUrl"
-                value={formData.imageUrl}
-                onChange={handleInputChange}
-                required
-                className="w-full p-2 bg-slate-700 border border-slate-600 rounded-md"
-              />
-            </div>
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-slate-300 mb-1">
-                Description
-              </label>
-              <textarea
-                name="description"
-                value={formData.description}
-                onChange={handleInputChange}
-                required
-                rows="4"
-                className="w-full p-2 bg-slate-700 border border-slate-600 rounded-md"
-              ></textarea>
-            </div>
-            <div className="md:col-span-2 flex items-center gap-3">
-              <input
-                type="checkbox"
-                name="isFeatured"
-                checked={formData.isFeatured}
-                onChange={handleInputChange}
-                id="isFeatured"
-                className="h-4 w-4 rounded text-indigo-500 bg-slate-600 border-slate-500 focus:ring-indigo-500"
-              />
-              <label
-                htmlFor="isFeatured"
-                className="text-sm font-medium text-slate-300"
-              >
-                Mark as a Featured Product
-              </label>
             </div>
           </div>
-          <div className="mt-6 pt-6 border-t border-slate-700 text-right">
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-slate-300">
+                Category
+              </label>
+              <select
+                className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                value={formData.category}
+                onChange={(e) =>
+                  setFormData({ ...formData, category: e.target.value })
+                }
+              >
+                <option>Sneakers</option>
+                <option>Boots</option>
+                <option>Running</option>
+              </select>
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-slate-300">
+                Stock
+              </label>
+              <input
+                required
+                type="number"
+                className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                value={formData.stock}
+                onChange={(e) =>
+                  setFormData({ ...formData, stock: e.target.value })
+                }
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-slate-300">
+              Description
+            </label>
+            <textarea
+              rows="3"
+              className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
+              value={formData.description}
+              onChange={(e) =>
+                setFormData({ ...formData, description: e.target.value })
+              }
+            />
+          </div>
+
+          <div className="flex gap-4 pt-4 border-t border-slate-700">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 mr-3 rounded-md text-gray-300 hover:bg-slate-700"
+              className="flex-1 bg-slate-700 text-white py-2.5 rounded-lg hover:bg-slate-600 transition font-semibold"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-6 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700"
+              disabled={loading}
+              className="flex-1 bg-indigo-600 text-white py-2.5 rounded-lg hover:bg-indigo-700 transition font-semibold flex justify-center items-center gap-2 disabled:opacity-50"
             >
-              {isEditing ? "Save Changes" : "Add Product"}
+              {loading ? (
+                <Loader2 className="animate-spin" size={20} />
+              ) : product ? (
+                "Save Changes"
+              ) : (
+                "Create Product"
+              )}
             </button>
           </div>
         </form>
@@ -216,5 +294,6 @@ function ProductFormModal({ product, onClose, onSuccess }) {
     </div>
   );
 }
+
 
 export default ProductFormModal;

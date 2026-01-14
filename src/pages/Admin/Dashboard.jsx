@@ -185,6 +185,7 @@ function Dashboard() {
             <input
               type="date"
               value={formatDateForInput(startDate)}
+              max={formatDateForInput(new Date())}
               onChange={(e) => setStartDate(new Date(e.target.value))}
               className="p-2 bg-slate-700 border border-slate-600 rounded-md text-sm text-gray-200 outline-none focus:border-blue-500"
             />
@@ -192,6 +193,7 @@ function Dashboard() {
             <input
               type="date"
               value={formatDateForInput(endDate)}
+              max={formatDateForInput(new Date())}
               onChange={(e) => setEndDate(new Date(e.target.value))}
               className="p-2 bg-slate-700 border border-slate-600 rounded-md text-sm text-gray-200 outline-none focus:border-blue-500"
             />

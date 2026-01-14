@@ -39,8 +39,8 @@ function Contact() {
           </div>
 
           <h1 className="text-6xl md:text-9xl font-black text-gray-900 tracking-tighter leading-[0.85] italic uppercase">
-            Get In <br />
-            <span className="text-indigo-600 not-italic">Touch.</span>
+            Reach <br />
+            <span className="text-indigo-600 not-italic">Out.</span>
           </h1>
 
           <p className="text-lg md:text-xl text-gray-400 font-medium tracking-tight max-w-xl mx-auto leading-relaxed uppercase">

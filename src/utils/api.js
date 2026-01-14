@@ -1,4 +1,5 @@
 import axios from "axios"
+import toast from "react-hot-toast";
 
     const api = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
@@ -36,7 +37,32 @@ api.interceptors.response.use(
     if (originalRequest.url.includes("/Auth/Refresh-Token")) {
       localStorage.removeItem("user");
       localStorage.removeItem("token");
-      window.location.href = "/";
+      window.location.href = "/login";
+      return Promise.reject(error);
+    }
+
+    // 403 error (Blocked user)
+    if (
+      error.response?.status === 403 &&
+      error.response?.data?.message ===
+        "Your account has been suspended. Please contact support."
+    ) {
+      // Prevent duplicate toasts if multiple APIs fail at once
+      toast.dismiss();
+
+      toast.error("You have been blocked by the Admin. Logging out...", {
+        id: "blocked-toast",
+        duration: 3000,
+      });
+
+      // Clear all auth data
+      localStorage.clear();
+
+      // Redirect after a short delay so user sees the message
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 2000);
+
       return Promise.reject(error);
     }
 
