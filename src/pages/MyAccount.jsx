@@ -11,7 +11,7 @@ import {
   ChevronRight,
   Plus,
 } from "lucide-react";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 // ============================================================================
 // ⚠️ IMPORTANT: UNCOMMENT YOUR REAL IMPORTS IN YOUR PROJECT
@@ -112,7 +112,6 @@ function MyAccount() {
 
   return (
     <div className="min-h-screen bg-neutral-50 font-sans selection:bg-black selection:text-white">
-      <Toaster position="top-center" />
 
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-24">
         {/* Page Header */}

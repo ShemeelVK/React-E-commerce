@@ -14,7 +14,7 @@ import {
   RotateCcw, // Added for Return Icon
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 // ============================================================================
 // ⚠️ IMPORTANT: UNCOMMENT YOUR REAL IMPORTS IN YOUR PROJECT
@@ -286,7 +286,6 @@ function Orders() {
   return (
     <div className="min-h-screen bg-neutral-50 font-sans selection:bg-black selection:text-white">
       <Navbar />
-      <Toaster position="top-center" />
 
       {/* INVOICE MODAL */}
       <InvoiceModal pdfUrl={viewingInvoice} onClose={handleCloseInvoice} />

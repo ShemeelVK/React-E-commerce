@@ -52,8 +52,7 @@ function Home() {
       {/* --- HERO SECTION --- */}
       <div className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
         {/* Dynamic Background Accents */}
-        <div className="absolute top-[10%] left-[-5%] w-[40%] h-[40%] bg-indigo-50 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute bottom-[10%] right-[-5%] w-[40%] h-[40%] bg-purple-50 rounded-full blur-[120px] animate-pulse delay-1000" />
+
 
         <div className="relative z-10 w-full max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center gap-12">
           {/* Hero Content */}
@@ -102,11 +101,12 @@ function Home() {
 
           {/* Hero Image Card */}
           <div className="w-full md:w-1/2 relative group">
-            <div className="absolute inset-0 bg-indigo-500/10 blur-[100px] rounded-full group-hover:scale-110 transition-transform duration-[3s]" />
+
             <div className="relative rounded-[4rem] overflow-hidden border-[15px] border-white shadow-[0_50px_100px_rgba(0,0,0,0.1)] bg-black">
               <img
-                src="https://images.unsplash.com/photo-1560769629-975ec94e6a86"
+                src="https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&q=80&w=1200"
                 alt="Luxury White Sneaker"
+                fetchPriority="high"
                 className="w-full h-[600px] object-cover opacity-90 transition-transform duration-[4s] group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-80" />
@@ -178,7 +178,7 @@ function Home() {
 
       {/* --- CATEGORY SECTION: ASYMMETRICAL MODERN GRID --- */}
       <div className="py-20 bg-gray-50/50 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-1/3 h-full bg-indigo-50/30 blur-[100px] rounded-full" />
+
 
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="text-center mb-24 space-y-4">
@@ -190,14 +190,15 @@ function Home() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 h-[700px]">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 h-[550px]">
             {/* Sneakers */}
             <div
               onClick={() => handleCategoryClick("Sneakers")}
               className="relative rounded-[3rem] overflow-hidden group cursor-pointer shadow-2xl transition-all duration-700"
             >
               <img
-                src="https://images.unsplash.com/photo-1542291026-7eec264c27ff"
+                src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=800"
+                loading="lazy"
                 alt="Sneakers"
                 className="w-full h-full object-cover transition-transform duration-[0.5s] group-hover:scale-110"
               />
@@ -224,6 +225,7 @@ function Home() {
             >
               <img
                 src="https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/8d73cd25-91cc-48fe-9514-7a41daccb7ef/NIKE+VOMERO+PLUS.png"
+                loading="lazy"
                 alt="Performance"
                 className="w-full h-full object-cover transition-transform duration-[0.5s] group-hover:scale-110"
               />
@@ -249,7 +251,8 @@ function Home() {
               className="relative rounded-[3rem] overflow-hidden group cursor-pointer shadow-2xl transition-all duration-700"
             >
               <img
-                src="https://egoss.in/cdn/shop/files/DSC_2106_1917a216-f12d-468f-8dd0-3587699ec440.jpg?v=1753876974&width=1950"
+                src="https://egoss.in/cdn/shop/files/DSC_2106_1917a216-f12d-468f-8dd0-3587699ec440.jpg?v=1753876974&width=800"
+                loading="lazy"
                 alt="Boots"
                 className="w-full h-full object-cover transition-transform duration-[0.5s] group-hover:scale-110"
               />
@@ -276,7 +279,7 @@ function Home() {
       <div className="py-40 max-w-7xl mx-auto px-6">
         <div className="relative bg-indigo-600 rounded-[4rem] overflow-hidden shadow-[0_50px_100px_rgba(79,70,229,0.2)]">
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
-          <div className="absolute top-[-50%] right-[-10%] w-[500px] h-[500px] bg-white/10 rounded-full blur-[120px]" />
+
 
           <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-16 p-12 md:p-24 items-center">
             <div className="space-y-10 text-left">
@@ -314,6 +317,7 @@ function Home() {
             <div className="relative group perspective-1000">
               <img
                 src="https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/21f56016-2e59-4392-b80f-c9440573f798/ZOOMX+VAPORFLY+NEXT%25+4.png"
+                loading="lazy"
                 alt="Promo Item"
                 className="relative w-full max-w-lg mx-auto drop-shadow-[0_30px_60px_rgba(0,0,0,0.3)] group-hover:rotate-[10deg] transition-transform duration-1000"
               />

@@ -21,7 +21,7 @@ import {
   Truck,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 // --- TEMPORARY MOCKS FOR PREVIEW (DELETE IN YOUR APP) ---
 // const useCart = () => ({
@@ -308,7 +308,6 @@ function Payment() {
   return (
     <div className="min-h-screen bg-neutral-50 font-sans selection:bg-black selection:text-white">
       <Navbar />
-      <Toaster position="top-center" />
 
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-24">
         {/* Page Header */}
